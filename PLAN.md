@@ -78,11 +78,9 @@ Derived from every script + knob that exists today (Waves 1–11b). *This table 
    - Veo bank: cached `veo_slow/*_1440p.mp4` clips w/ thumbnails.
    - Tokens: upload token + analytics token status (valid / needs re-auth). Disk free. Running job banner.
 2. **Prompts (M2)** — run `generate_prompts` as a job; render `today_prompt.txt` per theme as copy-button blocks (STYLE / scene / variations / THUMBNAIL section); `today_suno_prompt.txt` as a copy-per-line list. History of past prompt files.
-3. **Assets (M1 read, M2 ingest, M4 actions)** — image grid per theme (preview, delete→trash, "set as thumb"); music library with in-browser `<audio>` playback; outputs folder with `<video>` preview (range requests).
-   - **Ingest — add assets FROM the UI** (closes the daily loop: prompts → ChatGPT/Suno → drop results in → build, no Finder):
-     - **Drag-drop upload** onto a theme (→ `images/<theme>/`) or the music library (→ `music/library/`); multipart POST, server copies into the pipeline folders.
-     - **Downloads inbox**: scan `~/Downloads` for fresh `ChatGPT Image*.png`, `*.mp3` (Suno), `Untitled video*.mp4` (Veo) → preview grid → one-click "send to theme X / library / Veo sources" (move, not copy). Faster than drag-drop for 20-image batches.
-     - Validation on ingest: image aspect (warn if not ~16:9), audio duration probe, dupe-name handling.
+3. **Assets (M1 read, M4 actions)** — image grid per theme (preview, delete→trash, "set as thumb"); music library with in-browser `<audio>` playback; outputs folder with `<video>` preview (range requests).
+   - **Folder-first flow (decided 2026-07-13):** Sasha keeps sorting files into `images/<theme>/` and `music/library/` in Finder himself — that manual sort is the curation step, and it prevents mess. **The app never moves assets in; it *sees* the folders**: reads them fresh on every request (local fs is cheap; thumbnail cache keyed by path+mtime) + React Query refetch-on-focus, so files dropped in Finder appear in the UI immediately on tab focus — no restart, no refresh button hunting. Validation stays, as *warnings on display* (odd aspect ratio, non-16:9, suspiciously short audio, dupe names).
+   - Ingest-from-UI (drag-drop upload, a Downloads inbox scanner) → **parked in Later**; revisit only if Finder sorting ever feels like friction.
 4. **Build (M3)** — wizards that assemble the env + command, show it for transparency, then run as a job:
    - **Main build** (Ken Burns / DepthFlow) with all knobs above + preflight check inline.
    - **Veo wizard**: scan sources → enhance selected (shows ~35min/clip estimate, cached clips marked "banked") → assemble (pick clips + music + duration + shuffle) → optional upload step.
@@ -92,7 +90,7 @@ Derived from every script + knob that exists today (Waves 1–11b). *This table 
 7. **Settings (M6)** — paths, defaults for knobs, token re-auth launcher (runs auth scripts, shows the consent URL), theme registry viewer (rendered from `config.THEMES`, read-only in v1).
 
 ### Later / nice-to-haves (parked)
-Analytics snapshots over time (local history + charts) · thumbnail A/B tracker · content calendar · clip-library tags/search · macOS notification on job done · multi-channel support · TikTok manual-post checklist · config.py editing from UI.
+Analytics snapshots over time (local history + charts) · thumbnail A/B tracker · content calendar · clip-library tags/search · macOS notification on job done · multi-channel support · TikTok manual-post checklist · config.py editing from UI · asset ingest from the UI (drag-drop upload, Downloads inbox scanner — parked 2026-07-13, Sasha prefers sorting in Finder).
 
 ---
 
@@ -146,7 +144,7 @@ GET  /api/channel/stats | /api/channel/analytics
 
 - **M0 — Skeleton.** Repo scaffolding, venv, FastAPI hello + Vite hello + proxy, launch.json, `.env.example`. ✓ = both dev servers run, page loads.
 - **M1 — Read-only Dashboard + Assets.** Inventory readers (themes/images/music/veo bank/tokens/disk), image grid w/ thumbnail cache, audio playback. **The census win — already useful daily.** ✓ = dashboard matches reality vs `ls`.
-- **M2 — Job engine + Prompts + Asset ingest.** Queue/spawn/cancel/SSE logs; Prompts page runs `generate_prompts` and renders copy-blocks; drag-drop upload + Downloads inbox. ✓ = generate prompts from UI, watch it stream, cancel a dummy job cleanly; drag a PNG onto a theme and see it in the grid; one-click import a Downloads batch.
+- **M2 — Job engine + Prompts.** Queue/spawn/cancel/SSE logs; Prompts page runs `generate_prompts` and renders copy-blocks. ✓ = generate prompts from UI, watch it stream, cancel a dummy job cleanly; drop a PNG into a theme folder in Finder → it's in the app on next tab focus.
 - **M3 — Build wizards.** Main build + Veo wizard + preflight inline; progress % parsing. **Daily-driver reached — CLI no longer needed for routine ops.** ✓ = kick a short test build (`VIDEO_DURATION_SECONDS=30 YOUTUBE_UPLOAD=false`) fully from UI.
 - **M4 — Outputs + Shorts.** Output browser w/ video preview (range requests), trash/set-thumb actions, Shorts builder w/ schedule. ✓ = build + schedule a Short from UI.
 - **M5 — Channel.** Stats + analytics views, scheduled-publish calendar. ✓ = numbers match Studio (minus impressions/CTR, which are Studio-only).
