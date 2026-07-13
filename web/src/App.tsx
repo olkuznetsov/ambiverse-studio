@@ -1,6 +1,8 @@
 import { NavLink, Navigate, Route, Routes } from 'react-router-dom'
 import Dashboard from './pages/Dashboard'
 import Assets from './pages/Assets'
+import Jobs from './pages/Jobs'
+import Prompts from './pages/Prompts'
 import Stub from './pages/Stub'
 
 const NAV = [
@@ -47,9 +49,9 @@ export default function App() {
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/assets" element={<Assets />} />
-          <Route path="/prompts" element={<Stub title="Prompts" milestone="M2" note="Run generate_prompts.py as a job; copy-blocks per theme." />} />
+          <Route path="/prompts" element={<Prompts />} />
           <Route path="/build" element={<Stub title="Build" milestone="M3" note="Main build, Veo wizard, Shorts builder." />} />
-          <Route path="/jobs" element={<Stub title="Jobs" milestone="M2" note="Queue, live SSE logs, cancel, history." />} />
+          <Route path="/jobs" element={<Jobs />} />
           <Route path="/channel" element={<Stub title="Channel" milestone="M5" note="YPP progress, per-video stats, theme rollup." />} />
           <Route path="/settings" element={<Stub title="Settings" milestone="M6" note="Paths, knob defaults, token re-auth." />} />
         </Routes>

@@ -63,6 +63,46 @@ export interface Overview {
   used_images_count: number
   animembient_dir: string
   generated_at: string
+  jobs: { running: { id: number; type: string; title: string; started_at: string } | null; queued: number }
+}
+
+export type JobStatus = 'queued' | 'running' | 'done' | 'failed' | 'cancelled'
+
+export interface Job {
+  id: number
+  type: string
+  title: string
+  cmd: string[]
+  env: Record<string, string>
+  status: JobStatus
+  cancel_requested: boolean
+  pid: number | null
+  log_path: string | null
+  exit_code: number | null
+  created_at: string
+  started_at: string | null
+  ended_at: string | null
+  queue_position?: number | null
+}
+
+export interface PromptScene {
+  scene: string
+  variations: string[]
+}
+
+export interface PromptTheme {
+  key: string
+  title: string
+  style: string
+  scenes: PromptScene[]
+  music_prompts: string[]
+  thumbnail: string | null
+}
+
+export interface Prompts {
+  date: string
+  age_days: number
+  themes: PromptTheme[]
 }
 
 export interface ThemeImages {
@@ -81,6 +121,27 @@ export const fetchOverview = () => get<Overview>('/api/state/overview')
 export const fetchThemeImages = (theme: string) =>
   get<ThemeImages>(`/api/themes/${theme}/images`)
 export const fetchMusic = () => get<MusicInventory>('/api/music')
+export const fetchJobs = () => get<Job[]>('/api/jobs')
+export const fetchJob = (id: number) => get<Job>(`/api/jobs/${id}`)
+export const fetchPrompts = () => get<Prompts>('/api/prompts/today')
+export const fetchPromptHistory = () => get<string[]>('/api/prompts/history')
+export const fetchPromptsForDay = (date: string) => get<Prompts>(`/api/prompts/day/${date}`)
+
+async function post<T>(url: string, body?: unknown): Promise<T> {
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: body === undefined ? undefined : JSON.stringify(body),
+  })
+  if (!res.ok) throw new Error(`${url} → ${res.status} ${await res.text()}`)
+  return res.json()
+}
+
+export const createJob = (type: string, params: Record<string, unknown> = {}, env: Record<string, string> = {}) =>
+  post<Job>('/api/jobs', { type, params, env })
+export const cancelJob = (id: number) => post<Job>(`/api/jobs/${id}/cancel`)
+
+export const jobLogUrl = (id: number) => `/api/jobs/${id}/log`
 
 export const imgUrl = (path: string, size = 480) =>
   `/api/media/img?path=${encodeURIComponent(path)}&size=${size}`

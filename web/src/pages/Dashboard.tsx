@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+import { Link } from 'react-router-dom'
 import { fetchOverview, fmtBytes, fmtDate, imgUrl, vthumbUrl } from '../api'
 import type { ThemeSummary } from '../api'
 
@@ -89,6 +90,20 @@ export default function Dashboard() {
           )}
         </div>
       </div>
+
+      {data.jobs?.running && (
+        <Link
+          to="/jobs"
+          className="mb-5 flex items-center justify-between rounded-xl border border-accent-500/40 bg-accent-500/10 px-4 py-2.5 text-sm hover:bg-accent-500/15"
+        >
+          <span className="text-accent-300">
+            <span className="mr-2 inline-block h-2 w-2 animate-pulse rounded-full bg-accent-400" />
+            Running: {data.jobs.running.title} (#{data.jobs.running.id})
+            {data.jobs.queued > 0 && <span className="text-dusk-400"> · {data.jobs.queued} queued</span>}
+          </span>
+          <span className="text-[11px] text-dusk-400">watch log →</span>
+        </Link>
+      )}
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
         {data.themes.map((t) => (

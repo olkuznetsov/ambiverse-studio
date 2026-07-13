@@ -3,21 +3,32 @@
 Dev:  uvicorn app:app --app-dir server --port 4700 --reload  (Vite on 5175 proxies /api)
 Prod: same process also serves web/dist on 4700 when it exists.
 """
+from contextlib import asynccontextmanager
 from pathlib import Path
 
 from fastapi import FastAPI
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
+import jobs as jobs_engine
 import media
 from config import ANIMEMBIENT_DIR, STUDIO_ROOT
-from routes import assets, state
+from routes import assets, jobs, prompts, state
 
-app = FastAPI(title="Ambiverse Studio", version="0.1.0")
+
+@asynccontextmanager
+async def lifespan(_app: FastAPI):
+    jobs_engine.start_worker()
+    yield
+
+
+app = FastAPI(title="Ambiverse Studio", version="0.2.0", lifespan=lifespan)
 
 app.include_router(state.router)
 app.include_router(assets.router)
 app.include_router(media.router)
+app.include_router(jobs.router)
+app.include_router(prompts.router)
 
 
 @app.get("/api/health")

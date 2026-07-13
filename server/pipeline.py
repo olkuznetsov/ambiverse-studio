@@ -234,8 +234,11 @@ def disk_free() -> dict:
 # ---------- composed dashboard payload ----------
 
 def overview() -> dict:
+    import jobs as jobs_engine
+
     used_count = len([p for p in _files(USED_IMAGES_DIR, IMAGE_EXTS)])
     return {
+        "jobs": jobs_engine.running_summary(),
         "themes": theme_summaries(),
         "music": music_inventory(),
         "veo_bank": veo_bank(),
