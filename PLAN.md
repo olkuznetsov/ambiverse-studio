@@ -86,11 +86,19 @@ Derived from every script + knob that exists today (Waves 1–11b). *This table 
    - **Veo wizard**: scan sources → enhance selected (shows ~35min/clip estimate, cached clips marked "banked") → assemble (pick clips + music + duration + shuffle) → optional upload step.
    - **Shorts builder**: pick image/clip + track + title + publish_at (generalizes `build_df_shorts.py`).
 5. **Jobs (M2)** — queue (SQLite), live log tail (SSE), cancel (kills process group), history with settings used + exit code + duration. Single-flight: one heavy job at a time (16 GB RAM reality).
-6. **Channel (M5)** — uploads table w/ stats (channel_stats), analytics summary (watch time, retention, traffic sources), scheduled-publish calendar of pending publishAt items. Impressions/CTR note: Studio-web only — link out.
+6. **Channel / YouTube Analytics (M5)** — a real analytics tab, not just a stats dump:
+   - **YPP progress bars, always on top**: subs → 1,000 and watch-hours → 4,000 (the channel goal made visible).
+   - **Overview cards**: subs, views, watch time, avg view duration — lifetime + last 28 days.
+   - **Per-video table**: views/likes/comments (Data API) + watch time/AVD/retention % (Analytics API), sortable; each video mapped to its theme/world.
+   - **Theme-level rollup** — retention/views/watch-time aggregated **per world** (e.g. "PS1 26% retention vs Space 5–6%"): the "what should I make next" signal Studio doesn't show directly. This is the tab's killer feature.
+   - **Traffic**: sources breakdown, Shorts-vs-long split, geography, devices.
+   - **Scheduled-publish calendar**: pending `publishAt` items (mains + staggered Shorts).
+   - Mechanics: quota-friendly caching (~1h TTL + manual refresh); needs the *separate* read-only analytics token — show its status + one-click re-auth (runs `auth_analytics.py` as a job, surfaces the consent URL).
+   - **Impressions/CTR are in NO API** (Studio-web only) — deep-link straight to the Studio impressions page; optional manual CTR log parked in Later.
 7. **Settings (M6)** — paths, defaults for knobs, token re-auth launcher (runs auth scripts, shows the consent URL), theme registry viewer (rendered from `config.THEMES`, read-only in v1).
 
 ### Later / nice-to-haves (parked)
-Analytics snapshots over time (local history + charts) · thumbnail A/B tracker · content calendar · clip-library tags/search · macOS notification on job done · multi-channel support · TikTok manual-post checklist · config.py editing from UI · asset ingest from the UI (drag-drop upload, Downloads inbox scanner — parked 2026-07-13, Sasha prefers sorting in Finder).
+Analytics snapshots over time (local history + charts) · thumbnail A/B tracker · content calendar · clip-library tags/search · macOS notification on job done · multi-channel support · TikTok manual-post checklist · config.py editing from UI · asset ingest from the UI (drag-drop upload, Downloads inbox scanner — parked 2026-07-13, Sasha prefers sorting in Finder) · manual impressions/CTR log (typed in from Studio screenshots, charts CTR over time).
 
 ---
 
@@ -147,7 +155,7 @@ GET  /api/channel/stats | /api/channel/analytics
 - **M2 — Job engine + Prompts.** Queue/spawn/cancel/SSE logs; Prompts page runs `generate_prompts` and renders copy-blocks. ✓ = generate prompts from UI, watch it stream, cancel a dummy job cleanly; drop a PNG into a theme folder in Finder → it's in the app on next tab focus.
 - **M3 — Build wizards.** Main build + Veo wizard + preflight inline; progress % parsing. **Daily-driver reached — CLI no longer needed for routine ops.** ✓ = kick a short test build (`VIDEO_DURATION_SECONDS=30 YOUTUBE_UPLOAD=false`) fully from UI.
 - **M4 — Outputs + Shorts.** Output browser w/ video preview (range requests), trash/set-thumb actions, Shorts builder w/ schedule. ✓ = build + schedule a Short from UI.
-- **M5 — Channel.** Stats + analytics views, scheduled-publish calendar. ✓ = numbers match Studio (minus impressions/CTR, which are Studio-only).
+- **M5 — Channel / Analytics.** YPP progress, overview cards, per-video table, theme rollup, traffic, scheduled calendar. ✓ = numbers match Studio (minus impressions/CTR, Studio-only) and the theme rollup reproduces the known ranking (PS1 > Tokyo > Space on retention).
 - **M6 — Polish.** Settings page, token re-auth flow, macOS notifications on job end, error surfacing, keyboard niceties.
 
 ---
