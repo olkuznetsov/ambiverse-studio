@@ -53,6 +53,43 @@ child.terminate()
 print("dummy job finished", flush=True)
 """
 
+# Calls the pipeline's veo_assemble as a library (cwd=ANIMEMBIENT_DIR) so the UI
+# can pass an explicit CLIP SELECTION — the script's own CLI only takes a dir.
+_VEO_ASSEMBLE_SNIPPET = """\
+import sys
+from pathlib import Path
+import veo_assemble
+out, dur, music = sys.argv[1], float(sys.argv[2]), sys.argv[3] or None
+clips = [Path(p) for p in sys.argv[4:]]
+print(f"[veo_assemble] {len(clips)} clips -> {out} ({dur:.0f}s, music={music or 'none'})", flush=True)
+veo_assemble.assemble(clips, out, dur, music)
+print("[veo_assemble] DONE", flush=True)
+"""
+
+
+def _resolve_inside(rel: str, *, must_exist: bool = True):
+    p = (ANIMEMBIENT_DIR / rel).resolve()
+    if not p.is_relative_to(ANIMEMBIENT_DIR):
+        raise ValueError(f"path escapes pipeline dir: {rel}")
+    if must_exist and not p.exists():
+        raise ValueError(f"not found: {rel}")
+    return p
+
+
+def _veo_assemble_argv(p: dict) -> list[str]:
+    clips = p.get("clips") or []
+    if not clips:
+        raise ValueError("no clips selected")
+    clip_paths = [str(_resolve_inside(c)) for c in clips]
+    duration = float(p.get("duration", 7200))
+    music = str(_resolve_inside(p["music"])) if p.get("music") else ""
+    name = os.path.basename(p.get("output") or "veo_custom.mp4")
+    if not name.endswith(".mp4"):
+        name += ".mp4"
+    out = str(_resolve_inside(f"output/{name}", must_exist=False))
+    return [PIPELINE_PYTHON, "-u", "-c", _VEO_ASSEMBLE_SNIPPET,
+            out, str(duration), music, *clip_paths]
+
 # Registry of everything the UI can run. argv is relative to ANIMEMBIENT_DIR;
 # env_keys whitelists which knobs the client may set for this job type.
 JOB_TYPES = {
@@ -68,6 +105,40 @@ JOB_TYPES = {
                            str(int(p.get("seconds", 60)))],
         "env_keys": set(),
         "heavy": False,
+    },
+    "main_build": {
+        "title": lambda p, env: "Main build ({}, {}s{})".format(
+            "DepthFlow" if env.get("ANIMATE") == "depthflow" else "Ken Burns",
+            env.get("VIDEO_DURATION_SECONDS", "7200"),
+            ", upload" if env.get("YOUTUBE_UPLOAD") == "true" else ", no upload",
+        ),
+        "argv": lambda p: [PIPELINE_PYTHON, "-u", "main.py"],
+        "env_keys": {
+            "ANIMATE", "VIDEO_DURATION_SECONDS", "NUM_IMAGES_PER_VIDEO",
+            "VIDEO_FLAVOR", "MUSIC_MODE", "YOUTUBE_UPLOAD", "YOUTUBE_PRIVACY",
+            "SCHEDULED_PUBLISH_UTC", "MAKE_SHORTS", "SHORTS_PER_VIDEO",
+            "SHORTS_SPACING_DAYS", "RENDER_PRESET", "RENDER_CRF",
+            "RENDER_WORKERS", "RENDER_SUPERSAMPLE",
+        },
+        "heavy": True,
+    },
+    "veo_enhance": {
+        "title": lambda p, env: "Veo enhance batch{}".format(
+            f" (upscale {env.get('VEO_TARGET_H', '1440')}p)"
+            if env.get("VEO_UPSCALE") == "1" else " (no upscale)",
+        ),
+        "argv": lambda p: [PIPELINE_PYTHON, "-u", "build_veo.py"],
+        "env_keys": {"VEO_UPSCALE", "VEO_TARGET_H", "VEO_SLOWDOWN"},
+        "heavy": True,
+    },
+    "veo_assemble": {
+        "title": lambda p, env: "Veo assemble ({} clips, {}s{})".format(
+            len(p.get("clips") or []), int(float(p.get("duration", 7200))),
+            ", music" if p.get("music") else ", silent",
+        ),
+        "argv": _veo_assemble_argv,
+        "env_keys": {"VEO_XFADE"},
+        "heavy": True,
     },
 }
 
@@ -93,7 +164,25 @@ def _row_to_dict(row: sqlite3.Row) -> dict:
     d["cmd"] = json.loads(d["cmd"])
     d["env"] = json.loads(d.pop("env_json"))
     d["cancel_requested"] = bool(d["cancel_requested"])
+    if d["status"] == "running":
+        d["progress"] = _progress_for(d)
     return d
+
+
+def _progress_for(job: dict) -> dict | None:
+    import progress as progress_mod
+
+    path = job.get("log_path")
+    if not path:
+        return None
+    try:
+        with open(path, "rb") as f:
+            f.seek(0, os.SEEK_END)
+            f.seek(max(0, f.tell() - 65536))
+            tail = f.read().decode(errors="replace")
+    except OSError:
+        return None
+    return progress_mod.parse(job["type"], tail)
 
 
 # ---------- public API ----------
@@ -102,14 +191,16 @@ def create_job(job_type: str, params: dict | None = None, env: dict | None = Non
     spec = JOB_TYPES.get(job_type)
     if spec is None:
         raise ValueError(f"unknown job type: {job_type}")
-    argv = spec["argv"](params or {})
+    params = params or {}
+    argv = spec["argv"](params)
     if spec["heavy"]:
         argv = ["caffeinate", "-dimsu", *argv]
     safe_env = {k: str(v) for k, v in (env or {}).items() if k in spec["env_keys"]}
+    title = spec["title"](params, safe_env) if callable(spec["title"]) else spec["title"]
     with _db() as conn:
         cur = conn.execute(
             "INSERT INTO jobs (type, title, cmd, env_json, created_at) VALUES (?,?,?,?,?)",
-            (job_type, spec["title"], json.dumps(argv), json.dumps(safe_env), _now()),
+            (job_type, title, json.dumps(argv), json.dumps(safe_env), _now()),
         )
         job_id = cur.lastrowid
     return get_job(job_id)  # after commit — a fresh connection must see the row

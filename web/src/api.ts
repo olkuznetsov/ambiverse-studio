@@ -68,6 +68,36 @@ export interface Overview {
 
 export type JobStatus = 'queued' | 'running' | 'done' | 'failed' | 'cancelled'
 
+export interface JobProgress {
+  stage: string
+  pct: number | null
+}
+
+export interface PreflightCheck {
+  ok: boolean
+  label: string
+  detail: string
+}
+
+export interface Preflight {
+  ok: boolean
+  checks: PreflightCheck[]
+}
+
+export interface VeoSource {
+  name: string
+  index: number
+  size: number
+  mtime: number
+  cached_heights: number[]
+}
+
+export interface VeoSources {
+  downloads_dir: string
+  sources: VeoSource[]
+  bank: VeoClip[]
+}
+
 export interface Job {
   id: number
   type: string
@@ -75,6 +105,7 @@ export interface Job {
   cmd: string[]
   env: Record<string, string>
   status: JobStatus
+  progress?: JobProgress | null
   cancel_requested: boolean
   pid: number | null
   log_path: string | null
@@ -126,6 +157,9 @@ export const fetchJob = (id: number) => get<Job>(`/api/jobs/${id}`)
 export const fetchPrompts = () => get<Prompts>('/api/prompts/today')
 export const fetchPromptHistory = () => get<string[]>('/api/prompts/history')
 export const fetchPromptsForDay = (date: string) => get<Prompts>(`/api/prompts/day/${date}`)
+export const fetchPreflight = (upload: boolean, musicMode: string, animate: string) =>
+  get<Preflight>(`/api/build/preflight?upload=${upload}&music_mode=${musicMode}&animate=${animate}`)
+export const fetchVeoSources = () => get<VeoSources>('/api/veo/sources')
 
 async function post<T>(url: string, body?: unknown): Promise<T> {
   const res = await fetch(url, {

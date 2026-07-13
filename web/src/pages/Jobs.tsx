@@ -56,7 +56,7 @@ export default function Jobs() {
                 }`}
               >
                 <div className="flex items-center justify-between gap-3">
-                  <div className="min-w-0">
+                  <div className="min-w-0 flex-1">
                     <div className="text-sm text-white truncate">
                       <span className="text-dusk-500 mr-1.5">#{j.id}</span>
                       {j.title}
@@ -68,6 +68,16 @@ export default function Jobs() {
                       {j.status === 'queued' && j.queue_position ? ` · position ${j.queue_position}` : ''}
                       {j.exit_code !== null && j.status !== 'done' ? ` · exit ${j.exit_code}` : ''}
                     </div>
+                    {j.status === 'running' && j.progress && (
+                      <div className="mt-1.5">
+                        <div className="text-[11px] text-accent-300">{j.progress.stage}</div>
+                        {j.progress.pct !== null && (
+                          <div className="mt-1 h-1 rounded-full bg-dusk-800 overflow-hidden">
+                            <div className="h-full rounded-full bg-accent-500" style={{ width: `${j.progress.pct}%` }} />
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </div>
                   <div className="flex items-center gap-2 shrink-0">
                     <span className={`rounded-full px-2 py-0.5 text-[11px] font-medium ${STATUS_STYLE[j.status]}`}>
