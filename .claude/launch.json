@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "studio",
+      "runtimeExecutable": "server/venv/bin/uvicorn",
+      "runtimeArgs": ["app:app", "--app-dir", "server", "--host", "127.0.0.1", "--port", "4700", "--reload"],
+      "port": 4700
+    },
+    {
+      "name": "web",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--prefix", "web"],
+      "port": 5175
+    }
+  ]
+}

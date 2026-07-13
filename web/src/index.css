@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+/* Dusk — dark slate/violet studio theme */
+@theme {
+  --color-dusk-950: #0a0d16;
+  --color-dusk-900: #0f1322;
+  --color-dusk-850: #141a2e;
+  --color-dusk-800: #1a2138;
+  --color-dusk-700: #263050;
+  --color-dusk-600: #3a4670;
+  --color-dusk-400: #8b95b8;
+  --color-dusk-300: #aeb6d4;
+  --color-dusk-200: #d2d7ea;
+  --color-accent-500: #8b5cf6;
+  --color-accent-400: #a78bfa;
+  --color-accent-300: #c4b5fd;
+  --color-ok-400: #34d399;
+  --color-warn-400: #fbbf24;
+  --color-bad-400: #f87171;
+}
+
+html {
+  background: var(--color-dusk-950);
+  color: var(--color-dusk-200);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+body { margin: 0; }
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb { background: var(--color-dusk-700); border-radius: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
