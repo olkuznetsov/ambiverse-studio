@@ -238,6 +238,14 @@ export interface ThemeImages {
   min_images: number
 }
 
+export interface Settings {
+  paths: Record<string, string>
+  ports: { api: number; vite_dev: number }
+  defaults: { key: string; value: string | number | null; note: string }[]
+  tokens: TokenStatus[]
+  themes: { key: string; title: string; description: string; style_notes: string; custom_style: boolean }[]
+}
+
 async function get<T>(url: string): Promise<T> {
   const res = await fetch(url)
   if (!res.ok) throw new Error(`${url} → ${res.status} ${await res.text()}`)
@@ -271,6 +279,7 @@ export const createJob = (type: string, params: Record<string, unknown> = {}, en
   post<Job>('/api/jobs', { type, params, env })
 export const cancelJob = (id: number) => post<Job>(`/api/jobs/${id}/cancel`)
 export const fetchChannel = (refresh = false) => get<ChannelData>(`/api/channel${refresh ? '?refresh=1' : ''}`)
+export const fetchSettings = () => get<Settings>('/api/settings')
 export const fetchOutputs = () => get<OutputEntry[]>('/api/outputs')
 export const fetchUsedImages = (limit = 48) => get<UsedImage[]>(`/api/assets/used-images?limit=${limit}`)
 export const trashAsset = (path: string) => post<{ ok: boolean }>('/api/assets/trash', { path })

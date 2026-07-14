@@ -5,7 +5,7 @@ import Build from './pages/Build'
 import Channel from './pages/Channel'
 import Jobs from './pages/Jobs'
 import Prompts from './pages/Prompts'
-import Stub from './pages/Stub'
+import Settings from './pages/Settings'
 
 const NAV = [
   { to: '/dashboard', label: 'Dashboard', icon: '◈' },
@@ -55,7 +55,7 @@ export default function App() {
           <Route path="/build" element={<Build />} />
           <Route path="/jobs" element={<Jobs />} />
           <Route path="/channel" element={<Channel />} />
-          <Route path="/settings" element={<Stub title="Settings" milestone="M6" note="Paths, knob defaults, token re-auth." />} />
+          <Route path="/settings" element={<Settings />} />
         </Routes>
       </main>
     </div>

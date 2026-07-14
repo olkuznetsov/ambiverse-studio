@@ -204,7 +204,23 @@ JOB_TYPES = {
         "env_keys": set(),
         "heavy": False,  # short + interactive: prints a consent URL, waits for redirect
     },
+    "auth_youtube": {
+        "title": "Re-auth YouTube upload token",
+        "argv": lambda p: [PIPELINE_PYTHON, "-u", "auth_youtube.py"],
+        "env_keys": set(),
+        "heavy": False,
+    },
 }
+
+
+def _notify(title: str, message: str):
+    """Fire-and-forget macOS banner (osascript). Never raises."""
+    try:
+        script = f'display notification {message!r} with title {title!r}'
+        subprocess.Popen(["osascript", "-e", script],
+                         stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    except OSError:
+        pass
 
 
 def _now() -> str:
@@ -453,3 +469,7 @@ def _run_job(job: dict):
     cancelled = get_job(job["id"])["cancel_requested"]
     status = "cancelled" if (cancelled and rc != 0) else ("done" if rc == 0 else "failed")
     _finish(job["id"], status, rc)
+    # ping the desktop for heavy jobs (the long ones you walk away from)
+    if status != "cancelled" and JOB_TYPES.get(job["type"], {}).get("heavy"):
+        icon = "✅" if status == "done" else "❌"
+        _notify("Ambiverse Studio", f"{icon} {job['title']} — {status}")
