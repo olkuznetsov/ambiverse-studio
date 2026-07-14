@@ -113,6 +113,87 @@ export interface UsedImage {
   mtime: string
 }
 
+export interface VideoAnalytics {
+  minutes_watched: number
+  avg_view_duration_s: number
+  avg_view_pct: number
+}
+
+export interface ChannelVideo {
+  video_id: string
+  title: string
+  kind: 'Video' | 'Short'
+  date: string
+  secs: number
+  views: number
+  likes: number
+  comments: number
+  privacy: string | null
+  publish_at: string | null
+  theme: string | null
+  theme_source: 'log' | 'inferred' | 'genre' | 'unknown'
+  analytics: VideoAnalytics | null
+}
+
+export interface CoreBlock {
+  views: number
+  minutes_watched: number
+  avg_view_duration_s: number
+  avg_view_pct: number
+  subs_gained: number
+  subs_lost: number
+  likes: number
+  comments: number
+  shares: number
+}
+
+export interface DimRow {
+  label: string
+  views: number
+  minutes_watched: number | null
+}
+
+export interface ChannelAnalytics {
+  available: boolean
+  reason?: string
+  lifetime?: CoreBlock
+  last_28?: CoreBlock
+  traffic?: DimRow[]
+  content_type?: DimRow[]
+  geography?: DimRow[]
+  devices?: DimRow[]
+}
+
+export interface ThemeRollup {
+  theme: string
+  videos: number
+  shorts: number
+  views: number
+  minutes_watched: number
+  avg_view_pct: number | null
+}
+
+export interface ScheduledUpload {
+  video_id: string
+  title: string
+  kind: 'Video' | 'Short'
+  publish_at: string
+}
+
+export interface ChannelData {
+  channel: { title: string; subscribers: number; views: number; video_count: number }
+  videos: ChannelVideo[]
+  scheduled: ScheduledUpload[]
+  analytics: ChannelAnalytics
+  theme_rollup: ThemeRollup[]
+  generated_at: string
+  fetched_at: number
+  cache: 'fresh' | 'live' | 'stale'
+  refresh_error?: string
+  analytics_token: TokenStatus | null
+  studio_impressions_url: string
+}
+
 export interface Job {
   id: number
   type: string
@@ -189,6 +270,7 @@ async function post<T>(url: string, body?: unknown): Promise<T> {
 export const createJob = (type: string, params: Record<string, unknown> = {}, env: Record<string, string> = {}) =>
   post<Job>('/api/jobs', { type, params, env })
 export const cancelJob = (id: number) => post<Job>(`/api/jobs/${id}/cancel`)
+export const fetchChannel = (refresh = false) => get<ChannelData>(`/api/channel${refresh ? '?refresh=1' : ''}`)
 export const fetchOutputs = () => get<OutputEntry[]>('/api/outputs')
 export const fetchUsedImages = (limit = 48) => get<UsedImage[]>(`/api/assets/used-images?limit=${limit}`)
 export const trashAsset = (path: string) => post<{ ok: boolean }>('/api/assets/trash', { path })

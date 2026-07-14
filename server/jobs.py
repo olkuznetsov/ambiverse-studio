@@ -198,6 +198,12 @@ JOB_TYPES = {
         "env_keys": {"ANIMATE"},
         "heavy": True,
     },
+    "auth_analytics": {
+        "title": "Re-auth YouTube Analytics (read-only)",
+        "argv": lambda p: [PIPELINE_PYTHON, "-u", "auth_analytics.py"],
+        "env_keys": set(),
+        "heavy": False,  # short + interactive: prints a consent URL, waits for redirect
+    },
 }
 
 

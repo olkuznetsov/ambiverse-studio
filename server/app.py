@@ -13,7 +13,7 @@ from fastapi.staticfiles import StaticFiles
 import jobs as jobs_engine
 import media
 from config import ANIMEMBIENT_DIR, STUDIO_ROOT
-from routes import assets, build, jobs, prompts, state
+from routes import assets, build, channel, jobs, prompts, state
 
 
 @asynccontextmanager
@@ -30,6 +30,7 @@ app.include_router(media.router)
 app.include_router(jobs.router)
 app.include_router(prompts.router)
 app.include_router(build.router)
+app.include_router(channel.router)
 
 
 @app.get("/api/health")

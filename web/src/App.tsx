@@ -2,6 +2,7 @@ import { NavLink, Navigate, Route, Routes } from 'react-router-dom'
 import Dashboard from './pages/Dashboard'
 import Assets from './pages/Assets'
 import Build from './pages/Build'
+import Channel from './pages/Channel'
 import Jobs from './pages/Jobs'
 import Prompts from './pages/Prompts'
 import Stub from './pages/Stub'
@@ -53,7 +54,7 @@ export default function App() {
           <Route path="/prompts" element={<Prompts />} />
           <Route path="/build" element={<Build />} />
           <Route path="/jobs" element={<Jobs />} />
-          <Route path="/channel" element={<Stub title="Channel" milestone="M5" note="YPP progress, per-video stats, theme rollup." />} />
+          <Route path="/channel" element={<Channel />} />
           <Route path="/settings" element={<Stub title="Settings" milestone="M6" note="Paths, knob defaults, token re-auth." />} />
         </Routes>
       </main>
