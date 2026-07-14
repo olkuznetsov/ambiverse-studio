@@ -4,7 +4,7 @@ Local mission-control app for the [Ambiverse](https://www.youtube.com/@ambiverse
 
 One UI to see pipeline state (images / music / Veo clip bank / tokens), generate prompts, run builds (Ken Burns · DepthFlow · Veo living-world), watch render jobs live, and track channel stats — instead of ~20 CLI scripts and env vars.
 
-**Status:** M0–M4 done — **daily driver**: Dashboard, Assets (outputs browser, trash/set-thumb), jobs, Prompts, Build wizards (main + Veo + Shorts). See **[PLAN.md](PLAN.md)**. Next: M5 channel analytics.
+**Status:** M0–M5 done — Dashboard, Assets (outputs browser, trash/set-thumb), jobs, Prompts, Build wizards (main + Veo + Shorts), Channel analytics (YPP, theme rollup, per-video, traffic). See **[PLAN.md](PLAN.md)**. Next: M6 polish (Settings).
 
 ## Run
 
