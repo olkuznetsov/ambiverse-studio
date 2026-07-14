@@ -10,13 +10,19 @@ It drives the [Ambiverse](https://www.youtube.com/@ambiverseworlds) ambient-musi
 
 ## Screenshots
 
-<!-- Add the three hero shots to docs/screenshots/ and uncomment:
-| Dashboard | Channel analytics | Build wizard |
-|---|---|---|
-| ![Dashboard](docs/screenshots/dashboard.png) | ![Channel](docs/screenshots/channel.png) | ![Build](docs/screenshots/build.png) |
--->
+A dark "Dusk" control panel. Three of the seven pages:
 
-A dark "Dusk" control panel: per-theme readiness cards, a job queue with live logs, a media browser, and a channel-analytics tab with a per-world retention rollup.
+**Dashboard** — the "can I build today?" view: per-theme readiness, banks, tokens & disk, Veo clip library.
+
+![Dashboard](docs/screenshots/dashboard.png)
+
+**Channel analytics** — YPP progress bars, growth-over-time charts, and the per-world retention rollup that answers "what should I make next?"
+
+![Channel analytics](docs/screenshots/channel.png)
+
+**Build wizard** — assembles the env + command, shows the exact command that will run, and runs an inline preflight before queueing.
+
+![Build wizard](docs/screenshots/build.png)
 
 ## What it does
 
