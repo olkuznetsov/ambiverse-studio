@@ -278,7 +278,29 @@ async function post<T>(url: string, body?: unknown): Promise<T> {
 export const createJob = (type: string, params: Record<string, unknown> = {}, env: Record<string, string> = {}) =>
   post<Job>('/api/jobs', { type, params, env })
 export const cancelJob = (id: number) => post<Job>(`/api/jobs/${id}/cancel`)
+export interface Snapshot {
+  date: string
+  subscribers: number | null
+  total_views: number | null
+  watch_minutes: number | null
+  long_watch_minutes: number | null
+  retention: number | null
+}
+
+export interface Impression {
+  date: string
+  impressions: number
+  ctr: number
+  note: string
+}
+
 export const fetchChannel = (refresh = false) => get<ChannelData>(`/api/channel${refresh ? '?refresh=1' : ''}`)
+export const fetchHistory = () => get<Snapshot[]>('/api/channel/history')
+export const fetchImpressions = () => get<Impression[]>('/api/channel/impressions')
+export const addImpression = (e: { date: string; impressions: number; ctr: number; note?: string }) =>
+  post<Impression[]>('/api/channel/impressions', e)
+export const deleteImpression = (day: string) =>
+  fetch(`/api/channel/impressions/${day}`, { method: 'DELETE' }).then((r) => r.json() as Promise<Impression[]>)
 export const fetchSettings = () => get<Settings>('/api/settings')
 export const fetchOutputs = () => get<OutputEntry[]>('/api/outputs')
 export const fetchUsedImages = (limit = 48) => get<UsedImage[]>(`/api/assets/used-images?limit=${limit}`)

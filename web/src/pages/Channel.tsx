@@ -1,8 +1,12 @@
 import { useMemo, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
-import { createJob, fetchChannel, fmtDuration } from '../api'
+import {
+  addImpression, createJob, deleteImpression, fetchChannel, fetchHistory,
+  fetchImpressions, fmtDuration,
+} from '../api'
 import type { ChannelVideo, DimRow, ThemeRollup } from '../api'
+import LineChart from '../components/LineChart'
 
 const THEME_TITLE: Record<string, string> = {
   'space-stations': 'Space Stations',
@@ -228,6 +232,117 @@ function VideoTable({ videos }: { videos: ChannelVideo[] }) {
   )
 }
 
+function GrowthCard() {
+  const { data } = useQuery({ queryKey: ['channel-history'], queryFn: fetchHistory })
+  const snaps = data ?? []
+  if (snaps.length === 0) return null
+  const series = (pick: (s: typeof snaps[number]) => number | null) =>
+    snaps.filter((s) => pick(s) != null).map((s) => ({ x: s.date, y: pick(s) as number }))
+  const charts: [string, { x: string; y: number }[], (v: number) => string, string][] = [
+    ['Subscribers', series((s) => s.subscribers), (v) => String(Math.round(v)), ''],
+    ['Watch hours (long-form)', series((s) => (s.long_watch_minutes ?? 0) / 60), (v) => String(Math.round(v)), 'h'],
+    ['Total views', series((s) => s.total_views), (v) => v.toLocaleString('en-US'), ''],
+  ]
+  return (
+    <div className="rounded-xl border border-dusk-800 bg-dusk-900 p-4">
+      <div className="flex items-baseline justify-between mb-3">
+        <h3 className="text-sm font-semibold text-dusk-300 uppercase tracking-wider">Growth over time</h3>
+        <span className="text-[11px] text-dusk-500">
+          {snaps.length === 1 ? 'first snapshot — banks a point on each refresh' : `${snaps.length} daily snapshots`}
+        </span>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {charts.map(([label, pts, fmt, suffix]) => (
+          <div key={label}>
+            <div className="text-[11px] uppercase tracking-wider text-dusk-400 mb-1">{label}</div>
+            <LineChart points={pts} format={fmt} suffix={suffix} />
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function ImpressionsCard({ studioUrl }: { studioUrl: string }) {
+  const qc = useQueryClient()
+  const { data } = useQuery({ queryKey: ['impressions'], queryFn: fetchImpressions })
+  const rows = data ?? []
+  const today = new Date().toISOString().slice(0, 10)
+  const [date, setDate] = useState(today)
+  const [impr, setImpr] = useState('')
+  const [ctr, setCtr] = useState('')
+
+  const add = useMutation({
+    mutationFn: () => addImpression({ date, impressions: Number(impr), ctr: Number(ctr) }),
+    onSuccess: (r) => {
+      qc.setQueryData(['impressions'], r)
+      setImpr('')
+      setCtr('')
+    },
+  })
+  const del = useMutation({
+    mutationFn: (day: string) => deleteImpression(day),
+    onSuccess: (r) => qc.setQueryData(['impressions'], r),
+  })
+
+  const chart = rows.map((r) => ({ x: r.date, y: r.ctr }))
+  const inputCls = 'rounded-lg border border-dusk-700 bg-dusk-950 px-2 py-1 text-xs text-dusk-200 focus:border-accent-400 focus:outline-none'
+
+  return (
+    <div className="rounded-xl border border-dusk-800 bg-dusk-900 p-4">
+      <div className="flex items-baseline justify-between mb-1">
+        <h3 className="text-sm font-semibold text-dusk-300 uppercase tracking-wider">Impressions & CTR</h3>
+        <a href={studioUrl} target="_blank" rel="noreferrer" className="text-[11px] text-accent-400 hover:text-accent-300">
+          read from Studio ↗
+        </a>
+      </div>
+      <p className="text-[11px] text-dusk-500 mb-3">
+        The one metric no API exposes — log it from Studio to track the channel's CTR lever over time.
+      </p>
+      {chart.length > 0 && <LineChart points={chart} format={(v) => v.toFixed(1)} suffix="% CTR" color="var(--color-ok-400)" />}
+
+      <div className="mt-3 flex flex-wrap items-end gap-2">
+        <label className="text-[10px] text-dusk-500">
+          date
+          <input type="date" value={date} onChange={(e) => setDate(e.target.value)} className={`${inputCls} block mt-0.5`} />
+        </label>
+        <label className="text-[10px] text-dusk-500">
+          impressions
+          <input type="number" value={impr} onChange={(e) => setImpr(e.target.value)} placeholder="1200" className={`${inputCls} block mt-0.5 w-24`} />
+        </label>
+        <label className="text-[10px] text-dusk-500">
+          CTR %
+          <input type="number" step="0.1" value={ctr} onChange={(e) => setCtr(e.target.value)} placeholder="2.0" className={`${inputCls} block mt-0.5 w-20`} />
+        </label>
+        <button
+          onClick={() => add.mutate()}
+          disabled={!impr || !ctr || add.isPending}
+          className="rounded-lg bg-accent-500 px-3 py-1 text-xs font-medium text-white hover:bg-accent-400 disabled:opacity-40"
+        >
+          log
+        </button>
+      </div>
+
+      {rows.length > 0 && (
+        <ul className="mt-3 space-y-1">
+          {[...rows].reverse().map((r) => (
+            <li key={r.date} className="flex items-center justify-between text-[11px] text-dusk-400 group">
+              <span>
+                <span className="text-dusk-300">{r.date}</span> · {r.impressions.toLocaleString('en-US')} impr ·{' '}
+                <span className="text-ok-400">{r.ctr}%</span>
+                {r.note && <span className="text-dusk-600"> — {r.note}</span>}
+              </span>
+              <button onClick={() => del.mutate(r.date)} className="opacity-0 group-hover:opacity-100 text-bad-400 hover:text-bad-400/80">
+                ✕
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  )
+}
+
 export default function Channel() {
   const qc = useQueryClient()
   const { data, isLoading, error, isFetching } = useQuery({ queryKey: ['channel'], queryFn: () => fetchChannel(false) })
@@ -314,7 +429,11 @@ export default function Channel() {
         </div>
       )}
 
+      <GrowthCard />
+
       {data.theme_rollup.length > 0 && <ThemeRollupCard rows={data.theme_rollup} />}
+
+      <ImpressionsCard studioUrl={data.studio_impressions_url} />
 
       {data.scheduled.length > 0 && (
         <div className="rounded-xl border border-dusk-800 bg-dusk-900 p-4">

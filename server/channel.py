@@ -35,6 +35,11 @@ def _fetch() -> dict:
     data = json.loads(proc.stdout)
     data["fetched_at"] = time.time()
     CACHE.write_text(json.dumps(data))
+    try:
+        import history
+        history.record_snapshot(data)  # bank a daily growth point on every live pull
+    except Exception:
+        pass  # snapshotting must never break the fetch
     return data
 
 
