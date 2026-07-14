@@ -200,6 +200,41 @@ def veo_bank() -> list[dict]:
     return clips
 
 
+# ---------- outputs ----------
+
+def outputs() -> list[dict]:
+    """Top-level files in output/ (the veo_slow bank is shown separately)."""
+    files = _files(OUTPUT_DIR, VIDEO_EXTS | AUDIO_EXTS | IMAGE_EXTS)
+    vids = [p for p in files if p.suffix.lower() in VIDEO_EXTS]
+    durs = durations_for(vids)
+    out = []
+    for p in sorted(files, key=lambda p: p.stat().st_mtime, reverse=True):
+        st = p.stat()
+        suffix = p.suffix.lower()
+        if suffix in VIDEO_EXTS:
+            kind = "short" if "short" in p.stem.lower() else "video"
+        elif suffix in IMAGE_EXTS:
+            kind = "thumbnail"
+        else:
+            kind = "music"
+        out.append({
+            "name": p.name,
+            "path": _rel(p),
+            "kind": kind,
+            "size": st.st_size,
+            "mtime": _iso(st.st_mtime),
+            "duration": durs.get(_rel(p)),
+        })
+    return out
+
+
+def used_images(limit: int = 48) -> list[dict]:
+    files = sorted(_files(USED_IMAGES_DIR, IMAGE_EXTS),
+                   key=lambda p: p.stat().st_mtime, reverse=True)[:limit]
+    return [{"name": p.name, "path": _rel(p), "mtime": _iso(p.stat().st_mtime)}
+            for p in files]
+
+
 # ---------- tokens / disk ----------
 
 def token_status() -> list[dict]:

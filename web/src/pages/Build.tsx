@@ -2,7 +2,8 @@ import { useMemo, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
 import {
-  createJob, fetchMusic, fetchPreflight, fetchVeoSources, fmtBytes, vthumbUrl,
+  createJob, fetchMusic, fetchOverview, fetchPreflight, fetchUsedImages,
+  fetchVeoSources, fmtBytes, imgUrl, vthumbUrl,
 } from '../api'
 import LogViewer from '../components/LogViewer'
 
@@ -468,16 +469,159 @@ function VeoWizard() {
   )
 }
 
+/* ---------- shorts builder ---------- */
+
+function ShortsBuilder() {
+  const qc = useQueryClient()
+  const overview = useQuery({ queryKey: ['overview'], queryFn: fetchOverview })
+  const usedImages = useQuery({ queryKey: ['used-images'], queryFn: () => fetchUsedImages(36) })
+  const music = useQuery({ queryKey: ['music'], queryFn: fetchMusic })
+  const [image, setImage] = useState('')
+  const [track, setTrack] = useState('')
+  const [title, setTitle] = useState('')
+  const [theme, setTheme] = useState('')
+  const [animate, setAnimate] = useState<'' | 'depthflow'>('depthflow')
+  const [upload, setUpload] = useState(false)
+  const [publishAt, setPublishAt] = useState('')
+  const [description, setDescription] = useState('')
+  const [jobId, setJobId] = useState<number | null>(null)
+
+  const themes = overview.data?.themes ?? []
+  // theme + unused-image previews double as an image source alongside used/
+  const themeImages = themes.flatMap((t) => t.preview_paths.map((p) => ({ path: p, theme: t.key })))
+  const pickable = [
+    ...themeImages.map((i) => ({ ...i, from: 'unused' as const })),
+    ...(usedImages.data ?? []).map((i) => ({ path: i.path, theme: '', from: 'used' as const })),
+  ]
+  const tracks = [...(music.data?.library ?? []), ...(music.data?.used ?? [])]
+
+  const pick = (p: { path: string; theme: string }) => {
+    setImage(p.path)
+    if (p.theme) setTheme(p.theme)
+  }
+
+  const queue = useMutation({
+    mutationFn: () =>
+      createJob(
+        'short_build',
+        {
+          image, track, title, theme,
+          upload,
+          publish_at: upload && publishAt ? new Date(publishAt).toISOString().replace(/\.\d{3}Z$/, 'Z') : null,
+          description: description || undefined,
+        },
+        animate ? { ANIMATE: animate } : {},
+      ),
+    onSuccess: (j) => {
+      setJobId(j.id)
+      qc.invalidateQueries({ queryKey: ['jobs'] })
+    },
+  })
+
+  const ready = image && track && title.trim() && theme
+
+  return (
+    <div className="space-y-4">
+      <section className="rounded-xl border border-dusk-800 bg-dusk-900 p-4">
+        <h3 className="text-sm font-semibold text-dusk-300 uppercase tracking-wider mb-3">1 · Pick a scene image</h3>
+        {pickable.length === 0 ? (
+          <div className="text-xs text-dusk-400">No images found — generate assets first.</div>
+        ) : (
+          <div className="grid grid-cols-4 md:grid-cols-6 gap-2 max-h-72 overflow-y-auto pr-1">
+            {pickable.map((p) => (
+              <button
+                key={p.path}
+                type="button"
+                onClick={() => pick(p)}
+                className={`relative rounded-lg overflow-hidden border transition-colors ${
+                  image === p.path ? 'border-accent-400 ring-1 ring-accent-400/50' : 'border-dusk-800 hover:border-dusk-600'
+                }`}
+              >
+                <img src={imgUrl(p.path, 240)} className="aspect-video w-full object-cover" loading="lazy" alt="" />
+                {p.from === 'unused' && (
+                  <span className="absolute top-1 left-1 rounded bg-ok-400/80 px-1 text-[9px] font-medium text-dusk-950">new</span>
+                )}
+              </button>
+            ))}
+          </div>
+        )}
+      </section>
+
+      <section className="rounded-xl border border-dusk-800 bg-dusk-900 p-4 space-y-4">
+        <h3 className="text-sm font-semibold text-dusk-300 uppercase tracking-wider">2 · Sound, title, style</h3>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <Field label="Music track">
+            <select value={track} onChange={(e) => setTrack(e.target.value)} className={inputCls}>
+              <option value="">— pick —</option>
+              {tracks.map((t) => (
+                <option key={t.path} value={t.path}>{t.name}</option>
+              ))}
+            </select>
+          </Field>
+          <Field label="Title overlay">
+            <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Sunset Falls" className={inputCls} />
+          </Field>
+          <Field label="Theme (atmosphere FX)">
+            <select value={theme} onChange={(e) => setTheme(e.target.value)} className={inputCls}>
+              <option value="">— pick —</option>
+              {themes.map((t) => (
+                <option key={t.key} value={t.key}>{t.title}</option>
+              ))}
+            </select>
+          </Field>
+          <Field label="Animation">
+            <Seg
+              value={animate}
+              onChange={setAnimate}
+              options={[
+                { value: 'depthflow', label: '2.5D' },
+                { value: '', label: 'Pan' },
+              ]}
+            />
+          </Field>
+        </div>
+
+        <div className="space-y-2.5 rounded-lg border border-dusk-800 bg-dusk-950/60 p-3">
+          <Toggle checked={upload} onChange={setUpload} label="Upload to YouTube (scheduled publish)" />
+          {upload && (
+            <div className="grid grid-cols-2 gap-3 pl-10">
+              <Field label="Go public at (local time, empty = now)">
+                <input type="datetime-local" value={publishAt} onChange={(e) => setPublishAt(e.target.value)} className={inputCls} />
+              </Field>
+              <Field label="Description (default: hashtags)">
+                <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={2} className={inputCls} />
+              </Field>
+            </div>
+          )}
+        </div>
+
+        <button
+          onClick={() => queue.mutate()}
+          disabled={!ready || queue.isPending}
+          className="rounded-lg bg-accent-500 px-5 py-2 text-sm font-medium text-white hover:bg-accent-400 disabled:opacity-40"
+        >
+          {upload ? 'Build + upload Short' : 'Build Short (no upload)'}
+        </button>
+        {!ready && <span className="ml-3 text-[11px] text-dusk-500">pick image + track + title + theme</span>}
+        {queue.isError && <div className="text-xs text-bad-400">{String(queue.error)}</div>}
+        {jobId !== null && <QueuedBanner jobId={jobId} onDone={() => qc.invalidateQueries({ queryKey: ['outputs'] })} />}
+      </section>
+    </div>
+  )
+}
+
 /* ---------- page ---------- */
 
+const TABS = { main: 'Main build', veo: 'Veo living-world', shorts: 'Shorts' } as const
+
 export default function Build() {
-  const [tab, setTab] = useState<'main' | 'veo'>('main')
+  const [tab, setTab] = useState<keyof typeof TABS>('main')
   return (
     <div className="max-w-6xl">
       <div className="flex items-center justify-between mb-5">
         <h1 className="text-xl font-semibold text-white">Build</h1>
         <div className="flex rounded-lg border border-dusk-800 overflow-hidden text-xs">
-          {(['main', 'veo'] as const).map((k) => (
+          {(Object.keys(TABS) as (keyof typeof TABS)[]).map((k) => (
             <button
               key={k}
               onClick={() => setTab(k)}
@@ -485,12 +629,14 @@ export default function Build() {
                 tab === k ? 'bg-accent-500/20 text-accent-300' : 'bg-dusk-900 text-dusk-400 hover:text-dusk-200'
               }`}
             >
-              {k === 'main' ? 'Main build' : 'Veo living-world'}
+              {TABS[k]}
             </button>
           ))}
         </div>
       </div>
-      {tab === 'main' ? <MainBuild /> : <VeoWizard />}
+      {tab === 'main' && <MainBuild />}
+      {tab === 'veo' && <VeoWizard />}
+      {tab === 'shorts' && <ShortsBuilder />}
     </div>
   )
 }

@@ -10,6 +10,7 @@ the CLI does it (own venv interpreter, cwd=ANIMEMBIENT_DIR, env knobs), with:
 """
 import json
 import os
+import re
 import signal
 import sqlite3
 import subprocess
@@ -17,7 +18,7 @@ import threading
 import time
 from datetime import datetime, timezone
 
-from config import ANIMEMBIENT_DIR, DATA_DIR, JOB_LOGS_DIR
+from config import ANIMEMBIENT_DIR, DATA_DIR, JOB_LOGS_DIR, PIPELINE
 
 DB_PATH = DATA_DIR / "studio.sqlite"
 PIPELINE_PYTHON = str(ANIMEMBIENT_DIR / "venv" / "bin" / "python")
@@ -52,6 +53,54 @@ for i in range(int(sys.argv[1])):
 child.terminate()
 print("dummy job finished", flush=True)
 """
+
+# Generalizes the one-off build_df_shorts.py: build one Short from an explicit
+# image + track + title, optionally upload with a scheduled publish_at.
+# Uses the pipeline's own make_shorts/upload_youtube as libraries.
+_SHORT_BUILD_SNIPPET = """\
+import json, sys
+from pathlib import Path
+import config, make_shorts
+a = json.loads(sys.argv[1])
+out = Path(config.BASE_DIR) / "output" / a["output"]
+print(f"[short] building {a['title']!r} ({a['theme']}) <- {a['image']}", flush=True)
+make_shorts.build_short(Path(a["image"]), Path(a["track"]), a["title"], a["theme"], out)
+print(f"[short] built {out}", flush=True)
+if a.get("upload"):
+    import upload_youtube
+    vid = upload_youtube.upload(out, None, a["title"] + " #Shorts",
+                                a["description"], a["tags"],
+                                publish_at=a.get("publish_at"))
+    when = f" (goes public {a['publish_at']})" if a.get("publish_at") else ""
+    print(f"[short] uploaded https://youtube.com/shorts/{vid}{when}", flush=True)
+print("[short] DONE", flush=True)
+"""
+
+
+def _short_build_argv(p: dict) -> list[str]:
+    title = (p.get("title") or "").strip()
+    if not title:
+        raise ValueError("title is required")
+    theme = p.get("theme")
+    if theme not in PIPELINE.THEMES:
+        raise ValueError(f"unknown theme: {theme}")
+    image = str(_resolve_inside(p["image"]))
+    track = str(_resolve_inside(p["track"]))
+    slug = re.sub(r"[^a-z0-9]+", "_", title.lower()).strip("_") or "short"
+    args = {
+        "image": image,
+        "track": track,
+        "title": title,
+        "theme": theme,
+        "output": f"short_{slug}_{datetime.now().strftime('%Y%m%d_%H%M')}.mp4",
+        "upload": bool(p.get("upload")),
+        "publish_at": p.get("publish_at") or None,
+        "description": p.get("description") or f"#Shorts #{theme.replace('-', '')} #ambient",
+        "tags": ["shorts", "ambient", "sleep music", "study music",
+                 theme.replace("-", " ")],
+    }
+    return [PIPELINE_PYTHON, "-u", "-c", _SHORT_BUILD_SNIPPET, json.dumps(args)]
+
 
 # Calls the pipeline's veo_assemble as a library (cwd=ANIMEMBIENT_DIR) so the UI
 # can pass an explicit CLIP SELECTION — the script's own CLI only takes a dir.
@@ -138,6 +187,15 @@ JOB_TYPES = {
         ),
         "argv": _veo_assemble_argv,
         "env_keys": {"VEO_XFADE"},
+        "heavy": True,
+    },
+    "short_build": {
+        "title": lambda p, env: "Short: {}{}".format(
+            (p.get("title") or "?")[:40],
+            " (upload)" if p.get("upload") else "",
+        ),
+        "argv": _short_build_argv,
+        "env_keys": {"ANIMATE"},
         "heavy": True,
     },
 }

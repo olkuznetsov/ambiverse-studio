@@ -1,11 +1,33 @@
 import { useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
-import { fetchMusic, fetchOverview, fetchThemeImages, fileUrl, fmtBytes, fmtDuration, imgUrl } from '../api'
-import type { ImageEntry, TrackEntry } from '../api'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import {
+  fetchMusic, fetchOutputs, fetchOverview, fetchThemeImages, fileUrl, fmtBytes,
+  fmtDuration, imgUrl, setThumb, trashAsset, vthumbUrl,
+} from '../api'
+import type { ImageEntry, OutputEntry, TrackEntry } from '../api'
 
-function ImageTile({ img }: { img: ImageEntry }) {
+function ActionBtn({ label, tone = 'dim', onClick }: {
+  label: string
+  tone?: 'dim' | 'danger' | 'accent'
+  onClick: () => void
+}) {
+  const tones = {
+    dim: 'border-dusk-700 text-dusk-400 hover:text-dusk-200 hover:border-dusk-600',
+    danger: 'border-bad-400/40 text-bad-400 hover:bg-bad-400/10',
+    accent: 'border-accent-400/40 text-accent-300 hover:bg-accent-500/10',
+  }
+  return (
+    <button onClick={onClick} className={`rounded-md border px-2 py-0.5 text-[10px] transition-colors ${tones[tone]}`}>
+      {label}
+    </button>
+  )
+}
+
+function ImageTile({ img, theme, onChanged }: { img: ImageEntry; theme: string; onChanged: () => void }) {
   const [open, setOpen] = useState(false)
   const warn = (img.warnings ?? []).length > 0
+  const trash = useMutation({ mutationFn: trashAsset, onSuccess: onChanged })
+  const thumb = useMutation({ mutationFn: setThumb, onSuccess: onChanged })
   return (
     <figure className="rounded-lg overflow-hidden border border-dusk-800 bg-dusk-850">
       <button className="block w-full cursor-zoom-in" onClick={() => setOpen(!open)} title={img.name}>
@@ -30,6 +52,24 @@ function ImageTile({ img }: { img: ImageEntry }) {
             ))}
           </ul>
         )}
+        <div className="mt-1.5 flex gap-1.5">
+          <ActionBtn
+            label="set as thumb"
+            tone="accent"
+            onClick={() => {
+              if (confirm(`Use ${img.name} as the custom thumbnail for ${theme}? (replaces any existing thumb.*)`))
+                thumb.mutate(img.path)
+            }}
+          />
+          <ActionBtn
+            label="trash"
+            tone="danger"
+            onClick={() => {
+              if (confirm(`Move ${img.name} to the studio trash? (recoverable from data/trash/)`))
+                trash.mutate(img.path)
+            }}
+          />
+        </div>
       </figcaption>
     </figure>
   )
@@ -49,11 +89,64 @@ function TrackRow({ t }: { t: TrackEntry }) {
   )
 }
 
+const KIND_LABEL: Record<OutputEntry['kind'], string> = {
+  video: 'main videos',
+  short: 'shorts',
+  thumbnail: 'thumbnails',
+  music: 'music intermediates',
+}
+
+function OutputRow({ o, onChanged }: { o: OutputEntry; onChanged: () => void }) {
+  const [open, setOpen] = useState(false)
+  const trash = useMutation({ mutationFn: trashAsset, onSuccess: onChanged })
+  const isVideo = o.kind === 'video' || o.kind === 'short'
+  return (
+    <li className="rounded-lg border border-dusk-800 bg-dusk-900 overflow-hidden">
+      <div className="flex items-center gap-3 px-3 py-2">
+        {isVideo && (
+          <img src={vthumbUrl(o.path, 160)} className="h-10 w-[71px] rounded object-cover shrink-0" loading="lazy" alt="" />
+        )}
+        {o.kind === 'thumbnail' && (
+          <img src={imgUrl(o.path, 160)} className="h-10 w-[71px] rounded object-cover shrink-0" loading="lazy" alt="" />
+        )}
+        <div className="min-w-0 flex-1">
+          <div className="text-xs text-dusk-200 truncate" title={o.name}>{o.name}</div>
+          <div className="text-[10px] text-dusk-500">
+            {fmtBytes(o.size)}
+            {o.duration ? ` · ${fmtDuration(o.duration)}` : ''} ·{' '}
+            {new Date(o.mtime).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
+          </div>
+        </div>
+        <div className="flex gap-1.5 shrink-0">
+          {(isVideo || o.kind === 'music') && (
+            <ActionBtn label={open ? 'close' : 'preview'} onClick={() => setOpen(!open)} />
+          )}
+          <ActionBtn
+            label="trash"
+            tone="danger"
+            onClick={() => {
+              if (confirm(`Move ${o.name} (${fmtBytes(o.size)}) to the studio trash?`)) trash.mutate(o.path)
+            }}
+          />
+        </div>
+      </div>
+      {open && isVideo && (
+        <video controls preload="none" poster={vthumbUrl(o.path, 960)} src={fileUrl(o.path)} className="w-full bg-black" />
+      )}
+      {open && o.kind === 'music' && (
+        <audio controls src={fileUrl(o.path)} className="w-full px-3 pb-2" />
+      )}
+    </li>
+  )
+}
+
 export default function Assets() {
+  const qc = useQueryClient()
   const overview = useQuery({ queryKey: ['overview'], queryFn: fetchOverview })
   const [tab, setTab] = useState<string>('images')
   const [theme, setTheme] = useState<string | null>(null)
   const [showUsedMusic, setShowUsedMusic] = useState(false)
+  const [outputKind, setOutputKind] = useState<OutputEntry['kind'] | 'all'>('all')
 
   const themes = overview.data?.themes ?? []
   const activeTheme = theme ?? themes[0]?.key ?? null
@@ -68,13 +161,25 @@ export default function Assets() {
     queryFn: fetchMusic,
     enabled: tab === 'music',
   })
+  const outputs = useQuery({
+    queryKey: ['outputs'],
+    queryFn: fetchOutputs,
+    enabled: tab === 'outputs',
+  })
+
+  const invalidateImages = () => {
+    qc.invalidateQueries({ queryKey: ['theme-images'] })
+    qc.invalidateQueries({ queryKey: ['overview'] })
+  }
+
+  const shownOutputs = (outputs.data ?? []).filter((o) => outputKind === 'all' || o.kind === outputKind)
 
   return (
     <div className="max-w-6xl">
       <div className="flex items-center justify-between mb-5">
         <h1 className="text-xl font-semibold text-white">Assets</h1>
         <div className="flex rounded-lg border border-dusk-800 overflow-hidden text-xs">
-          {(['images', 'music'] as const).map((k) => (
+          {(['images', 'music', 'outputs'] as const).map((k) => (
             <button
               key={k}
               onClick={() => setTab(k)}
@@ -103,6 +208,7 @@ export default function Assets() {
               >
                 {t.title}
                 <span className={`ml-1.5 ${t.image_count > 0 ? 'text-ok-400' : 'text-dusk-600'}`}>{t.image_count}</span>
+                {t.has_custom_thumb && <span className="ml-1 text-accent-400">◆</span>}
               </button>
             ))}
           </div>
@@ -119,7 +225,7 @@ export default function Assets() {
           {images.data && images.data.images.length > 0 && (
             <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3">
               {images.data.images.map((img) => (
-                <ImageTile key={img.path} img={img} />
+                <ImageTile key={img.path} img={img} theme={activeTheme!} onChanged={invalidateImages} />
               ))}
             </div>
           )}
@@ -162,6 +268,40 @@ export default function Assets() {
               )}
             </>
           )}
+        </>
+      )}
+
+      {tab === 'outputs' && (
+        <>
+          <div className="flex flex-wrap gap-1.5 mb-4">
+            {(['all', 'video', 'short', 'thumbnail', 'music'] as const).map((k) => (
+              <button
+                key={k}
+                onClick={() => setOutputKind(k)}
+                className={`rounded-full px-3 py-1 text-xs border transition-colors ${
+                  outputKind === k
+                    ? 'border-accent-400/50 bg-accent-500/15 text-accent-300'
+                    : 'border-dusk-800 bg-dusk-900 text-dusk-400 hover:text-dusk-200'
+                }`}
+              >
+                {k === 'all' ? 'all' : KIND_LABEL[k]}
+                <span className="ml-1.5 text-dusk-600">
+                  {(outputs.data ?? []).filter((o) => k === 'all' || o.kind === k).length}
+                </span>
+              </button>
+            ))}
+          </div>
+          {outputs.isLoading && <div className="text-dusk-400 text-sm">Scanning output/ (probing durations)…</div>}
+          {outputs.data && shownOutputs.length === 0 && (
+            <div className="rounded-xl border border-dashed border-dusk-700 bg-dusk-900/50 p-10 text-center text-sm text-dusk-400">
+              Nothing here yet.
+            </div>
+          )}
+          <ul className="space-y-2">
+            {shownOutputs.map((o) => (
+              <OutputRow key={o.path} o={o} onChanged={() => qc.invalidateQueries({ queryKey: ['outputs'] })} />
+            ))}
+          </ul>
         </>
       )}
     </div>

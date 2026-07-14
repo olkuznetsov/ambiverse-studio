@@ -98,6 +98,21 @@ export interface VeoSources {
   bank: VeoClip[]
 }
 
+export interface OutputEntry {
+  name: string
+  path: string
+  kind: 'video' | 'short' | 'thumbnail' | 'music'
+  size: number
+  mtime: string
+  duration: number | null
+}
+
+export interface UsedImage {
+  name: string
+  path: string
+  mtime: string
+}
+
 export interface Job {
   id: number
   type: string
@@ -174,6 +189,10 @@ async function post<T>(url: string, body?: unknown): Promise<T> {
 export const createJob = (type: string, params: Record<string, unknown> = {}, env: Record<string, string> = {}) =>
   post<Job>('/api/jobs', { type, params, env })
 export const cancelJob = (id: number) => post<Job>(`/api/jobs/${id}/cancel`)
+export const fetchOutputs = () => get<OutputEntry[]>('/api/outputs')
+export const fetchUsedImages = (limit = 48) => get<UsedImage[]>(`/api/assets/used-images?limit=${limit}`)
+export const trashAsset = (path: string) => post<{ ok: boolean }>('/api/assets/trash', { path })
+export const setThumb = (path: string) => post<{ ok: boolean; thumb: string }>('/api/assets/set-thumb', { path })
 
 export const jobLogUrl = (id: number) => `/api/jobs/${id}/log`
 
