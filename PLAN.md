@@ -2,7 +2,7 @@
 
 **One-liner:** a local web app (mission control) for the Ambiverse YouTube pipeline — see everything, run everything, from one UI instead of ~20 CLI scripts + env vars.
 
-- **Date:** 2026-07-13 · **Status:** M0–M3 shipped 2026-07-14 — daily driver reached; next M4 (outputs + Shorts builder + asset actions)
+- **Date:** 2026-07-13 · **Status:** M0–M4 shipped 2026-07-14; next M5 (channel analytics: YPP progress, per-video table, theme rollup)
 - **Pipeline it drives:** `~/myFolder/Programming/animembient/` (read its `CLAUDE.md` first — Waves 1–11b)
 - **This repo:** `~/myFolder/Programming/ambiverse-studio/`
 
