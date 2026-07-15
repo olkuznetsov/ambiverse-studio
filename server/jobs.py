@@ -55,16 +55,22 @@ print("dummy job finished", flush=True)
 """
 
 # Generalizes the one-off build_df_shorts.py: build one Short from an explicit
-# image + track + title, optionally upload with a scheduled publish_at.
-# Uses the pipeline's own make_shorts/upload_youtube as libraries.
+# image + track + title (or an enhanced Veo clip via veo_short), optionally
+# upload with a scheduled publish_at. Uses the pipeline's own libraries.
 _SHORT_BUILD_SNIPPET = """\
 import json, sys
 from pathlib import Path
-import config, make_shorts
+import config
 a = json.loads(sys.argv[1])
 out = Path(config.BASE_DIR) / "output" / a["output"]
-print(f"[short] building {a['title']!r} ({a['theme']}) <- {a['image']}", flush=True)
-make_shorts.build_short(Path(a["image"]), Path(a["track"]), a["title"], a["theme"], out)
+if a.get("veo_clip"):
+    import veo_short
+    print(f"[short] Veo-clip short {a['title']!r} <- {a['veo_clip']}", flush=True)
+    veo_short.build_veo_short(Path(a["veo_clip"]), Path(a["track"]), a["title"], out)
+else:
+    import make_shorts
+    print(f"[short] building {a['title']!r} ({a['theme']}) <- {a['image']}", flush=True)
+    make_shorts.build_short(Path(a["image"]), Path(a["track"]), a["title"], a["theme"], out)
 print(f"[short] built {out}", flush=True)
 if a.get("upload"):
     import upload_youtube
@@ -81,37 +87,51 @@ def _short_build_argv(p: dict) -> list[str]:
     title = (p.get("title") or "").strip()
     if not title:
         raise ValueError("title is required")
-    theme = p.get("theme")
-    if theme not in PIPELINE.THEMES:
-        raise ValueError(f"unknown theme: {theme}")
-    image = str(_resolve_inside(p["image"]))
     track = str(_resolve_inside(p["track"]))
     slug = re.sub(r"[^a-z0-9]+", "_", title.lower()).strip("_") or "short"
     args = {
-        "image": image,
         "track": track,
         "title": title,
-        "theme": theme,
         "output": f"short_{slug}_{datetime.now().strftime('%Y%m%d_%H%M')}.mp4",
         "upload": bool(p.get("upload")),
         "publish_at": p.get("publish_at") or None,
-        "description": p.get("description") or f"#Shorts #{theme.replace('-', '')} #ambient",
-        "tags": ["shorts", "ambient", "sleep music", "study music",
-                 theme.replace("-", " ")],
     }
+    if p.get("veo_clip"):  # vertical Short from an enhanced Veo clip (living motion)
+        args["veo_clip"] = str(_resolve_inside(p["veo_clip"]))
+        args["description"] = p.get("description") or "#Shorts #ambient #fantasy #sleep"
+        args["tags"] = ["shorts", "ambient", "sleep music", "study music", "fantasy"]
+    else:  # classic image Short (Ken Burns / DepthFlow)
+        theme = p.get("theme")
+        if theme not in PIPELINE.THEMES:
+            raise ValueError(f"unknown theme: {theme}")
+        args["image"] = str(_resolve_inside(p["image"]))
+        args["theme"] = theme
+        args["description"] = p.get("description") or f"#Shorts #{theme.replace('-', '')} #ambient"
+        args["tags"] = ["shorts", "ambient", "sleep music", "study music", theme.replace("-", " ")]
     return [PIPELINE_PYTHON, "-u", "-c", _SHORT_BUILD_SNIPPET, json.dumps(args)]
 
 
 # Calls the pipeline's veo_assemble as a library (cwd=ANIMEMBIENT_DIR) so the UI
 # can pass an explicit CLIP SELECTION — the script's own CLI only takes a dir.
+# Uses build_shuffled (scene order reshuffled each cycle) and, when music=="library",
+# builds a full-length crossfaded bed from music/library via make_music.build_track.
 _VEO_ASSEMBLE_SNIPPET = """\
 import sys
 from pathlib import Path
-import veo_assemble
+import config, veo_assemble
 out, dur, music = sys.argv[1], float(sys.argv[2]), sys.argv[3] or None
 clips = [Path(p) for p in sys.argv[4:]]
-print(f"[veo_assemble] {len(clips)} clips -> {out} ({dur:.0f}s, music={music or 'none'})", flush=True)
-veo_assemble.assemble(clips, out, dur, music)
+if music == "library":
+    import make_music
+    bed = Path(config.OUTPUT_DIR) / "veo_music_bed.mp3"
+    print(f"[veo_assemble] building {dur:.0f}s music bed from library...", flush=True)
+    r = make_music.build_track(bed, dur)
+    if not r:
+        raise SystemExit("no tracks in music/library")
+    music = str(bed)
+    print(f"[veo_assemble] music bed: {len(r[1])} unique tracks", flush=True)
+print(f"[veo_assemble] {len(clips)} clips -> {out} ({dur:.0f}s, music={music or 'none'}, shuffled)", flush=True)
+veo_assemble.build_shuffled(clips, out, dur, music=music)
 print("[veo_assemble] DONE", flush=True)
 """
 
@@ -131,7 +151,13 @@ def _veo_assemble_argv(p: dict) -> list[str]:
         raise ValueError("no clips selected")
     clip_paths = [str(_resolve_inside(c)) for c in clips]
     duration = float(p.get("duration", 7200))
-    music = str(_resolve_inside(p["music"])) if p.get("music") else ""
+    music_val = p.get("music")
+    if music_val == "library":       # sentinel → build a crossfaded bed from music/library
+        music = "library"
+    elif music_val:                  # an explicit track file
+        music = str(_resolve_inside(music_val))
+    else:                            # silent
+        music = ""
     name = os.path.basename(p.get("output") or "veo_custom.mp4")
     if not name.endswith(".mp4"):
         name += ".mp4"
@@ -187,6 +213,14 @@ JOB_TYPES = {
         ),
         "argv": _veo_assemble_argv,
         "env_keys": {"VEO_XFADE"},
+        "heavy": True,
+    },
+    "veo_full": {
+        "title": lambda p, env: "Veo full build (enhance all → shuffled {}h + library music)".format(
+            round(int(env.get("VIDEO_DURATION_SECONDS", "7200")) / 3600, 1),
+        ),
+        "argv": lambda p: [PIPELINE_PYTHON, "-u", "build_veo_full.py"],
+        "env_keys": {"VEO_UPSCALE", "VEO_TARGET_H", "VIDEO_DURATION_SECONDS"},
         "heavy": True,
     },
     "short_build": {

@@ -23,11 +23,13 @@ Context: this session built the full Veo slow-mo + ESRGAN-upscale pipeline and j
 3. **`veo_short.py` (NEW)** — a **vertical Short from an enhanced Veo clip** (center-crop 16:9→9:16, loop to 60s, title + music), reusing `make_shorts`' overlay/slice/composite. The studio's Shorts builder (`jobs.py` → `make_shorts.build_short`) is **image-only** (Ken Burns / DepthFlow). Consider adding a "Veo clip" source option to the Shorts builder that calls `veo_short.build_veo_short(clip, music, title, out)`.
 4. **Music for Veo = a bed, not one track.** For a 2h video you want variety: call `make_music.build_track(bed_path, duration)` (MUSIC_MODE=library, loops+crossfades the library, loudnorm, fade — and does NOT move tracks to `/used`) to make the bed, then pass that bed as the `music=` arg. The studio's veo_assemble job passing a single library file only loops one track.
 
-**Studio TODO (when convenient — not urgent, videos ship fine today):**
-- [ ] Veo assemble job → use `build_shuffled` (randomized order) instead of `assemble`.
-- [ ] Veo assemble music → build a `make_music.build_track` bed from the library, not a single track.
-- [ ] Shorts builder → add a "from Veo clip" option (`veo_short.py`).
-- [ ] Optionally expose `build_veo_full.py` as a one-click "full Veo video" job (enhance-all → music → shuffled 2h).
-- Progress parsing note: `build_veo_full.py` emits `[full] (i/N) …`, `[esrgan] i/192`, `[veo_assemble] …` — `server/progress.py` already matches the esrgan/veo_assemble lines; add a `[full]` clip counter if you wire it as a job.
+**Studio TODO — ✅ ALL DONE 2026-07-15 (implemented from the pipeline session; see git log):**
+- [x] Veo assemble job → uses `build_shuffled` (randomized scene order) instead of `assemble`.
+- [x] Veo assemble music → `music: "library"` sentinel builds a `make_music.build_track` bed from the library; an explicit track still works; empty = silent. (`_VEO_ASSEMBLE_SNIPPET` + `_veo_assemble_argv` in `server/jobs.py`; UI = "♪ Full library bed" option in the Veo wizard music dropdown.)
+- [x] Shorts builder → "Image | Veo clip" source toggle (`ShortsBuilder` in `web/src/pages/Build.tsx`); Veo mode shows the enhanced-clip bank and hides theme/animation; backend `short_build` gained a `veo_clip` branch → `veo_short.build_veo_short`.
+- [x] `build_veo_full.py` exposed as job type **`veo_full`** ("Full auto build →" button in the Veo wizard: enhance all → shuffled 2h + library bed).
+- Progress parsing note (still open, minor): `build_veo_full.py` emits `[full] (i/N) …`; `server/progress.py` already matches `[esrgan]`/`[veo_assemble]` — add a `[full]` clip counter to `_PATTERNS` if you want per-clip % on the `veo_full` job.
 
-*(No studio code was edited from the pipeline session in this entry — animembient-only changes. The studio picks up the `veo_assemble` fix automatically since it runs the pipeline's code; the rest are new capabilities to surface.)*
+**Verification:** frontend compiles (`tsc -b && vite build` clean) and the new UI was confirmed rendering in the dev server (library-bed option, Full-auto-build button, Veo-clip Shorts toggle + bank). Backend `jobs.py` imports OK; the changed argv builders were exercised. **NOT yet runtime-tested end-to-end** (an actual `veo_assemble`/`veo_short`/`veo_full` job) — the machine is busy with the first real 2h Veo render; do a quick real run when it's free. Note: `output/veo_slow/` currently holds BOTH old 1080p `veo_NN.mp4` and new `veo_NN_1440p.mp4`; the bank lists both — prefer the `_1440p` ones (the old 1080p set can be deleted once confirmed unneeded).
+
+*(This entry WAS implemented from the pipeline session per Sasha's request — studio code was edited here, committed + pushed. Studio session: nothing to redo; only the optional `[full]` progress counter remains.)*

@@ -335,6 +335,15 @@ function VeoWizard() {
     },
   })
 
+  const fullBuild = useMutation({
+    mutationFn: () =>
+      createJob('veo_full', {}, upscale ? { VEO_UPSCALE: '1', VEO_TARGET_H: targetH } : {}),
+    onSuccess: (j) => {
+      setEnhanceJob(j.id)
+      qc.invalidateQueries({ queryKey: ['jobs'] })
+    },
+  })
+
   const toggle = (path: string) =>
     setSelected((s) => {
       const n = new Set(s)
@@ -396,6 +405,19 @@ function VeoWizard() {
                 {upscale && uncached > 0 && ` · est. ~${Math.round(uncached * 35)} min`}
               </span>
             </div>
+            <div className="mt-3 flex items-center gap-3 border-t border-dusk-800 pt-3">
+              <button
+                onClick={() => fullBuild.mutate()}
+                disabled={fullBuild.isPending}
+                title="Enhance every clip → shuffled 2h video + a crossfaded library music bed, one unattended run"
+                className="rounded-lg border border-accent-500/40 px-4 py-1.5 text-xs font-medium text-accent-300 hover:bg-accent-500/10 disabled:opacity-50"
+              >
+                Full auto build →
+              </button>
+              <span className="text-[11px] text-dusk-500">
+                enhance all → shuffled 2h + library music bed, one unattended run (~5.5h)
+              </span>
+            </div>
           </>
         )}
         {enhanceJob !== null && (
@@ -436,9 +458,10 @@ function VeoWizard() {
               <Field label="Duration (s)">
                 <input type="number" min={30} value={duration} onChange={(e) => setDuration(Number(e.target.value))} className={inputCls} />
               </Field>
-              <Field label="Music (from library)">
+              <Field label="Music">
                 <select value={track} onChange={(e) => setTrack(e.target.value)} className={inputCls}>
                   <option value="">— silent (QC build) —</option>
+                  <option value="library">♪ Full library bed (crossfaded — best for 2h)</option>
                   {music.data?.library.map((t) => (
                     <option key={t.path} value={t.path}>{t.name}</option>
                   ))}
@@ -458,6 +481,7 @@ function VeoWizard() {
             >
               Assemble {selected.size || 'no'} clip{selected.size === 1 ? '' : 's'} → output/{outName}.mp4
             </button>
+            <span className="ml-3 text-[11px] text-dusk-500">scene order reshuffled every cycle — never repeats</span>
             {assemble.isError && <div className="mt-2 text-xs text-bad-400">{String(assemble.error)}</div>}
           </>
         )}
@@ -485,6 +509,9 @@ function ShortsBuilder() {
   const [publishAt, setPublishAt] = useState('')
   const [description, setDescription] = useState('')
   const [jobId, setJobId] = useState<number | null>(null)
+  const [source, setSource] = useState<'image' | 'veo'>('image')
+  const veoBank = useQuery({ queryKey: ['veo-sources'], queryFn: fetchVeoSources })
+  const [veoClip, setVeoClip] = useState('')
 
   const themes = overview.data?.themes ?? []
   // theme + unused-image previews double as an image source alongside used/
@@ -500,17 +527,15 @@ function ShortsBuilder() {
     if (p.theme) setTheme(p.theme)
   }
 
+  const publishIso = upload && publishAt ? new Date(publishAt).toISOString().replace(/\.\d{3}Z$/, 'Z') : null
   const queue = useMutation({
     mutationFn: () =>
       createJob(
         'short_build',
-        {
-          image, track, title, theme,
-          upload,
-          publish_at: upload && publishAt ? new Date(publishAt).toISOString().replace(/\.\d{3}Z$/, 'Z') : null,
-          description: description || undefined,
-        },
-        animate ? { ANIMATE: animate } : {},
+        source === 'veo'
+          ? { veo_clip: veoClip, track, title, upload, publish_at: publishIso, description: description || undefined }
+          : { image, track, title, theme, upload, publish_at: publishIso, description: description || undefined },
+        source === 'image' && animate ? { ANIMATE: animate } : {},
       ),
     onSuccess: (j) => {
       setJobId(j.id)
@@ -518,13 +543,47 @@ function ShortsBuilder() {
     },
   })
 
-  const ready = image && track && title.trim() && theme
+  const ready = source === 'veo'
+    ? Boolean(veoClip && track && title.trim())
+    : Boolean(image && track && title.trim() && theme)
 
   return (
     <div className="space-y-4">
       <section className="rounded-xl border border-dusk-800 bg-dusk-900 p-4">
-        <h3 className="text-sm font-semibold text-dusk-300 uppercase tracking-wider mb-3">1 · Pick a scene image</h3>
-        {pickable.length === 0 ? (
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-sm font-semibold text-dusk-300 uppercase tracking-wider">
+            1 · Pick a {source === 'veo' ? 'Veo clip' : 'scene image'}
+          </h3>
+          <Seg
+            value={source}
+            onChange={setSource}
+            options={[
+              { value: 'image', label: 'Image' },
+              { value: 'veo', label: 'Veo clip' },
+            ]}
+          />
+        </div>
+        {source === 'veo' ? (
+          !veoBank.data || veoBank.data.bank.length === 0 ? (
+            <div className="text-xs text-dusk-400">No enhanced Veo clips yet — enhance some in the Veo living-world tab first.</div>
+          ) : (
+            <div className="grid grid-cols-3 md:grid-cols-5 gap-2 max-h-72 overflow-y-auto pr-1">
+              {veoBank.data.bank.map((c) => (
+                <button
+                  key={c.path}
+                  type="button"
+                  onClick={() => setVeoClip(c.path)}
+                  className={`rounded-lg overflow-hidden border text-left transition-colors ${
+                    veoClip === c.path ? 'border-accent-400 ring-1 ring-accent-400/50' : 'border-dusk-800 hover:border-dusk-600'
+                  }`}
+                >
+                  <img src={vthumbUrl(c.path, 240)} className="aspect-video w-full object-cover" loading="lazy" alt="" />
+                  <div className="px-2 py-1 text-[10px] truncate text-dusk-400">{c.name}</div>
+                </button>
+              ))}
+            </div>
+          )
+        ) : pickable.length === 0 ? (
           <div className="text-xs text-dusk-400">No images found — generate assets first.</div>
         ) : (
           <div className="grid grid-cols-4 md:grid-cols-6 gap-2 max-h-72 overflow-y-auto pr-1">
@@ -561,24 +620,28 @@ function ShortsBuilder() {
           <Field label="Title overlay">
             <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Sunset Falls" className={inputCls} />
           </Field>
-          <Field label="Theme (atmosphere FX)">
-            <select value={theme} onChange={(e) => setTheme(e.target.value)} className={inputCls}>
-              <option value="">— pick —</option>
-              {themes.map((t) => (
-                <option key={t.key} value={t.key}>{t.title}</option>
-              ))}
-            </select>
-          </Field>
-          <Field label="Animation">
-            <Seg
-              value={animate}
-              onChange={setAnimate}
-              options={[
-                { value: 'depthflow', label: '2.5D' },
-                { value: '', label: 'Pan' },
-              ]}
-            />
-          </Field>
+          {source === 'image' && (
+            <>
+              <Field label="Theme (atmosphere FX)">
+                <select value={theme} onChange={(e) => setTheme(e.target.value)} className={inputCls}>
+                  <option value="">— pick —</option>
+                  {themes.map((t) => (
+                    <option key={t.key} value={t.key}>{t.title}</option>
+                  ))}
+                </select>
+              </Field>
+              <Field label="Animation">
+                <Seg
+                  value={animate}
+                  onChange={setAnimate}
+                  options={[
+                    { value: 'depthflow', label: '2.5D' },
+                    { value: '', label: 'Pan' },
+                  ]}
+                />
+              </Field>
+            </>
+          )}
         </div>
 
         <div className="space-y-2.5 rounded-lg border border-dusk-800 bg-dusk-950/60 p-3">
@@ -602,7 +665,7 @@ function ShortsBuilder() {
         >
           {upload ? 'Build + upload Short' : 'Build Short (no upload)'}
         </button>
-        {!ready && <span className="ml-3 text-[11px] text-dusk-500">pick image + track + title + theme</span>}
+        {!ready && <span className="ml-3 text-[11px] text-dusk-500">{source === 'veo' ? 'pick clip + track + title' : 'pick image + track + title + theme'}</span>}
         {queue.isError && <div className="text-xs text-bad-400">{String(queue.error)}</div>}
         {jobId !== null && <QueuedBanner jobId={jobId} onDone={() => qc.invalidateQueries({ queryKey: ['outputs'] })} />}
       </section>
