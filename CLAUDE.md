@@ -2,6 +2,10 @@
 
 Local web app (FastAPI + React) that is **mission control for the Ambiverse YouTube pipeline** at `~/myFolder/Programming/animembient/`. Read **PLAN.md** (architecture, feature census, milestones) before building anything. Read `animembient/CLAUDE.md` to understand the pipeline being wrapped.
 
+## Cross-session coordination — read HANDOFF.md first
+
+A **separate "pipeline" session** works on the animembient repo this app wraps. When it changes the pipeline (new script/knob/renamed function), it logs an entry in **`HANDOFF.md`** describing what changed and what the studio should do. **At the start of a session, read `HANDOFF.md`** for unresolved entries; apply what's relevant, then mark them `✅ DONE (studio)` with the commit hash. If you (studio session) change something the pipeline session should know, add an entry there too. Since Studio *wraps* the pipeline (runs its code as subprocesses), most pipeline fixes are picked up automatically — HANDOFF entries are mostly "new capability to surface" or "a function you call changed."
+
 ## Git — commit & push after every change (standing rule; don't wait to be asked)
 
 After completing any code change, **automatically `git commit` + `git push origin main`** with a descriptive message ending `Co-Authored-By: Claude <noreply@anthropic.com>`.
