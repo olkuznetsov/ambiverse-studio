@@ -14,8 +14,11 @@ _PATTERNS = {
     "render_total": re.compile(r"Rendering (\d+) clips across", re.M),
     "df_clip": re.compile(r"\[df_batch\] (\d+)/(\d+)", re.M),
     "build_veo": re.compile(r"\[build_veo\] \((\d+)/(\d+)\) (slowmo|cached)", re.M),
+    "full_clip": re.compile(r"\[full\] \((\d+)/(\d+)\) (enhance|cached)", re.M),
     "esrgan": re.compile(r"\[esrgan\]\s+(\d+)/(\d+)", re.M),
     "veo_assemble": re.compile(r"\[veo_assemble\][ :]*(.+)", re.M),
+    "shuffled": re.compile(r"shuffled build: (\d+) cycles", re.M),
+    "building_reel": re.compile(r"\[veo_assemble\] building reel", re.M),
     "planned": re.compile(r"\((\d+) images planned\)", re.M),
 }
 
@@ -35,8 +38,9 @@ def parse(job_type: str, log_tail: str) -> dict | None:
     if job_type == "veo_enhance":
         return _veo_enhance(log_tail)
     if job_type == "veo_assemble":
-        m = _last(_PATTERNS["veo_assemble"], log_tail)
-        return {"stage": m.group(1).strip()[:80], "pct": None} if m else None
+        return _veo_assemble(log_tail)
+    if job_type == "veo_full":
+        return _veo_full(log_tail)
     return None
 
 
@@ -73,4 +77,50 @@ def _veo_enhance(text: str) -> dict | None:
         if es.start() > bv.start():
             stage += f" — ESRGAN frame {fi}/{fn}"
             pct = round(((i - 1) + fi / fn) / n * 100)
+    return {"stage": stage, "pct": pct}
+
+
+def _veo_assemble(text: str) -> dict | None:
+    """Standalone assemble (build_shuffled): optional music bed -> shuffled reels -> mux."""
+    if "[veo_assemble] DONE" in text:
+        return {"stage": "done", "pct": 100}
+    sb = _PATTERNS["shuffled"].search(text)
+    if sb:
+        n = int(sb.group(1))
+        reels = min(len(_PATTERNS["building_reel"].findall(text)), n)
+        pct = round(reels / n * 92) if n else None  # reels ~92%; headroom for concat + mux
+        return {"stage": f"reel {reels}/{n} (shuffled) + mux", "pct": pct}
+    if "music bed" in text:
+        return {"stage": "building music bed from library", "pct": 3}
+    m = _last(_PATTERNS["veo_assemble"], text)
+    return {"stage": m.group(1).strip()[:80], "pct": None} if m else None
+
+
+def _veo_full(text: str) -> dict | None:
+    """Full build: enhance clips (0-85%, ESRGAN sub-progress) -> assembly (85-100%)."""
+    if "[full] DONE" in text:
+        return {"stage": "done", "pct": 100}
+    # once a music bed / shuffled build appears, all clips are enhanced -> assembly phase
+    if "music bed" in text or _PATTERNS["shuffled"].search(text):
+        sb = _PATTERNS["shuffled"].search(text)
+        if sb:
+            n = int(sb.group(1))
+            reels = min(len(_PATTERNS["building_reel"].findall(text)), n)
+            return {"stage": f"assembling reel {reels}/{n} + music",
+                    "pct": round(85 + (reels / n if n else 0) * 14)}
+        return {"stage": "building music bed from library", "pct": 85}
+    # enhancement phase (0-85%)
+    fv = _last(_PATTERNS["full_clip"], text)
+    if not fv:
+        return None
+    i, n = int(fv.group(1)), int(fv.group(2))
+    if fv.group(3) == "cached":
+        return {"stage": f"clip {i}/{n} cached", "pct": round(i / n * 85)}
+    stage = f"enhancing clip {i}/{n}"
+    pct = round((i - 1) / n * 85)
+    es = _last(_PATTERNS["esrgan"], text)
+    if es and es.start() > fv.start():
+        efi, efn = int(es.group(1)), int(es.group(2))
+        stage += f" — ESRGAN {efi}/{efn}"
+        pct = round(((i - 1) + efi / efn) / n * 85)
     return {"stage": stage, "pct": pct}
