@@ -303,8 +303,12 @@ function VeoWizard() {
   const qc = useQueryClient()
   const { data } = useQuery({ queryKey: ['veo-sources'], queryFn: fetchVeoSources })
   const music = useQuery({ queryKey: ['music'], queryFn: fetchMusic })
+  const overview = useQuery({ queryKey: ['overview'], queryFn: fetchOverview })
   const [upscale, setUpscale] = useState(true)
   const [targetH, setTargetH] = useState<'1440' | '2160'>('1440')
+  const [veoTheme, setVeoTheme] = useState('fantasy-realms')
+  const [doPublish, setDoPublish] = useState(false)
+  const [scenes, setScenes] = useState('')
   const [selected, setSelected] = useState<Set<string>>(new Set())
   const [duration, setDuration] = useState(7200)
   const [track, setTrack] = useState('')
@@ -337,7 +341,12 @@ function VeoWizard() {
 
   const fullBuild = useMutation({
     mutationFn: () =>
-      createJob('veo_full', {}, upscale ? { VEO_UPSCALE: '1', VEO_TARGET_H: targetH } : {}),
+      createJob('veo_full', {}, {
+        ...(upscale ? { VEO_UPSCALE: '1', VEO_TARGET_H: targetH } : {}),
+        VEO_THEME: veoTheme,
+        ...(doPublish ? { PUBLISH: '1' } : {}),
+        ...(doPublish && scenes.trim() ? { VEO_SCENES: scenes.trim() } : {}),
+      }),
     onSuccess: (j) => {
       setEnhanceJob(j.id)
       qc.invalidateQueries({ queryKey: ['jobs'] })
@@ -405,18 +414,39 @@ function VeoWizard() {
                 {upscale && uncached > 0 && ` · est. ~${Math.round(uncached * 35)} min`}
               </span>
             </div>
-            <div className="mt-3 flex items-center gap-3 border-t border-dusk-800 pt-3">
-              <button
-                onClick={() => fullBuild.mutate()}
-                disabled={fullBuild.isPending}
-                title="Enhance every clip → shuffled 2h video + a crossfaded library music bed, one unattended run"
-                className="rounded-lg border border-accent-500/40 px-4 py-1.5 text-xs font-medium text-accent-300 hover:bg-accent-500/10 disabled:opacity-50"
-              >
-                Full auto build →
-              </button>
-              <span className="text-[11px] text-dusk-500">
-                enhance all → shuffled 2h + library music bed, one unattended run (~5.5h)
-              </span>
+            <div className="mt-3 space-y-2.5 border-t border-dusk-800 pt-3">
+              <div className="flex flex-wrap items-end gap-3">
+                <Field label="Theme">
+                  <select value={veoTheme} onChange={(e) => setVeoTheme(e.target.value)} className={`${inputCls} w-44`}>
+                    {(overview.data?.themes ?? []).map((t) => (
+                      <option key={t.key} value={t.key}>{t.title}</option>
+                    ))}
+                  </select>
+                </Field>
+                <Toggle checked={doPublish} onChange={setDoPublish} label="Publish when done (metadata + upload + shorts)" />
+                <button
+                  onClick={() => fullBuild.mutate()}
+                  disabled={fullBuild.isPending}
+                  title="Enhance every clip → shuffled 2h + library music bed → optionally publish (scheduled upload + staggered Shorts)"
+                  className="rounded-lg border border-accent-500/40 px-4 py-1.5 text-xs font-medium text-accent-300 hover:bg-accent-500/10 disabled:opacity-50"
+                >
+                  Full auto build →
+                </button>
+              </div>
+              {doPublish && (
+                <Field label="Scene note (optional, human-supplied — woven into the description; leave empty to stay abstract)">
+                  <input
+                    value={scenes}
+                    onChange={(e) => setScenes(e.target.value)}
+                    placeholder="ancient bridges at sunset, a candlelit apothecary, fireflies over the river"
+                    className={inputCls}
+                  />
+                </Field>
+              )}
+              <div className="text-[11px] text-dusk-500">
+                enhance all (Downloads → banked per theme) → shuffled 2h + library music bed
+                {doPublish ? ' → scheduled 19:00 UTC upload + staggered Shorts' : ''} · one unattended run (~5.5h)
+              </div>
             </div>
           </>
         )}

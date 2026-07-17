@@ -96,8 +96,17 @@ def _veo_assemble(text: str) -> dict | None:
     return {"stage": m.group(1).strip()[:80], "pct": None} if m else None
 
 
+_VEO_PUBLISH_LINE = re.compile(r"\[veo_publish\][ :]*(.+)", re.M)
+
+
 def _veo_full(text: str) -> dict | None:
-    """Full build: enhance clips (0-85%, ESRGAN sub-progress) -> assembly (85-100%)."""
+    """Full build: enhance (0-85%, ESRGAN sub-progress) -> assembly (85-99%)
+    -> optional PUBLISH=1 phase (metadata/upload/shorts, stage passthrough)."""
+    if "[veo_publish] DONE" in text:
+        return {"stage": "published", "pct": 100}
+    pub = _last(_VEO_PUBLISH_LINE, text)
+    if pub:  # publish phase (after the build) — show its last stage line
+        return {"stage": f"publish: {pub.group(1).strip()[:70]}", "pct": 99}
     if "[full] DONE" in text:
         return {"stage": "done", "pct": 100}
     # once a music bed / shuffled build appears, all clips are enhanced -> assembly phase

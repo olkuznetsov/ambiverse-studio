@@ -43,3 +43,16 @@ The first full 2h Veo video built fine but played with **no music in QuickTime**
 **Studio impact: NONE needed** — the `veo_assemble`/`veo_full` jobs run animembient's `veo_assemble.py` as a subprocess, so they inherit this fix automatically. No studio code change.
 
 **Follow-up worth a look (minor, not urgent):** `make_music.build_track(bed, 7200)` produced a **93-min** bed, not 120 min — so `_mux_music`'s `-stream_loop -1` loops it to fill 2h (works, music plays throughout + fades out), but there's a hard cut at the ~93-min loop seam and the last ~27 min repeats the first. Root cause is in `make_music.pick_library_tracks`/`concat_with_crossfades` duration accounting (crossfades shrink the total below the requested length, and it doesn't top up). Not broken — just a polish item if the loop seam is ever noticeable. Lives in the pipeline (`make_music.py`), so it's a pipeline-session fix if pursued.
+
+---
+
+## 2026-07-18 — Veo one-button-to-publish (pipeline session; studio edits included)
+
+**Pipeline (animembient `22b3578`):** Wave 11d — `veo_publish.py` (theme-aware publish from a build manifest: deterministic metadata — no LLM-invented scenes — custom-or-auto thumb, translations, scheduled upload, staggered Shorts w/ constrained Groq titles; **resumable** via ids written into the manifest) + `build_veo_full.py` generalized (`VEO_THEME` any theme, theme-namespaced bank `<theme>_NN_<H>p.mp4` w/ legacy fantasy fallback, raw sources archived to `clips/<theme>/veo_raw/`, bank-only reruns, `PUBLISH=1` chains build→publish). Context: Sasha plans **one Veo video per channel theme**.
+
+**Studio edits (done here, this commit):**
+- `server/jobs.py`: `veo_full` env_keys += `VEO_THEME`, `PUBLISH`, `VEO_SCENES`, `VEO_SHORTS_COUNT`, `VEO_SHORT_TITLES`; title shows theme + PUBLISH flag.
+- `server/progress.py`: `veo_full` parser gains the publish phase (`[veo_publish]` stage passthrough at 99%, `[veo_publish] DONE` → "published" 100%). Checked before `[full] DONE` since publishing continues past it.
+- `web/src/pages/Build.tsx`: Veo wizard "Full auto build" row now has a **theme select** (all 8), **"Publish when done"** toggle, and an optional **scene-note input** (→ `VEO_SCENES`, human-supplied accuracy). Verified rendering in dev server; `tsc -b && vite build` clean; parser unit-checked.
+- **`IDEAS.md` (new):** curated roadmap (Now / Next / Beyond-YouTube / deliberate cuts) from a deep functionality pass. Studio session: treat the "Now" section as the working backlog — top items: upload-progress %, **A/B format tracker (Veo vs image rollup — the channel's live decision)**, publish-event markers on growth charts, output housekeeping.
+- Not runtime-tested end-to-end from the UI yet (machine busy publishing fantasy); the underlying scripts are the ones running tonight.

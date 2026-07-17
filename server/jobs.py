@@ -216,11 +216,15 @@ JOB_TYPES = {
         "heavy": True,
     },
     "veo_full": {
-        "title": lambda p, env: "Veo full build (enhance all → shuffled {}h + library music)".format(
+        "title": lambda p, env: "Veo full build: {} ({}h{})".format(
+            env.get("VEO_THEME", "fantasy-realms"),
             round(int(env.get("VIDEO_DURATION_SECONDS", "7200")) / 3600, 1),
+            ", PUBLISH" if env.get("PUBLISH") == "1" else "",
         ),
         "argv": lambda p: [PIPELINE_PYTHON, "-u", "build_veo_full.py"],
-        "env_keys": {"VEO_UPSCALE", "VEO_TARGET_H", "VIDEO_DURATION_SECONDS"},
+        "env_keys": {"VEO_UPSCALE", "VEO_TARGET_H", "VIDEO_DURATION_SECONDS",
+                     "VEO_THEME", "PUBLISH", "VEO_SCENES", "VEO_SHORTS_COUNT",
+                     "VEO_SHORT_TITLES"},
         "heavy": True,
     },
     "short_build": {
