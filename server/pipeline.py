@@ -5,6 +5,7 @@ files dropped in Finder appear on the next request. Only expensive derived
 data (audio durations) is cached, keyed by path+mtime.
 """
 import json
+import re
 import shutil
 import subprocess
 from datetime import datetime, timezone
@@ -226,6 +227,51 @@ def outputs() -> list[dict]:
             "duration": durs.get(_rel(p)),
         })
     return out
+
+
+_HEIGHT_SUFFIX = re.compile(r"_(\d{3,4})p$")
+
+
+def housekeeping() -> dict:
+    """Reclaimable disk space, with explicit per-file reasons (conservative —
+    only files clearly superseded or test artifacts; nothing speculative).
+    Disk is a real constraint: a Veo build writes ~8 GB."""
+    candidates = []
+
+    def add(p: Path, reason: str):
+        st = p.stat()
+        candidates.append({
+            "name": p.name, "path": _rel(p), "size": st.st_size,
+            "mtime": _iso(st.st_mtime), "reason": reason,
+        })
+
+    # bank: un-suffixed / lower-res clips superseded by a higher-res sibling
+    bank = _files(VEO_SLOW_DIR, VIDEO_EXTS)
+    stems = {p.stem for p in bank}
+    for p in bank:
+        m = _HEIGHT_SUFFIX.search(p.stem)
+        if m:  # e.g. veo_01_1080p — superseded if a taller sibling exists
+            base, h = p.stem[: m.start()], int(m.group(1))
+            taller = [s for s in stems if s.startswith(base + "_")
+                      and (sm := _HEIGHT_SUFFIX.search(s)) and int(sm.group(1)) > h]
+            if taller:
+                add(p, f"superseded by {taller[0]}.mp4")
+        else:  # e.g. veo_01 (legacy 1080p) — superseded by any veo_01_<H>p
+            taller = [s for s in stems if s.startswith(p.stem + "_") and _HEIGHT_SUFFIX.search(s)]
+            if taller:
+                add(p, f"legacy pre-upscale clip — superseded by {taller[0]}.mp4")
+
+    # outputs: test artifacts + silent pre-mux builds with a _final sibling
+    for p in _files(OUTPUT_DIR, VIDEO_EXTS | AUDIO_EXTS | IMAGE_EXTS):
+        if "test" in p.name.lower():
+            add(p, "test output")
+        elif p.suffix.lower() in VIDEO_EXTS and (p.with_name(f"{p.stem}_final{p.suffix}")).exists():
+            add(p, f"silent pre-mux build — {p.stem}_final{p.suffix} exists")
+
+    candidates.sort(key=lambda c: c["size"], reverse=True)
+    return {"candidates": candidates,
+            "total_bytes": sum(c["size"] for c in candidates),
+            "disk_free_gb": round(shutil.disk_usage(ANIMEMBIENT_DIR).free / 1024**3, 1)}
 
 
 def used_images(limit: int = 48) -> list[dict]:

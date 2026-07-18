@@ -1,19 +1,28 @@
 // Tiny dependency-free SVG line chart (single series). Handles 1 point (dot),
 // auto-scales Y to the data, labels the first/last X and the latest value.
+// Optional `markers` (dated events, e.g. uploads) render as ticks along the
+// baseline, positioned by date between the first and last point.
 
 export interface Point {
   x: string // date label
   y: number
 }
 
+export interface Marker {
+  x: string // date
+  label: string // tooltip
+}
+
 export default function LineChart({
   points,
+  markers = [],
   color = 'var(--color-accent-400)',
   height = 90,
   format = (v: number) => String(v),
   suffix = '',
 }: {
   points: Point[]
+  markers?: Marker[]
   color?: string
   height?: number
   format?: (v: number) => string
@@ -39,6 +48,17 @@ export default function LineChart({
   const last = points[n - 1]
   const area = `${padX},${H - padY} ${line} ${xAt(n - 1)},${H - padY}`
 
+  // date-positioned event ticks (only meaningful with a real time span)
+  const t0 = Date.parse(points[0].x)
+  const t1 = Date.parse(last.x)
+  const shownMarkers =
+    n > 1 && t1 > t0
+      ? markers
+          .map((m) => ({ ...m, t: Date.parse(m.x) }))
+          .filter((m) => m.t >= t0 && m.t <= t1)
+          .map((m) => ({ ...m, mx: padX + ((m.t - t0) / (t1 - t0)) * (W - 2 * padX) }))
+      : []
+
   return (
     <div>
       <svg viewBox={`0 0 ${W} ${H}`} className="w-full" preserveAspectRatio="none" style={{ height }}>
@@ -47,6 +67,15 @@ export default function LineChart({
                   strokeLinejoin="round" strokeLinecap="round" vectorEffect="non-scaling-stroke" />
         {points.map((p, i) => (
           <circle key={i} cx={xAt(i)} cy={yAt(p.y)} r={i === n - 1 ? 3 : 1.8} fill={color} />
+        ))}
+        {shownMarkers.map((m, i) => (
+          <g key={i}>
+            <line x1={m.mx} x2={m.mx} y1={H - padY + 1} y2={H - padY + 7}
+                  stroke="var(--color-warn-400)" strokeWidth={2} />
+            <circle cx={m.mx} cy={H - padY + 4} r={7} fill="transparent">
+              <title>{`${m.x} — ${m.label}`}</title>
+            </circle>
+          </g>
         ))}
       </svg>
       <div className="flex justify-between text-[10px] text-dusk-600 mt-1">

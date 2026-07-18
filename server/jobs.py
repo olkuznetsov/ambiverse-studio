@@ -11,6 +11,7 @@ the CLI does it (own venv interpreter, cwd=ANIMEMBIENT_DIR, env knobs), with:
 import json
 import os
 import re
+import shutil
 import signal
 import sqlite3
 import subprocess
@@ -136,6 +137,18 @@ print("[veo_assemble] DONE", flush=True)
 """
 
 
+def _disk_guard(need_gb: float) -> None:
+    """Fail at queue time, not at hour 5: a full Veo build writes ~8 GB of
+    intermediates + the final video. Raises ValueError (→ HTTP 400) when free
+    space is under `need_gb`."""
+    free_gb = shutil.disk_usage(ANIMEMBIENT_DIR).free / 1024**3
+    if free_gb < need_gb:
+        raise ValueError(
+            f"only {free_gb:.1f} GB free — a full Veo build needs ~{need_gb:.0f} GB. "
+            "Free space first (see Assets → Outputs → Housekeeping)."
+        )
+
+
 def _resolve_inside(rel: str, *, must_exist: bool = True):
     p = (ANIMEMBIENT_DIR / rel).resolve()
     if not p.is_relative_to(ANIMEMBIENT_DIR):
@@ -221,7 +234,7 @@ JOB_TYPES = {
             round(int(env.get("VIDEO_DURATION_SECONDS", "7200")) / 3600, 1),
             ", PUBLISH" if env.get("PUBLISH") == "1" else "",
         ),
-        "argv": lambda p: [PIPELINE_PYTHON, "-u", "build_veo_full.py"],
+        "argv": lambda p: _disk_guard(15) or [PIPELINE_PYTHON, "-u", "build_veo_full.py"],
         "env_keys": {"VEO_UPSCALE", "VEO_TARGET_H", "VIDEO_DURATION_SECONDS",
                      "VEO_THEME", "PUBLISH", "VEO_SCENES", "VEO_SHORTS_COUNT",
                      "VEO_SHORT_TITLES"},

@@ -243,17 +243,62 @@ def analytics_api():
         return {"available": False, "reason": f"{type(e).__name__}: {e}"}
 
 
-# ---- theme rollup -----------------------------------------------------
+# ---- format attribution (Veo living-world vs image-based) -------------
 
-def build_rollup(rows, analytics):
+def veo_evidence():
+    """What we know locally about which uploads are Veo-built.
+
+    - ids: build manifests (veo_<theme>_manifest.json) persist main_video_id +
+      short_ids after publish — the durable go-forward signal.
+    - titles: manifests' meta.title + fantasy_veo_meta.json (the pre-manifest
+      one-off publisher recorded the exact title but not the video id).
+    """
+    ids, titles = set(), set()
+    for mpath in glob.glob(os.path.join(config.OUTPUT_DIR, "veo_*_manifest.json")):
+        try:
+            m = json.loads(open(mpath).read())
+        except (OSError, ValueError):
+            continue
+        if m.get("main_video_id"):
+            ids.add(m["main_video_id"])
+        ids.update((m.get("short_ids") or {}).values())
+        title = (m.get("meta") or {}).get("title")
+        if title:
+            titles.add(title.strip())
+    meta_path = os.path.join(config.OUTPUT_DIR, "fantasy_veo_meta.json")
+    try:
+        titles.add(json.loads(open(meta_path).read())["title"].strip())
+    except (OSError, ValueError, KeyError):
+        pass
+    return ids, titles
+
+
+def infer_format(row, veo_ids, veo_titles):
+    if row["video_id"] in veo_ids:
+        return "veo", "manifest"
+    if row["title"].strip() in veo_titles:
+        return "veo", "title"
+    # fantasy-realms has ONLY ever been built through the Veo pipeline (its
+    # first upload was the 2026-07 Veo video; theme_history shows no image
+    # build) — so fantasy uploads whose ids predate the manifests are Veo too.
+    if row.get("theme") == "fantasy-realms":
+        return "veo", "assumed"
+    return "image", "default"
+
+
+# ---- rollups ----------------------------------------------------------
+
+def _aggregate(rows, analytics, key_field):
+    """Group rows by key_field: uploads/views/watch + watch-weighted retention
+    + exact AVD (total watch seconds / total views)."""
     per_video = (analytics or {}).get("per_video", {})
     agg = {}
     for r in rows:
-        theme = r.get("theme")
-        if not theme:
+        key = r.get(key_field)
+        if not key:
             continue
-        a = agg.setdefault(theme, {
-            "theme": theme, "videos": 0, "shorts": 0, "views": 0,
+        a = agg.setdefault(key, {
+            key_field: key, "videos": 0, "shorts": 0, "views": 0,
             "minutes_watched": 0, "_avp_weight": 0.0, "_avp_num": 0.0,
         })
         if r["kind"] == "Short":
@@ -271,22 +316,29 @@ def build_rollup(rows, analytics):
     out = []
     for a in agg.values():
         avp = round(a["_avp_num"] / a["_avp_weight"], 1) if a["_avp_weight"] else None
+        avd = round(a["minutes_watched"] * 60 / a["views"], 1) if a["views"] else None
         out.append({
-            "theme": a["theme"],
+            key_field: a[key_field],
             "videos": a["videos"], "shorts": a["shorts"],
             "views": a["views"], "minutes_watched": a["minutes_watched"],
-            "avg_view_pct": avp,
+            "avg_view_pct": avp, "avg_view_duration_s": avd,
         })
     out.sort(key=lambda x: (x["avg_view_pct"] or -1, x["minutes_watched"]), reverse=True)
     return out
 
 
+def build_rollup(rows, analytics):
+    return _aggregate(rows, analytics, "theme")
+
+
 def main():
     channel, rows, scheduled = data_api()
     log_map = build_log_theme_map()
+    veo_ids, veo_titles = veo_evidence()
     for r in rows:
         theme, source = infer_theme(r["title"], log_map)
         r["theme"], r["theme_source"] = theme, source
+        r["format"], r["format_source"] = infer_format(r, veo_ids, veo_titles)
     analytics = analytics_api()
     # attach analytics per-video onto rows for the table
     pv = analytics.get("per_video", {}) if analytics.get("available") else {}
@@ -299,6 +351,7 @@ def main():
         "scheduled": scheduled,
         "analytics": analytics,
         "theme_rollup": rollup,
+        "format_rollup": _aggregate(rows, analytics, "format"),
         "generated_at": __import__("datetime").datetime.now().isoformat(),
     }))
 

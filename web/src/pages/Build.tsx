@@ -433,6 +433,11 @@ function VeoWizard() {
                   Full auto build →
                 </button>
               </div>
+              {fullBuild.isError && (
+                <div className="rounded-lg border border-bad-400/30 bg-bad-400/10 px-3 py-2 text-xs text-bad-400">
+                  {String(fullBuild.error).replace(/^Error: /, '')}
+                </div>
+              )}
               {doPublish && (
                 <Field label="Scene note (optional, human-supplied — woven into the description; leave empty to stay abstract)">
                   <input

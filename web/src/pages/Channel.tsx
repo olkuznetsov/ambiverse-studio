@@ -5,8 +5,13 @@ import {
   addImpression, createJob, deleteImpression, fetchChannel, fetchHistory,
   fetchImpressions, fmtDuration,
 } from '../api'
-import type { ChannelVideo, DimRow, ThemeRollup } from '../api'
+import type { ChannelVideo, DimRow, FormatRollup, ThemeRollup } from '../api'
 import LineChart from '../components/LineChart'
+
+const FORMAT_LABEL: Record<FormatRollup['format'], string> = {
+  veo: 'Veo living-world',
+  image: 'Ken Burns / DepthFlow',
+}
 
 const THEME_TITLE: Record<string, string> = {
   'space-stations': 'Space Stations',
@@ -138,6 +143,57 @@ function ThemeRollupCard({ rows }: { rows: ThemeRollup[] }) {
   )
 }
 
+function FormatCard({ rows }: { rows: FormatRollup[] }) {
+  // fixed order: the experiment (veo) on top of the control (image)
+  const ordered = [...rows].sort((a) => (a.format === 'veo' ? -1 : 1))
+  return (
+    <div className="rounded-xl border border-ok-400/25 bg-ok-400/[0.04] p-4">
+      <div className="flex items-baseline justify-between mb-1">
+        <h3 className="text-sm font-semibold text-ok-400 uppercase tracking-wider">Format A/B — Veo vs image</h3>
+        <span className="text-[11px] text-dusk-500">the live decision: does real motion out-retain stills?</span>
+      </div>
+      <div className="overflow-x-auto">
+        <table className="w-full text-xs">
+          <thead>
+            <tr className="text-dusk-500 text-left">
+              <th className="py-1.5 font-medium">Format</th>
+              <th className="py-1.5 font-medium text-right">Uploads</th>
+              <th className="py-1.5 font-medium text-right">Views</th>
+              <th className="py-1.5 font-medium text-right">Watch</th>
+              <th className="py-1.5 font-medium text-right">AVD</th>
+              <th className="py-1.5 font-medium text-right">Retention</th>
+            </tr>
+          </thead>
+          <tbody>
+            {ordered.map((r) => {
+              const pending = r.views === 0 && r.minutes_watched === 0
+              return (
+                <tr key={r.format} className="border-t border-dusk-800/60">
+                  <td className="py-2 text-dusk-100 font-medium">
+                    {FORMAT_LABEL[r.format]}
+                    {r.format === 'veo' && <span className="ml-1.5 rounded bg-ok-400/15 px-1 text-[9px] text-ok-400">NEW</span>}
+                  </td>
+                  <td className="py-2 text-right text-dusk-300">
+                    {r.videos}<span className="text-dusk-600"> long</span> · {r.shorts}<span className="text-dusk-600"> sh</span>
+                  </td>
+                  <td className="py-2 text-right text-dusk-300">{fmtInt(r.views)}</td>
+                  <td className="py-2 text-right text-dusk-300">{fmtHours(r.minutes_watched)}</td>
+                  <td className="py-2 text-right text-dusk-300">
+                    {r.avg_view_duration_s != null ? fmtDuration(r.avg_view_duration_s) : '—'}
+                  </td>
+                  <td className={`py-2 text-right font-semibold ${retentionTone(r.avg_view_pct)}`}>
+                    {r.avg_view_pct === null ? (pending ? 'data pending' : '—') : `${r.avg_view_pct}%`}
+                  </td>
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  )
+}
+
 type SortKey = 'views' | 'watch' | 'retention' | 'date'
 
 function VideoTable({ videos }: { videos: ChannelVideo[] }) {
@@ -206,6 +262,11 @@ function VideoTable({ videos }: { videos: ChannelVideo[] }) {
                       {v.kind === 'Short' ? 'S' : 'L'}
                     </span>
                     {v.title}
+                    {v.format === 'veo' && (
+                      <span className="ml-1.5 rounded bg-ok-400/15 px-1 text-[9px] text-ok-400" title={`Veo living-world (${v.format_source})`}>
+                        veo
+                      </span>
+                    )}
                     {v.publish_at && <span className="ml-1.5 text-[10px] text-warn-400">scheduled</span>}
                   </a>
                 </td>
@@ -232,12 +293,23 @@ function VideoTable({ videos }: { videos: ChannelVideo[] }) {
   )
 }
 
-function GrowthCard() {
+function GrowthCard({ videos }: { videos: ChannelVideo[] }) {
   const { data } = useQuery({ queryKey: ['channel-history'], queryFn: fetchHistory })
   const snaps = data ?? []
   if (snaps.length === 0) return null
   const series = (pick: (s: typeof snaps[number]) => number | null) =>
     snaps.filter((s) => pick(s) != null).map((s) => ({ x: s.date, y: pick(s) as number }))
+  // upload events → one marker per publish date, all titles in the tooltip
+  const byDate = new Map<string, string[]>()
+  for (const v of videos) {
+    const list = byDate.get(v.date) ?? []
+    list.push(`${v.kind === 'Short' ? 'S' : 'L'}· ${v.title}`)
+    byDate.set(v.date, list)
+  }
+  const events = [...byDate].map(([x, titles]) => ({
+    x,
+    label: `${titles.length} upload${titles.length > 1 ? 's' : ''}:\n${titles.join('\n')}`,
+  }))
   const charts: [string, { x: string; y: number }[], (v: number) => string, string][] = [
     ['Subscribers', series((s) => s.subscribers), (v) => String(Math.round(v)), ''],
     ['Watch hours (long-form)', series((s) => (s.long_watch_minutes ?? 0) / 60), (v) => String(Math.round(v)), 'h'],
@@ -248,14 +320,16 @@ function GrowthCard() {
       <div className="flex items-baseline justify-between mb-3">
         <h3 className="text-sm font-semibold text-dusk-300 uppercase tracking-wider">Growth over time</h3>
         <span className="text-[11px] text-dusk-500">
-          {snaps.length === 1 ? 'first snapshot — banks a point on each refresh' : `${snaps.length} daily snapshots`}
+          {snaps.length === 1
+            ? 'first snapshot — banks a point on each refresh'
+            : `${snaps.length} daily snapshots · ▍ = upload (hover)`}
         </span>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {charts.map(([label, pts, fmt, suffix]) => (
           <div key={label}>
             <div className="text-[11px] uppercase tracking-wider text-dusk-400 mb-1">{label}</div>
-            <LineChart points={pts} format={fmt} suffix={suffix} />
+            <LineChart points={pts} markers={events} format={fmt} suffix={suffix} />
           </div>
         ))}
       </div>
@@ -429,7 +503,9 @@ export default function Channel() {
         </div>
       )}
 
-      <GrowthCard />
+      <GrowthCard videos={data.videos} />
+
+      {(data.format_rollup?.length ?? 0) > 1 && <FormatCard rows={data.format_rollup!} />}
 
       {data.theme_rollup.length > 0 && <ThemeRollupCard rows={data.theme_rollup} />}
 

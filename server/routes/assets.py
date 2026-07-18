@@ -77,6 +77,11 @@ def outputs():
     return pipeline.outputs()
 
 
+@router.get("/housekeeping")
+def housekeeping():
+    return pipeline.housekeeping()
+
+
 @router.get("/assets/used-images")
 def used_images(limit: int = 48):
     return pipeline.used_images(limit)

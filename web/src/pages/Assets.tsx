@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
-  fetchMusic, fetchOutputs, fetchOverview, fetchThemeImages, fileUrl, fmtBytes,
-  fmtDuration, imgUrl, setThumb, trashAsset, vthumbUrl,
+  fetchHousekeeping, fetchMusic, fetchOutputs, fetchOverview, fetchThemeImages,
+  fileUrl, fmtBytes, fmtDuration, imgUrl, setThumb, trashAsset, vthumbUrl,
 } from '../api'
 import type { ImageEntry, OutputEntry, TrackEntry } from '../api'
 
@@ -86,6 +86,55 @@ function TrackRow({ t }: { t: TrackEntry }) {
       </div>
       <audio controls preload="none" src={fileUrl(t.path)} className="h-8 w-64 shrink-0" />
     </li>
+  )
+}
+
+function HousekeepingCard() {
+  const qc = useQueryClient()
+  const [open, setOpen] = useState(false)
+  const { data } = useQuery({ queryKey: ['housekeeping'], queryFn: fetchHousekeeping })
+  const trash = useMutation({
+    mutationFn: trashAsset,
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['housekeeping'] })
+      qc.invalidateQueries({ queryKey: ['outputs'] })
+      qc.invalidateQueries({ queryKey: ['overview'] })
+    },
+  })
+  if (!data || data.candidates.length === 0) return null
+  return (
+    <div className="mb-4 rounded-xl border border-warn-400/25 bg-warn-400/[0.05]">
+      <button onClick={() => setOpen(!open)} className="flex w-full items-center justify-between px-4 py-3 text-left">
+        <span className="text-sm font-medium text-warn-400">
+          🧹 Housekeeping — {fmtBytes(data.total_bytes)} reclaimable in {data.candidates.length} file
+          {data.candidates.length > 1 ? 's' : ''}
+        </span>
+        <span className="text-[11px] text-dusk-400">
+          {data.disk_free_gb} GB free {open ? '▾' : '▸'}
+        </span>
+      </button>
+      {open && (
+        <ul className="border-t border-warn-400/15 px-4 py-2 space-y-1.5">
+          {data.candidates.map((c) => (
+            <li key={c.path} className="flex items-center justify-between gap-3 text-xs">
+              <div className="min-w-0">
+                <span className="text-dusk-200">{c.name}</span>
+                <span className="text-dusk-500"> · {fmtBytes(c.size)}</span>
+                <div className="text-[10px] text-dusk-500">{c.reason}</div>
+              </div>
+              <ActionBtn
+                label="trash"
+                tone="danger"
+                onClick={() => {
+                  if (confirm(`Move ${c.name} (${fmtBytes(c.size)}) to the studio trash?\nReason: ${c.reason}`))
+                    trash.mutate(c.path)
+                }}
+              />
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
   )
 }
 
@@ -273,6 +322,7 @@ export default function Assets() {
 
       {tab === 'outputs' && (
         <>
+          <HousekeepingCard />
           <div className="flex flex-wrap gap-1.5 mb-4">
             {(['all', 'video', 'short', 'thumbnail', 'music'] as const).map((k) => (
               <button

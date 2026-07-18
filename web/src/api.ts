@@ -113,6 +113,20 @@ export interface UsedImage {
   mtime: string
 }
 
+export interface HousekeepingCandidate {
+  name: string
+  path: string
+  size: number
+  mtime: string
+  reason: string
+}
+
+export interface Housekeeping {
+  candidates: HousekeepingCandidate[]
+  total_bytes: number
+  disk_free_gb: number
+}
+
 export interface VideoAnalytics {
   minutes_watched: number
   avg_view_duration_s: number
@@ -132,6 +146,8 @@ export interface ChannelVideo {
   publish_at: string | null
   theme: string | null
   theme_source: 'log' | 'inferred' | 'genre' | 'unknown'
+  format: 'veo' | 'image'
+  format_source: 'manifest' | 'title' | 'assumed' | 'default'
   analytics: VideoAnalytics | null
 }
 
@@ -171,6 +187,17 @@ export interface ThemeRollup {
   views: number
   minutes_watched: number
   avg_view_pct: number | null
+  avg_view_duration_s?: number | null
+}
+
+export interface FormatRollup {
+  format: 'veo' | 'image'
+  videos: number
+  shorts: number
+  views: number
+  minutes_watched: number
+  avg_view_pct: number | null
+  avg_view_duration_s: number | null
 }
 
 export interface ScheduledUpload {
@@ -186,6 +213,7 @@ export interface ChannelData {
   scheduled: ScheduledUpload[]
   analytics: ChannelAnalytics
   theme_rollup: ThemeRollup[]
+  format_rollup?: FormatRollup[]
   generated_at: string
   fetched_at: number
   cache: 'fresh' | 'live' | 'stale'
@@ -303,6 +331,7 @@ export const deleteImpression = (day: string) =>
   fetch(`/api/channel/impressions/${day}`, { method: 'DELETE' }).then((r) => r.json() as Promise<Impression[]>)
 export const fetchSettings = () => get<Settings>('/api/settings')
 export const fetchOutputs = () => get<OutputEntry[]>('/api/outputs')
+export const fetchHousekeeping = () => get<Housekeeping>('/api/housekeeping')
 export const fetchUsedImages = (limit = 48) => get<UsedImage[]>(`/api/assets/used-images?limit=${limit}`)
 export const trashAsset = (path: string) => post<{ ok: boolean }>('/api/assets/trash', { path })
 export const setThumb = (path: string) => post<{ ok: boolean; thumb: string }>('/api/assets/set-thumb', { path })
