@@ -307,6 +307,7 @@ function VeoWizard() {
   const [upscale, setUpscale] = useState(true)
   const [targetH, setTargetH] = useState<'1440' | '2160'>('1440')
   const [veoTheme, setVeoTheme] = useState('fantasy-realms')
+  const [fullDur, setFullDur] = useState(7200)
   const [doPublish, setDoPublish] = useState(false)
   const [scenes, setScenes] = useState('')
   const [selected, setSelected] = useState<Set<string>>(new Set())
@@ -344,6 +345,7 @@ function VeoWizard() {
       createJob('veo_full', {}, {
         ...(upscale ? { VEO_UPSCALE: '1', VEO_TARGET_H: targetH } : {}),
         VEO_THEME: veoTheme,
+        VIDEO_DURATION_SECONDS: String(fullDur),
         ...(doPublish ? { PUBLISH: '1' } : {}),
         ...(doPublish && scenes.trim() ? { VEO_SCENES: scenes.trim() } : {}),
       }),
@@ -422,6 +424,28 @@ function VeoWizard() {
                       <option key={t.key} value={t.key}>{t.title}</option>
                     ))}
                   </select>
+                </Field>
+                <Field label="Duration">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <Seg
+                      value={String([3600, 7200, 14400, 28800].includes(fullDur) ? fullDur : 'custom')}
+                      onChange={(v) => v !== 'custom' && setFullDur(Number(v))}
+                      options={[
+                        { value: '3600', label: '1h' },
+                        { value: '7200', label: '2h' },
+                        { value: '14400', label: '4h' },
+                        { value: '28800', label: '8h' },
+                      ]}
+                    />
+                    <input
+                      type="number"
+                      min={60}
+                      value={fullDur}
+                      onChange={(e) => setFullDur(Number(e.target.value))}
+                      className={`${inputCls} w-24`}
+                      title="seconds — enhancement is cached per clip; duration scales only the assembly phase"
+                    />
+                  </div>
                 </Field>
                 <Toggle checked={doPublish} onChange={setDoPublish} label="Publish when done (metadata + upload + shorts)" />
                 <button
