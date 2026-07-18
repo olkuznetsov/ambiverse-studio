@@ -20,6 +20,7 @@ _PATTERNS = {
     "shuffled": re.compile(r"shuffled build: (\d+) cycles", re.M),
     "building_reel": re.compile(r"\[veo_assemble\] building reel", re.M),
     "planned": re.compile(r"\((\d+) images planned\)", re.M),
+    "upload": re.compile(r"\[upload\] (\d+)%", re.M),
 }
 
 
@@ -41,10 +42,18 @@ def parse(job_type: str, log_tail: str) -> dict | None:
         return _veo_assemble(log_tail)
     if job_type == "veo_full":
         return _veo_full(log_tail)
+    if job_type == "short_build":
+        up = _last(_PATTERNS["upload"], log_tail)
+        return {"stage": f"uploading {up.group(1)}%", "pct": int(up.group(1))} if up else None
     return None
 
 
 def _main_build(text: str) -> dict | None:
+    # upload is the last phase — a chunk line after everything else wins
+    up = _last(_PATTERNS["upload"], text)
+    if up and "Uploading to YouTube" in text:
+        pct = int(up.group(1))
+        return {"stage": f"uploading to YouTube {pct}%", "pct": pct}
     if "Concatenating clips" in text:
         return {"stage": "concatenating clips (xfade master encode)", "pct": None}
     df = _last(_PATTERNS["df_clip"], text)
@@ -106,6 +115,9 @@ def _veo_full(text: str) -> dict | None:
         return {"stage": "published", "pct": 100}
     pub = _last(_VEO_PUBLISH_LINE, text)
     if pub:  # publish phase (after the build) — show its last stage line
+        up = _last(_PATTERNS["upload"], text)
+        if up and up.start() > pub.start():  # mid-upload: chunk % is fresher
+            return {"stage": f"publish: uploading {up.group(1)}%", "pct": 99}
         return {"stage": f"publish: {pub.group(1).strip()[:70]}", "pct": 99}
     if "[full] DONE" in text:
         return {"stage": "done", "pct": 100}

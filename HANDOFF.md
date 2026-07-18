@@ -13,6 +13,17 @@ They share the same machine but not the same conversation. **Ambiverse Studio wr
 
 ---
 
+## 2026-07-18 (later) — upload progress tag (studio session; 1-line animembient edit)
+
+IDEAS #1: `upload_youtube._retriable_chunk_upload` already printed a bare chunk percent;
+the studio session tagged + flushed it — `[upload] N%` — (animembient commit `08ac31c`,
+the exact edit IDEAS.md prescribed) and taught `server/progress.py` to parse it:
+`main_build` upload phase (bar = upload %), `veo_full` publish phase ("publish: uploading
+N%" at 99%), and `short_build` uploads. Pipeline sessions: keep the `[upload]` tag if that
+loop is ever reworked — Studio's upload bars key on it.
+
+---
+
 ## 2026-07-15 — Veo "living-world" pipeline gained an end-to-end path + real Shorts (pipeline session)
 
 Context: this session built the full Veo slow-mo + ESRGAN-upscale pipeline and just kicked off the first real 2-hour fantasy video (9 clips, 1440p, 40-track music bed). Along the way the animembient repo gained scripts/fixes the studio's current Veo/Shorts wiring predates. **None of this breaks the studio** — it's "new stuff to surface."
