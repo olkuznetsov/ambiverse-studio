@@ -12,12 +12,12 @@ YouTube is the first consumer, not the boundary.
 
 ## Now — gaps that will bite soon (small, concrete)
 
-1. **Upload progress.** The 8 GB upload is a 4-hour black box ("uploading…"). `upload_youtube._retriable_chunk_upload` already loops chunks — print `[upload] N%` per chunk and let `progress.py`/Studio parse it. *One print statement away from a real bar.*
-2. **A/B format tracker — the decision the channel actually faces.** Veo-vs-image is THE open question. Manifests now record which videos are Veo; add a `format` dimension to the Channel rollup (Veo living-world vs Ken Burns/DepthFlow, retention + AVD side by side, per theme). This turns "maybe we move this way" into a read-off-the-screen answer.
-3. **Publish-event markers on the growth charts.** Studio banks daily snapshots + knows every publishAt. Overlay upload events on the subs/views sparklines → see which video/short moved the needle (approximates the shorts→long conversion no API exposes).
+1. ✅ **Upload progress.** *(2026-07-18, studio session — animembient `08ac31c` + studio `ea20ff5`: `[upload] N%` tagged print, parsed into live bars for main_build/veo_full-publish/short_build.)*
+2. ✅ **A/B format tracker — the decision the channel actually faces.** *(2026-07-18, studio `aa3a8ca`: collector tags veo|image via manifest ids → meta titles → fantasy-is-always-Veo rule; Format A/B card + veo badges on the Channel page.)*
+3. ✅ **Publish-event markers on the growth charts.** *(2026-07-18, studio `aa3a8ca`: upload ticks with tooltips on all three growth sparklines.)*
 4. **Music-bed length fix.** `make_music.build_track(bed, 7200)` returns ~93 min (crossfade accounting) → bed loops with a mid-video seam. Fix: top up tracks until *post-crossfade* length ≥ target. (Pipeline-side, `make_music.py`.)
-5. **Bank housekeeping.** `output/veo_slow/` holds legacy `veo_NN` + new `<theme>_NN` names, plus obsolete 1080p versions; old test outputs accumulate (a silent 4 GB `fantasy_veo_2h.mp4`, `_VEO_TEST_*`…). A Studio "housekeeping" card: size-sorted stale files → one-click trash. Disk is a real constraint (8 GB per video).
-6. **Hard disk-space guard** in `build_veo_full` preflight (need ~15 GB free): fail fast, not at hour 5.
+5. ✅ **Bank housekeeping.** *(2026-07-18, studio `aa3a8ca`: /api/housekeeping + collapsible card in Assets→Outputs — legacy pre-upscale clips, test outputs, silent pre-mux builds w/ a `_final` sibling; found 4.6 GB on first run. Trashing left to Sasha.)*
+6. ✅ **Hard disk-space guard.** *(2026-07-18, studio `aa3a8ca`: `veo_full` refuses to queue under 15 GB free — HTTP 400 surfaced in the Veo wizard.)*
 7. **Veo intake by folder (multi-theme batches).** 8 themes of "Untitled video*.mp4" through one Downloads folder is now the bottleneck-by-convention: process each batch before generating the next. Folder-first alternative honoring Sasha's preference: drop per theme into `clips/<theme>/veo_raw/` and let build read from there too (`VEO_SRC_DIR`), Downloads stays the quick path.
 
 ## Next — leverage on what already exists

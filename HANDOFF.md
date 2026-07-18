@@ -13,6 +13,20 @@ They share the same machine but not the same conversation. **Ambiverse Studio wr
 
 ---
 
+## 2026-07-18 (evening) — IDEAS "Now" backlog built (studio session)
+
+Studio `aa3a8ca`: IDEAS #2 format A/B tracker (collector tags veo|image from
+`output/veo_*_manifest.json` ids → meta titles → fantasy-always-Veo fallback; Channel
+gains a Format A/B card + veo badges), #3 publish-event ticks on the growth sparklines,
+#5 housekeeping card (Assets→Outputs; found the silent 4.3 GB `fantasy_veo_2h.mp4` + the
+9 legacy 1080p bank clips = 4.6 GB; **not trashed — Sasha's call**), #6 disk guard
+(`veo_full` 400s under 15 GB free). **Pipeline sessions note:** keep writing
+`main_video_id`/`short_ids` into build manifests — the format tracker keys on them
+(the pre-manifest fantasy publish is covered by title + theme fallbacks). Remaining
+"Now" items for the pipeline session: #4 music-bed length, #7 Veo intake by folder.
+
+---
+
 ## 2026-07-18 (later) — upload progress tag (studio session; 1-line animembient edit)
 
 IDEAS #1: `upload_youtube._retriable_chunk_upload` already printed a bare chunk percent;
