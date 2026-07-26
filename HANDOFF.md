@@ -81,3 +81,18 @@ The first full 2h Veo video built fine but played with **no music in QuickTime**
 - `web/src/pages/Build.tsx`: Veo wizard "Full auto build" row now has a **theme select** (all 8), **"Publish when done"** toggle, and an optional **scene-note input** (→ `VEO_SCENES`, human-supplied accuracy). Verified rendering in dev server; `tsc -b && vite build` clean; parser unit-checked.
 - **`IDEAS.md` (new):** curated roadmap (Now / Next / Beyond-YouTube / deliberate cuts) from a deep functionality pass. Studio session: treat the "Now" section as the working backlog — top items: upload-progress %, **A/B format tracker (Veo vs image rollup — the channel's live decision)**, publish-event markers on growth charts, output housekeeping.
 - Not runtime-tested end-to-end from the UI yet (machine busy publishing fantasy); the underlying scripts are the ones running tonight.
+
+---
+
+## 2026-07-26 — Shorts-feed throttling from bulk uploads (diagnosis; studio backlog items)
+
+**What happened.** After the fantasy batch (10 uploads Jul 17-18) and the PS1 batch (10 uploads in ~1 hour Jul 23-24) — **20 uploads in 6 days** onto an 11-sub channel — **Shorts-feed traffic collapsed ~100×** (410 views Jul 19-23 → 4 views Jul 24-26). All other traffic sources normal; every video technically clean (`public`/`processed`, `madeForKids=False`, no rejection/region flags). So: **algorithmic distribution throttling, not a ban.** Proof it's velocity and not content: a *fantasy* Short from the 189-235-view series, published on the PS1 batch day, got 9 views. Full write-up + rules now in animembient `CLAUDE.md` (Wave-7 research section, commit `92a6023`).
+
+**Fixed already:** rescheduled the 11 queued Shorts to **one every 2 days, alternating fantasy/PS1, zero collisions** (Jul 28 → Aug 17) via `videos().update(part='status')`. Two parallel Short series had been colliding on the same 19:00 UTC slot for 6 days.
+
+**Studio backlog (new, high value — this is the channel's active problem):**
+- [ ] **Staggered Short uploads.** `veo_publish` uploads all N Shorts in one run — staggered `publishAt` does NOT stagger the *upload*, and the upload burst is the throttle trigger. Options: a `VEO_SHORTS_UPLOAD_PER_DAY` mode that uploads a few per run + a resumable queue (the manifest already records `short_ids`, so a cron/daily job could drain it), or Studio surfaces a "pending shorts" list with an upload-next button. **Pipeline-side change, but Studio should drive it.**
+- [ ] **Collision guard.** Before scheduling, check existing `publishAt` slots across the channel and refuse/shift to keep max one Short per day. Cheap: the collector already fetches scheduled items for the Channel page.
+- [ ] **Schedule calendar view.** The Channel page lists scheduled publishes; a day-grid would have made these 6 collisions obvious at a glance.
+- [ ] **Traffic-source trend card.** `insightTrafficSourceType` split by date range was the smoking gun — a "SHORTS feed views/day" sparkline on the Channel page would surface throttling within a day instead of after a week. (Analytics API, already wired.)
+- [ ] Nice-to-have: an "upload velocity" warning — flag when uploads in the last 7 days exceed ~2× the channel's trailing average.
