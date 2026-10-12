@@ -25,8 +25,10 @@ export default function Jobs() {
   const { data: jobs, isLoading } = useQuery({
     queryKey: ['jobs'],
     queryFn: fetchJobs,
+    // fast while something runs; slow (not off) when idle, so jobs queued from
+    // another tab or straight through the API still show up
     refetchInterval: (q) =>
-      (q.state.data ?? []).some((j) => j.status === 'running' || j.status === 'queued') ? 2000 : false,
+      (q.state.data ?? []).some((j) => j.status === 'running' || j.status === 'queued') ? 2000 : 8000,
   })
   const cancel = useMutation({
     mutationFn: cancelJob,

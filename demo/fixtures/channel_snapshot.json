@@ -1,0 +1,1511 @@
+{
+ "channel": {
+  "title": "AMBIVERSE",
+  "subscribers": 11,
+  "views": 2595,
+  "video_count": 50
+ },
+ "videos": [
+  {
+   "video_id": "drnDxlxVvpc",
+   "title": "Lazy Summer Breeze #Shorts",
+   "kind": "Short",
+   "date": "2026-08-09",
+   "secs": 61,
+   "views": 102,
+   "likes": 0,
+   "comments": 0,
+   "privacy": "public",
+   "publish_at": null,
+   "theme": null,
+   "theme_source": "unknown",
+   "format": "image",
+   "format_source": "default",
+   "analytics": {
+    "minutes_watched": 5,
+    "avg_view_duration_s": 22,
+    "avg_view_pct": 36.9
+   }
+  },
+  {
+   "video_id": "KCDAbcG4Wjw",
+   "title": "Crimson Dusk Fade #Shorts",
+   "kind": "Short",
+   "date": "2026-08-08",
+   "secs": 61,
+   "views": 92,
+   "likes": 0,
+   "comments": 0,
+   "privacy": "public",
+   "publish_at": null,
+   "theme": null,
+   "theme_source": "unknown",
+   "format": "image",
+   "format_source": "default",
+   "analytics": {
+    "minutes_watched": 3,
+    "avg_view_duration_s": 12,
+    "avg_view_pct": 20.8
+   }
+  },
+  {
+   "video_id": "Ovkt388m2gk",
+   "title": "Silent Forest Depths #Shorts",
+   "kind": "Short",
+   "date": "2026-08-07",
+   "secs": 61,
+   "views": 64,
+   "likes": 0,
+   "comments": 0,
+   "privacy": "public",
+   "publish_at": null,
+   "theme": null,
+   "theme_source": "unknown",
+   "format": "image",
+   "format_source": "default",
+   "analytics": {
+    "minutes_watched": 3,
+    "avg_view_duration_s": 16,
+    "avg_view_pct": 27.6
+   }
+  },
+  {
+   "video_id": "xIuVGCACHVk",
+   "title": "Warm Sunset Embers #Shorts",
+   "kind": "Short",
+   "date": "2026-08-06",
+   "secs": 61,
+   "views": 5,
+   "likes": 0,
+   "comments": 0,
+   "privacy": "public",
+   "publish_at": null,
+   "theme": null,
+   "theme_source": "unknown",
+   "format": "image",
+   "format_source": "default",
+   "analytics": {
+    "minutes_watched": 1,
+    "avg_view_duration_s": 29,
+    "avg_view_pct": 49.1
+   }
+  },
+  {
+   "video_id": "HXHi1ACVXOU",
+   "title": "Dawn Over the Realm #Shorts",
+   "kind": "Short",
+   "date": "2026-08-05",
+   "secs": 61,
+   "views": 79,
+   "likes": 0,
+   "comments": 0,
+   "privacy": "public",
+   "publish_at": null,
+   "theme": "fantasy-realms",
+   "theme_source": "inferred",
+   "format": "veo",
+   "format_source": "assumed",
+   "analytics": {
+    "minutes_watched": 4,
+    "avg_view_duration_s": 25,
+    "avg_view_pct": 42.0
+   }
+  },
+  {
+   "video_id": "Tv63domsNHc",
+   "title": "Soft Focus Dawn #Shorts",
+   "kind": "Short",
+   "date": "2026-08-04",
+   "secs": 61,
+   "views": 4,
+   "likes": 0,
+   "comments": 0,
+   "privacy": "public",
+   "publish_at": null,
+   "theme": null,
+   "theme_source": "unknown",
+   "format": "image",
+   "format_source": "default",
+   "analytics": {
+    "minutes_watched": 2,
+    "avg_view_duration_s": 42,
+    "avg_view_pct": 69.7
+   }
+  },
+  {
+   "video_id": "-tSoHFTNeKg",
+   "title": "The Alchemist's Desk #Shorts",
+   "kind": "Short",
+   "date": "2026-08-03",
+   "secs": 61,
+   "views": 11,
+   "likes": 2,
+   "comments": 0,
+   "privacy": "public",
+   "publish_at": null,
+   "theme": "fantasy-realms",
+   "theme_source": "inferred",
+   "format": "veo",
+   "format_source": "assumed",
+   "analytics": {
+    "minutes_watched": 5,
+    "avg_view_duration_s": 32,
+    "avg_view_pct": 53.5
+   }
+  },
+  {
+   "video_id": "qQysgNcVxKY",
+   "title": "Midnight Bloom Aura #Shorts",
+   "kind": "Short",
+   "date": "2026-08-02",
+   "secs": 61,
+   "views": 6,
+   "likes": 0,
+   "comments": 0,
+   "privacy": "public",
+   "publish_at": null,
+   "theme": null,
+   "theme_source": "unknown",
+   "format": "image",
+   "format_source": "default",
+   "analytics": {
+    "minutes_watched": 2,
+    "avg_view_duration_s": 50,
+    "avg_view_pct": 83.3
+   }
+  },
+  {
+   "video_id": "65RemhuWFiQ",
+   "title": "Light in the Grand Library #Shorts",
+   "kind": "Short",
+   "date": "2026-08-01",
+   "secs": 61,
+   "views": 22,
+   "likes": 2,
+   "comments": 0,
+   "privacy": "public",
+   "publish_at": null,
+   "theme": "fantasy-realms",
+   "theme_source": "inferred",
+   "format": "veo",
+   "format_source": "assumed",
+   "analytics": {
+    "minutes_watched": 78,
+    "avg_view_duration_s": 786,
+    "avg_view_pct": 1288.8
+   }
+  },
+  {
+   "video_id": "i1hlpLIyfpg",
+   "title": "Tropical Twilight Haze #Shorts",
+   "kind": "Short",
+   "date": "2026-07-30",
+   "secs": 61,
+   "views": 104,
+   "likes": 1,
+   "comments": 0,
+   "privacy": "public",
+   "publish_at": null,
+   "theme": null,
+   "theme_source": "unknown",
+   "format": "image",
+   "format_source": "default",
+   "analytics": {
+    "minutes_watched": 6,
+    "avg_view_duration_s": 18,
+    "avg_view_pct": 30.9
+   }
+  },
+  {
+   "video_id": "uFQaxrnNFNg",
+   "title": "The Emerald Elixir #Shorts",
+   "kind": "Short",
+   "date": "2026-07-28",
+   "secs": 61,
+   "views": 7,
+   "likes": 0,
+   "comments": 0,
+   "privacy": "public",
+   "publish_at": null,
+   "theme": "fantasy-realms",
+   "theme_source": "inferred",
+   "format": "veo",
+   "format_source": "assumed",
+   "analytics": {
+    "minutes_watched": 2,
+    "avg_view_duration_s": 37,
+    "avg_view_pct": 61.3
+   }
+  },
+  {
+   "video_id": "Orj1Eu-m2BE",
+   "title": "The Apothecary #Shorts",
+   "kind": "Short",
+   "date": "2026-07-26",
+   "secs": 61,
+   "views": 4,
+   "likes": 0,
+   "comments": 0,
+   "privacy": "public",
+   "publish_at": null,
+   "theme": "fantasy-realms",
+   "theme_source": "inferred",
+   "format": "veo",
+   "format_source": "assumed",
+   "analytics": {
+    "minutes_watched": 1,
+    "avg_view_duration_s": 61,
+    "avg_view_pct": 100.2
+   }
+  },
+  {
+   "video_id": "rrsCQPcmA3Q",
+   "title": "Morning Mist Rise #Shorts",
+   "kind": "Short",
+   "date": "2026-07-26",
+   "secs": 61,
+   "views": 7,
+   "likes": 0,
+   "comments": 0,
+   "privacy": "public",
+   "publish_at": null,
+   "theme": null,
+   "theme_source": "unknown",
+   "format": "image",
+   "format_source": "default",
+   "analytics": {
+    "minutes_watched": 2,
+    "avg_view_duration_s": 42,
+    "avg_view_pct": 69.1
+   }
+  },
+  {
+   "video_id": "zRjeRzHl0-4",
+   "title": "Low-Poly Jungle — 2 Hours PS1 Ambient & Liquid DnB for Deep Work & Sleep",
+   "kind": "Video",
+   "date": "2026-07-24",
+   "secs": 7201,
+   "views": 83,
+   "likes": 1,
+   "comments": 0,
+   "privacy": "public",
+   "publish_at": null,
+   "theme": "ps1-jungle",
+   "theme_source": "inferred",
+   "format": "image",
+   "format_source": "default",
+   "analytics": {
+    "minutes_watched": 1074,
+    "avg_view_duration_s": 815,
+    "avg_view_pct": 11.3
+   }
+  },
+  {
+   "video_id": "POEWV7CiRtw",
+   "title": "Golden Hour Glow #Shorts",
+   "kind": "Short",
+   "date": "2026-07-24",
+   "secs": 61,
+   "views": 6,
+   "likes": 1,
+   "comments": 0,
+   "privacy": "public",
+   "publish_at": null,
+   "theme": null,
+   "theme_source": "unknown",
+   "format": "image",
+   "format_source": "default",
+   "analytics": {
+    "minutes_watched": 2,
+    "avg_view_duration_s": 86,
+    "avg_view_pct": 142.2
+   }
+  },
+  {
+   "video_id": "yUdMYSWjG3c",
+   "title": "Twilight at the Crossing #Shorts",
+   "kind": "Short",
+   "date": "2026-07-24",
+   "secs": 61,
+   "views": 9,
+   "likes": 0,
+   "comments": 0,
+   "privacy": "public",
+   "publish_at": null,
+   "theme": null,
+   "theme_source": "unknown",
+   "format": "image",
+   "format_source": "default",
+   "analytics": {
+    "minutes_watched": 1,
+    "avg_view_duration_s": 45,
+    "avg_view_pct": 74.2
+   }
+  },
+  {
+   "video_id": "VbNXmriqJ3U",
+   "title": "Where the Fireflies Gather #Shorts",
+   "kind": "Short",
+   "date": "2026-07-22",
+   "secs": 61,
+   "views": 190,
+   "likes": 6,
+   "comments": 2,
+   "privacy": "public",
+   "publish_at": null,
+   "theme": null,
+   "theme_source": "unknown",
+   "format": "image",
+   "format_source": "default",
+   "analytics": {
+    "minutes_watched": 31,
+    "avg_view_duration_s": 26,
+    "avg_view_pct": 44.0
+   }
+  },
+  {
+   "video_id": "4ljMvKL0iEo",
+   "title": "The River Beneath the Ruins #Shorts",
+   "kind": "Short",
+   "date": "2026-07-20",
+   "secs": 61,
+   "views": 239,
+   "likes": 5,
+   "comments": 0,
+   "privacy": "public",
+   "publish_at": null,
+   "theme": null,
+   "theme_source": "unknown",
+   "format": "image",
+   "format_source": "default",
+   "analytics": {
+    "minutes_watched": 21,
+    "avg_view_duration_s": 11,
+    "avg_view_pct": 19.1
+   }
+  },
+  {
+   "video_id": "eIL7UILXDPg",
+   "title": "Enchanted Realm — 2 Hours Fantasy Ambient for Sleep, Study & Deep Focus",
+   "kind": "Video",
+   "date": "2026-07-18",
+   "secs": 7201,
+   "views": 65,
+   "likes": 0,
+   "comments": 0,
+   "privacy": "public",
+   "publish_at": null,
+   "theme": "fantasy-realms",
+   "theme_source": "inferred",
+   "format": "veo",
+   "format_source": "assumed",
+   "analytics": {
+    "minutes_watched": 575,
+    "avg_view_duration_s": 531,
+    "avg_view_pct": 7.4
+   }
+  },
+  {
+   "video_id": "F1F4y88yu6I",
+   "title": "Sunset Over the Old Bridge #Shorts",
+   "kind": "Short",
+   "date": "2026-07-18",
+   "secs": 61,
+   "views": 154,
+   "likes": 6,
+   "comments": 0,
+   "privacy": "public",
+   "publish_at": null,
+   "theme": null,
+   "theme_source": "unknown",
+   "format": "image",
+   "format_source": "default",
+   "analytics": {
+    "minutes_watched": 21,
+    "avg_view_duration_s": 15,
+    "avg_view_pct": 25.5
+   }
+  },
+  {
+   "video_id": "uR2XPaEwNUU",
+   "title": "Jungle Ruins #Shorts",
+   "kind": "Short",
+   "date": "2026-07-14",
+   "secs": 61,
+   "views": 98,
+   "likes": 4,
+   "comments": 0,
+   "privacy": "public",
+   "publish_at": null,
+   "theme": "ps1-jungle",
+   "theme_source": "inferred",
+   "format": "image",
+   "format_source": "default",
+   "analytics": {
+    "minutes_watched": 8,
+    "avg_view_duration_s": 16,
+    "avg_view_pct": 27.2
+   }
+  },
+  {
+   "video_id": "cgOq_w-j2fM",
+   "title": "Misty Jungle Ruins — Ancient Ruin Stillness #Shorts",
+   "kind": "Short",
+   "date": "2026-07-14",
+   "secs": 61,
+   "views": 52,
+   "likes": 3,
+   "comments": 0,
+   "privacy": "public",
+   "publish_at": null,
+   "theme": "ps1-jungle",
+   "theme_source": "log",
+   "format": "image",
+   "format_source": "default",
+   "analytics": {
+    "minutes_watched": 4,
+    "avg_view_duration_s": 14,
+    "avg_view_pct": 23.7
+   }
+  },
+  {
+   "video_id": "6CFB5lKzJKQ",
+   "title": "Twilight Waterfall #Shorts",
+   "kind": "Short",
+   "date": "2026-07-12",
+   "secs": 61,
+   "views": 33,
+   "likes": 0,
+   "comments": 0,
+   "privacy": "public",
+   "publish_at": null,
+   "theme": null,
+   "theme_source": "unknown",
+   "format": "image",
+   "format_source": "default",
+   "analytics": {
+    "minutes_watched": 35,
+    "avg_view_duration_s": 263,
+    "avg_view_pct": 432.2
+   }
+  },
+  {
+   "video_id": "aGs6LQQWHeo",
+   "title": "Misty Jungle Ruins — Silent Jungle Depths #Shorts",
+   "kind": "Short",
+   "date": "2026-07-12",
+   "secs": 61,
+   "views": 28,
+   "likes": 0,
+   "comments": 0,
+   "privacy": "public",
+   "publish_at": null,
+   "theme": "ps1-jungle",
+   "theme_source": "log",
+   "format": "image",
+   "format_source": "default",
+   "analytics": {
+    "minutes_watched": 4,
+    "avg_view_duration_s": 23,
+    "avg_view_pct": 39.1
+   }
+  },
+  {
+   "video_id": "9sIEeBwp0UA",
+   "title": "Sunset Falls #Shorts",
+   "kind": "Short",
+   "date": "2026-07-10",
+   "secs": 61,
+   "views": 280,
+   "likes": 2,
+   "comments": 0,
+   "privacy": "public",
+   "publish_at": null,
+   "theme": null,
+   "theme_source": "unknown",
+   "format": "image",
+   "format_source": "default",
+   "analytics": {
+    "minutes_watched": 23,
+    "avg_view_duration_s": 17,
+    "avg_view_pct": 28.6
+   }
+  },
+  {
+   "video_id": "huAXz3QOXF4",
+   "title": "Misty Jungle Ruins — 2 Hours PS1 Ambient & Downtempo for Deep Focus & Sleep",
+   "kind": "Video",
+   "date": "2026-07-10",
+   "secs": 7201,
+   "views": 18,
+   "likes": 0,
+   "comments": 0,
+   "privacy": "public",
+   "publish_at": null,
+   "theme": "ps1-jungle",
+   "theme_source": "log",
+   "format": "image",
+   "format_source": "default",
+   "analytics": {
+    "minutes_watched": 222,
+    "avg_view_duration_s": 786,
+    "avg_view_pct": 10.9
+   }
+  },
+  {
+   "video_id": "Ear2qLesHLs",
+   "title": "Misty Jungle Ruins #Shorts",
+   "kind": "Short",
+   "date": "2026-07-10",
+   "secs": 61,
+   "views": 42,
+   "likes": 0,
+   "comments": 0,
+   "privacy": "public",
+   "publish_at": null,
+   "theme": "ps1-jungle",
+   "theme_source": "log",
+   "format": "image",
+   "format_source": "default",
+   "analytics": {
+    "minutes_watched": 7,
+    "avg_view_duration_s": 21,
+    "avg_view_pct": 34.8
+   }
+  },
+  {
+   "video_id": "aAAl3ECXMnE",
+   "title": "Misty Jungle Canopy — Distant Waterfall #Shorts",
+   "kind": "Short",
+   "date": "2026-06-24",
+   "secs": 61,
+   "views": 50,
+   "likes": 0,
+   "comments": 0,
+   "privacy": "public",
+   "publish_at": null,
+   "theme": "ps1-jungle",
+   "theme_source": "log",
+   "format": "image",
+   "format_source": "default",
+   "analytics": {
+    "minutes_watched": 4,
+    "avg_view_duration_s": 18,
+    "avg_view_pct": 30.1
+   }
+  },
+  {
+   "video_id": "0ybaLs48-rc",
+   "title": "Misty Jungle Canopy — Silent Tree Tops #Shorts",
+   "kind": "Short",
+   "date": "2026-06-22",
+   "secs": 61,
+   "views": 100,
+   "likes": 1,
+   "comments": 0,
+   "privacy": "public",
+   "publish_at": null,
+   "theme": "ps1-jungle",
+   "theme_source": "log",
+   "format": "image",
+   "format_source": "default",
+   "analytics": {
+    "minutes_watched": 47,
+    "avg_view_duration_s": 37,
+    "avg_view_pct": 61.3
+   }
+  },
+  {
+   "video_id": "PO43A5-tXQw",
+   "title": "Low-Poly Jungle — Distant Waterfall Hum #Shorts",
+   "kind": "Short",
+   "date": "2026-06-22",
+   "secs": 61,
+   "views": 119,
+   "likes": 0,
+   "comments": 0,
+   "privacy": "public",
+   "publish_at": null,
+   "theme": "ps1-jungle",
+   "theme_source": "inferred",
+   "format": "image",
+   "format_source": "default",
+   "analytics": {
+    "minutes_watched": 11,
+    "avg_view_duration_s": 12,
+    "avg_view_pct": 21.1
+   }
+  },
+  {
+   "video_id": "n9txdBdwV6w",
+   "title": "Misty Jungle Canopy #Shorts",
+   "kind": "Short",
+   "date": "2026-06-20",
+   "secs": 61,
+   "views": 66,
+   "likes": 1,
+   "comments": 0,
+   "privacy": "public",
+   "publish_at": null,
+   "theme": "ps1-jungle",
+   "theme_source": "log",
+   "format": "image",
+   "format_source": "default",
+   "analytics": {
+    "minutes_watched": 4,
+    "avg_view_duration_s": 20,
+    "avg_view_pct": 34.0
+   }
+  },
+  {
+   "video_id": "7r0ihB71IlE",
+   "title": "Misty Jungle Canopy — 2 Hours PS1 Ambient & Chillout for Deep Focus & Sleep",
+   "kind": "Video",
+   "date": "2026-06-20",
+   "secs": 6974,
+   "views": 21,
+   "likes": 0,
+   "comments": 0,
+   "privacy": "public",
+   "publish_at": null,
+   "theme": "ps1-jungle",
+   "theme_source": "log",
+   "format": "image",
+   "format_source": "default",
+   "analytics": {
+    "minutes_watched": 269,
+    "avg_view_duration_s": 771,
+    "avg_view_pct": 11.1
+   }
+  },
+  {
+   "video_id": "DqS1FldZHYc",
+   "title": "Rainy Tokyo Streets — Wet Pavement Shine #Shorts",
+   "kind": "Short",
+   "date": "2026-06-20",
+   "secs": 61,
+   "views": 80,
+   "likes": 0,
+   "comments": 0,
+   "privacy": "public",
+   "publish_at": null,
+   "theme": "japanese-streets",
+   "theme_source": "log",
+   "format": "image",
+   "format_source": "default",
+   "analytics": {
+    "minutes_watched": 20,
+    "avg_view_duration_s": 74,
+    "avg_view_pct": 122.5
+   }
+  },
+  {
+   "video_id": "EF-UOBn0bfE",
+   "title": "Low-Poly Jungle — Softly Glowing Foliage #Shorts",
+   "kind": "Short",
+   "date": "2026-06-20",
+   "secs": 61,
+   "views": 52,
+   "likes": 0,
+   "comments": 0,
+   "privacy": "public",
+   "publish_at": null,
+   "theme": "ps1-jungle",
+   "theme_source": "inferred",
+   "format": "image",
+   "format_source": "default",
+   "analytics": {
+    "minutes_watched": 4,
+    "avg_view_duration_s": 18,
+    "avg_view_pct": 30.2
+   }
+  },
+  {
+   "video_id": "iBb1ELwIrIM",
+   "title": "Rainy Tokyo Streets — Neon Reflections #Shorts",
+   "kind": "Short",
+   "date": "2026-06-18",
+   "secs": 61,
+   "views": 5,
+   "likes": 0,
+   "comments": 0,
+   "privacy": "public",
+   "publish_at": null,
+   "theme": "japanese-streets",
+   "theme_source": "log",
+   "format": "image",
+   "format_source": "default",
+   "analytics": {
+    "minutes_watched": 1,
+    "avg_view_duration_s": 24,
+    "avg_view_pct": 40.5
+   }
+  },
+  {
+   "video_id": "dljbbwRC9Dw",
+   "title": "Low-Poly Jungle — 2 Hours PS1 Ambient & Chillout for Deep Focus & Sleep",
+   "kind": "Video",
+   "date": "2026-06-18",
+   "secs": 7018,
+   "views": 12,
+   "likes": 1,
+   "comments": 0,
+   "privacy": "public",
+   "publish_at": null,
+   "theme": "ps1-jungle",
+   "theme_source": "inferred",
+   "format": "image",
+   "format_source": "default",
+   "analytics": {
+    "minutes_watched": 248,
+    "avg_view_duration_s": 1353,
+    "avg_view_pct": 19.3
+   }
+  },
+  {
+   "video_id": "oHCtC0kRRds",
+   "title": "Low-Poly Jungle #Shorts",
+   "kind": "Short",
+   "date": "2026-06-18",
+   "secs": 61,
+   "views": 6,
+   "likes": 0,
+   "comments": 0,
+   "privacy": "public",
+   "publish_at": null,
+   "theme": "ps1-jungle",
+   "theme_source": "inferred",
+   "format": "image",
+   "format_source": "default",
+   "analytics": {
+    "minutes_watched": 1,
+    "avg_view_duration_s": 28,
+    "avg_view_pct": 46.5
+   }
+  },
+  {
+   "video_id": "HcvIxswWp4c",
+   "title": "Tokyo Night Streets — Quiet Alleyways #Shorts",
+   "kind": "Short",
+   "date": "2026-06-17",
+   "secs": 61,
+   "views": 15,
+   "likes": 1,
+   "comments": 0,
+   "privacy": "public",
+   "publish_at": null,
+   "theme": "japanese-streets",
+   "theme_source": "log",
+   "format": "image",
+   "format_source": "default",
+   "analytics": {
+    "minutes_watched": 2,
+    "avg_view_duration_s": 28,
+    "avg_view_pct": 45.9
+   }
+  },
+  {
+   "video_id": "P9q5HGiXuhk",
+   "title": "Rainy Tokyo Streets — 2 Hours Ambient Lofi for Deep Focus & Sleep",
+   "kind": "Video",
+   "date": "2026-06-16",
+   "secs": 6860,
+   "views": 7,
+   "likes": 0,
+   "comments": 0,
+   "privacy": "public",
+   "publish_at": null,
+   "theme": "japanese-streets",
+   "theme_source": "log",
+   "format": "image",
+   "format_source": "default",
+   "analytics": {
+    "minutes_watched": 232,
+    "avg_view_duration_s": 1990,
+    "avg_view_pct": 29.0
+   }
+  },
+  {
+   "video_id": "nVLPMnC6RZ8",
+   "title": "Rainy Tokyo Streets #Shorts",
+   "kind": "Short",
+   "date": "2026-06-16",
+   "secs": 61,
+   "views": 8,
+   "likes": 0,
+   "comments": 0,
+   "privacy": "public",
+   "publish_at": null,
+   "theme": "japanese-streets",
+   "theme_source": "log",
+   "format": "image",
+   "format_source": "default",
+   "analytics": {
+    "minutes_watched": 1,
+    "avg_view_duration_s": 27,
+    "avg_view_pct": 45.2
+   }
+  },
+  {
+   "video_id": "63kpN4J4-1I",
+   "title": "Tokyo Night Streets — Neon Reflections #Shorts",
+   "kind": "Short",
+   "date": "2026-06-15",
+   "secs": 61,
+   "views": 8,
+   "likes": 0,
+   "comments": 0,
+   "privacy": "public",
+   "publish_at": null,
+   "theme": "japanese-streets",
+   "theme_source": "log",
+   "format": "image",
+   "format_source": "default",
+   "analytics": {
+    "minutes_watched": 2,
+    "avg_view_duration_s": 25,
+    "avg_view_pct": 41.5
+   }
+  },
+  {
+   "video_id": "29A7Owe-kWg",
+   "title": "Tokyo Night Streets — 2 Hours Ambient Lofi for Deep Focus & Sleep",
+   "kind": "Video",
+   "date": "2026-06-13",
+   "secs": 6858,
+   "views": 14,
+   "likes": 0,
+   "comments": 0,
+   "privacy": "public",
+   "publish_at": null,
+   "theme": "japanese-streets",
+   "theme_source": "log",
+   "format": "image",
+   "format_source": "default",
+   "analytics": {
+    "minutes_watched": 131,
+    "avg_view_duration_s": 564,
+    "avg_view_pct": 8.2
+   }
+  },
+  {
+   "video_id": "5GjVdb3hteo",
+   "title": "Tokyo Night Streets #Shorts",
+   "kind": "Short",
+   "date": "2026-06-13",
+   "secs": 61,
+   "views": 28,
+   "likes": 0,
+   "comments": 0,
+   "privacy": "public",
+   "publish_at": null,
+   "theme": "japanese-streets",
+   "theme_source": "log",
+   "format": "image",
+   "format_source": "default",
+   "analytics": {
+    "minutes_watched": 6,
+    "avg_view_duration_s": 31,
+    "avg_view_pct": 51.8
+   }
+  },
+  {
+   "video_id": "nO7-AHRTdCE",
+   "title": "Tokyo Neon Streets #Shorts",
+   "kind": "Short",
+   "date": "2026-06-08",
+   "secs": 61,
+   "views": 15,
+   "likes": 0,
+   "comments": 0,
+   "privacy": "public",
+   "publish_at": null,
+   "theme": "japanese-streets",
+   "theme_source": "log",
+   "format": "image",
+   "format_source": "default",
+   "analytics": {
+    "minutes_watched": 2,
+    "avg_view_duration_s": 25,
+    "avg_view_pct": 42.4
+   }
+  },
+  {
+   "video_id": "ivrELbkdnqc",
+   "title": "Tokyo Neon Streets — 2 Hours Ambient Lofi for Study, Focus & Sleep",
+   "kind": "Video",
+   "date": "2026-06-08",
+   "secs": 6818,
+   "views": 12,
+   "likes": 0,
+   "comments": 0,
+   "privacy": "public",
+   "publish_at": null,
+   "theme": "japanese-streets",
+   "theme_source": "log",
+   "format": "image",
+   "format_source": "default",
+   "analytics": {
+    "minutes_watched": 126,
+    "avg_view_duration_s": 630,
+    "avg_view_pct": 9.2
+   }
+  },
+  {
+   "video_id": "JJKAnWXudQU",
+   "title": "Cosmic Docking Bay — 2 Hours Ambient for Deep Focus & Sleep",
+   "kind": "Video",
+   "date": "2026-05-30",
+   "secs": 7130,
+   "views": 29,
+   "likes": 0,
+   "comments": 0,
+   "privacy": "public",
+   "publish_at": null,
+   "theme": "space-stations",
+   "theme_source": "log",
+   "format": "image",
+   "format_source": "default",
+   "analytics": {
+    "minutes_watched": 160,
+    "avg_view_duration_s": 332,
+    "avg_view_pct": 4.7
+   }
+  },
+  {
+   "video_id": "9_Yynq2jjPE",
+   "title": "Cosmic Docking Bay #Shorts",
+   "kind": "Short",
+   "date": "2026-05-30",
+   "secs": 61,
+   "views": 42,
+   "likes": 0,
+   "comments": 0,
+   "privacy": "public",
+   "publish_at": null,
+   "theme": "space-stations",
+   "theme_source": "log",
+   "format": "image",
+   "format_source": "default",
+   "analytics": {
+    "minutes_watched": 3,
+    "avg_view_duration_s": 39,
+    "avg_view_pct": 64.6
+   }
+  },
+  {
+   "video_id": "OXQTaB2Da2s",
+   "title": "Orbital Habitat Wheel — 2 Hours Ambient for Deep Focus & Sleep",
+   "kind": "Video",
+   "date": "2026-05-24",
+   "secs": 7129,
+   "views": 8,
+   "likes": 0,
+   "comments": 0,
+   "privacy": "public",
+   "publish_at": null,
+   "theme": "space-stations",
+   "theme_source": "log",
+   "format": "image",
+   "format_source": "default",
+   "analytics": {
+    "minutes_watched": 143,
+    "avg_view_duration_s": 1077,
+    "avg_view_pct": 15.1
+   }
+  },
+  {
+   "video_id": "Xmz7sFP05O8",
+   "title": "Orbital Habitat Wheel #Shorts",
+   "kind": "Short",
+   "date": "2026-05-23",
+   "secs": 31,
+   "views": 54,
+   "likes": 0,
+   "comments": 0,
+   "privacy": "public",
+   "publish_at": null,
+   "theme": "space-stations",
+   "theme_source": "log",
+   "format": "image",
+   "format_source": "default",
+   "analytics": {
+    "minutes_watched": 5,
+    "avg_view_duration_s": 20,
+    "avg_view_pct": 64.6
+   }
+  },
+  {
+   "video_id": "OmAY2H7jSzM",
+   "title": "Golden Orbit — 2 Hours Sci-Fi Ambient for Sleep & Study",
+   "kind": "Video",
+   "date": "2026-05-20",
+   "secs": 7180,
+   "views": 40,
+   "likes": 1,
+   "comments": 0,
+   "privacy": "public",
+   "publish_at": null,
+   "theme": "space-stations",
+   "theme_source": "log",
+   "format": "image",
+   "format_source": "default",
+   "analytics": {
+    "minutes_watched": 287,
+    "avg_view_duration_s": 431,
+    "avg_view_pct": 6
+   }
+  }
+ ],
+ "scheduled": [],
+ "analytics": {
+  "available": true,
+  "lifetime": {
+   "views": 2628,
+   "minutes_watched": 3903,
+   "avg_view_duration_s": 233,
+   "avg_view_pct": 10.1,
+   "subs_gained": 12,
+   "subs_lost": 1,
+   "likes": 38,
+   "comments": 2,
+   "shares": 7
+  },
+  "last_28": {
+   "views": 24,
+   "minutes_watched": 128,
+   "avg_view_duration_s": 592,
+   "avg_view_pct": 11.8,
+   "subs_gained": 0,
+   "subs_lost": 0,
+   "likes": 0,
+   "comments": 0,
+   "shares": 0
+  },
+  "per_video": {
+   "zRjeRzHl0-4": {
+    "minutes_watched": 1074,
+    "avg_view_duration_s": 815,
+    "avg_view_pct": 11.3
+   },
+   "eIL7UILXDPg": {
+    "minutes_watched": 575,
+    "avg_view_duration_s": 531,
+    "avg_view_pct": 7.4
+   },
+   "OmAY2H7jSzM": {
+    "minutes_watched": 287,
+    "avg_view_duration_s": 431,
+    "avg_view_pct": 6
+   },
+   "7r0ihB71IlE": {
+    "minutes_watched": 269,
+    "avg_view_duration_s": 771,
+    "avg_view_pct": 11.1
+   },
+   "dljbbwRC9Dw": {
+    "minutes_watched": 248,
+    "avg_view_duration_s": 1353,
+    "avg_view_pct": 19.3
+   },
+   "P9q5HGiXuhk": {
+    "minutes_watched": 232,
+    "avg_view_duration_s": 1990,
+    "avg_view_pct": 29.0
+   },
+   "huAXz3QOXF4": {
+    "minutes_watched": 222,
+    "avg_view_duration_s": 786,
+    "avg_view_pct": 10.9
+   },
+   "JJKAnWXudQU": {
+    "minutes_watched": 160,
+    "avg_view_duration_s": 332,
+    "avg_view_pct": 4.7
+   },
+   "OXQTaB2Da2s": {
+    "minutes_watched": 143,
+    "avg_view_duration_s": 1077,
+    "avg_view_pct": 15.1
+   },
+   "29A7Owe-kWg": {
+    "minutes_watched": 131,
+    "avg_view_duration_s": 564,
+    "avg_view_pct": 8.2
+   },
+   "ivrELbkdnqc": {
+    "minutes_watched": 126,
+    "avg_view_duration_s": 630,
+    "avg_view_pct": 9.2
+   },
+   "65RemhuWFiQ": {
+    "minutes_watched": 78,
+    "avg_view_duration_s": 786,
+    "avg_view_pct": 1288.8
+   },
+   "0ybaLs48-rc": {
+    "minutes_watched": 47,
+    "avg_view_duration_s": 37,
+    "avg_view_pct": 61.3
+   },
+   "6CFB5lKzJKQ": {
+    "minutes_watched": 35,
+    "avg_view_duration_s": 263,
+    "avg_view_pct": 432.2
+   },
+   "VbNXmriqJ3U": {
+    "minutes_watched": 31,
+    "avg_view_duration_s": 26,
+    "avg_view_pct": 44.0
+   },
+   "9sIEeBwp0UA": {
+    "minutes_watched": 23,
+    "avg_view_duration_s": 17,
+    "avg_view_pct": 28.6
+   },
+   "4ljMvKL0iEo": {
+    "minutes_watched": 21,
+    "avg_view_duration_s": 11,
+    "avg_view_pct": 19.1
+   },
+   "F1F4y88yu6I": {
+    "minutes_watched": 21,
+    "avg_view_duration_s": 15,
+    "avg_view_pct": 25.5
+   },
+   "DqS1FldZHYc": {
+    "minutes_watched": 20,
+    "avg_view_duration_s": 74,
+    "avg_view_pct": 122.5
+   },
+   "PO43A5-tXQw": {
+    "minutes_watched": 11,
+    "avg_view_duration_s": 12,
+    "avg_view_pct": 21.1
+   },
+   "uR2XPaEwNUU": {
+    "minutes_watched": 8,
+    "avg_view_duration_s": 16,
+    "avg_view_pct": 27.2
+   },
+   "Ear2qLesHLs": {
+    "minutes_watched": 7,
+    "avg_view_duration_s": 21,
+    "avg_view_pct": 34.8
+   },
+   "i1hlpLIyfpg": {
+    "minutes_watched": 6,
+    "avg_view_duration_s": 18,
+    "avg_view_pct": 30.9
+   },
+   "5GjVdb3hteo": {
+    "minutes_watched": 6,
+    "avg_view_duration_s": 31,
+    "avg_view_pct": 51.8
+   },
+   "-tSoHFTNeKg": {
+    "minutes_watched": 5,
+    "avg_view_duration_s": 32,
+    "avg_view_pct": 53.5
+   },
+   "Xmz7sFP05O8": {
+    "minutes_watched": 5,
+    "avg_view_duration_s": 20,
+    "avg_view_pct": 64.6
+   },
+   "drnDxlxVvpc": {
+    "minutes_watched": 5,
+    "avg_view_duration_s": 22,
+    "avg_view_pct": 36.9
+   },
+   "cgOq_w-j2fM": {
+    "minutes_watched": 4,
+    "avg_view_duration_s": 14,
+    "avg_view_pct": 23.7
+   },
+   "aGs6LQQWHeo": {
+    "minutes_watched": 4,
+    "avg_view_duration_s": 23,
+    "avg_view_pct": 39.1
+   },
+   "HXHi1ACVXOU": {
+    "minutes_watched": 4,
+    "avg_view_duration_s": 25,
+    "avg_view_pct": 42.0
+   },
+   "n9txdBdwV6w": {
+    "minutes_watched": 4,
+    "avg_view_duration_s": 20,
+    "avg_view_pct": 34.0
+   },
+   "EF-UOBn0bfE": {
+    "minutes_watched": 4,
+    "avg_view_duration_s": 18,
+    "avg_view_pct": 30.2
+   },
+   "aAAl3ECXMnE": {
+    "minutes_watched": 4,
+    "avg_view_duration_s": 18,
+    "avg_view_pct": 30.1
+   },
+   "9_Yynq2jjPE": {
+    "minutes_watched": 3,
+    "avg_view_duration_s": 39,
+    "avg_view_pct": 64.6
+   },
+   "Ovkt388m2gk": {
+    "minutes_watched": 3,
+    "avg_view_duration_s": 16,
+    "avg_view_pct": 27.6
+   },
+   "KCDAbcG4Wjw": {
+    "minutes_watched": 3,
+    "avg_view_duration_s": 12,
+    "avg_view_pct": 20.8
+   },
+   "HcvIxswWp4c": {
+    "minutes_watched": 2,
+    "avg_view_duration_s": 28,
+    "avg_view_pct": 45.9
+   },
+   "POEWV7CiRtw": {
+    "minutes_watched": 2,
+    "avg_view_duration_s": 86,
+    "avg_view_pct": 142.2
+   },
+   "rrsCQPcmA3Q": {
+    "minutes_watched": 2,
+    "avg_view_duration_s": 42,
+    "avg_view_pct": 69.1
+   },
+   "nO7-AHRTdCE": {
+    "minutes_watched": 2,
+    "avg_view_duration_s": 25,
+    "avg_view_pct": 42.4
+   },
+   "qQysgNcVxKY": {
+    "minutes_watched": 2,
+    "avg_view_duration_s": 50,
+    "avg_view_pct": 83.3
+   },
+   "uFQaxrnNFNg": {
+    "minutes_watched": 2,
+    "avg_view_duration_s": 37,
+    "avg_view_pct": 61.3
+   },
+   "63kpN4J4-1I": {
+    "minutes_watched": 2,
+    "avg_view_duration_s": 25,
+    "avg_view_pct": 41.5
+   },
+   "Tv63domsNHc": {
+    "minutes_watched": 2,
+    "avg_view_duration_s": 42,
+    "avg_view_pct": 69.7
+   },
+   "yUdMYSWjG3c": {
+    "minutes_watched": 1,
+    "avg_view_duration_s": 45,
+    "avg_view_pct": 74.2
+   },
+   "nVLPMnC6RZ8": {
+    "minutes_watched": 1,
+    "avg_view_duration_s": 27,
+    "avg_view_pct": 45.2
+   },
+   "xIuVGCACHVk": {
+    "minutes_watched": 1,
+    "avg_view_duration_s": 29,
+    "avg_view_pct": 49.1
+   },
+   "oHCtC0kRRds": {
+    "minutes_watched": 1,
+    "avg_view_duration_s": 28,
+    "avg_view_pct": 46.5
+   },
+   "iBb1ELwIrIM": {
+    "minutes_watched": 1,
+    "avg_view_duration_s": 24,
+    "avg_view_pct": 40.5
+   },
+   "Orj1Eu-m2BE": {
+    "minutes_watched": 1,
+    "avg_view_duration_s": 61,
+    "avg_view_pct": 100.2
+   }
+  },
+  "traffic": [
+   {
+    "label": "Shorts feed",
+    "views": 1984,
+    "minutes_watched": 271
+   },
+   {
+    "label": "Suggested videos",
+    "views": 116,
+    "minutes_watched": 1525
+   },
+   {
+    "label": "Playlists",
+    "views": 89,
+    "minutes_watched": 56
+   },
+   {
+    "label": "Channel pages",
+    "views": 87,
+    "minutes_watched": 174
+   },
+   {
+    "label": "YouTube search",
+    "views": 84,
+    "minutes_watched": 207
+   },
+   {
+    "label": "Channel / subs feed",
+    "views": 79,
+    "minutes_watched": 1063
+   },
+   {
+    "label": "External sites",
+    "views": 70,
+    "minutes_watched": 88
+   },
+   {
+    "label": "Direct / unknown",
+    "views": 58,
+    "minutes_watched": 424
+   },
+   {
+    "label": "YT_OTHER_PAGE",
+    "views": 34,
+    "minutes_watched": 74
+   },
+   {
+    "label": "Notifications",
+    "views": 25,
+    "minutes_watched": 16
+   },
+   {
+    "label": "SOUND_PAGE",
+    "views": 2,
+    "minutes_watched": 0
+   }
+  ],
+  "content_type": [
+   {
+    "label": "Shorts",
+    "views": 2306,
+    "minutes_watched": 405
+   },
+   {
+    "label": "Long videos",
+    "views": 318,
+    "minutes_watched": 3495
+   },
+   {
+    "label": "Live streams",
+    "views": 4,
+    "minutes_watched": 1
+   }
+  ],
+  "geography": [
+   {
+    "label": "UA",
+    "views": 1116,
+    "minutes_watched": null
+   },
+   {
+    "label": "RU",
+    "views": 10,
+    "minutes_watched": null
+   },
+   {
+    "label": "KZ",
+    "views": 0,
+    "minutes_watched": null
+   }
+  ],
+  "devices": [
+   {
+    "label": "MOBILE",
+    "views": 2154,
+    "minutes_watched": null
+   },
+   {
+    "label": "DESKTOP",
+    "views": 295,
+    "minutes_watched": null
+   },
+   {
+    "label": "TABLET",
+    "views": 102,
+    "minutes_watched": null
+   },
+   {
+    "label": "TV",
+    "views": 73,
+    "minutes_watched": null
+   }
+  ]
+ },
+ "theme_rollup": [
+  {
+   "theme": "japanese-streets",
+   "videos": 3,
+   "shorts": 7,
+   "views": 192,
+   "minutes_watched": 523,
+   "avg_view_pct": 18.3,
+   "avg_view_duration_s": 889.1
+  },
+  {
+   "theme": "ps1-jungle",
+   "videos": 4,
+   "shorts": 10,
+   "views": 747,
+   "minutes_watched": 1907,
+   "avg_view_pct": 12.3,
+   "avg_view_duration_s": 811.8
+  },
+  {
+   "theme": "space-stations",
+   "videos": 3,
+   "shorts": 2,
+   "views": 173,
+   "minutes_watched": 598,
+   "avg_view_pct": 7.9,
+   "avg_view_duration_s": 459.7
+  },
+  {
+   "theme": "fantasy-realms",
+   "videos": 1,
+   "shorts": 5,
+   "views": 188,
+   "minutes_watched": 665,
+   "avg_view_pct": 7.4,
+   "avg_view_duration_s": 530.8
+  }
+ ],
+ "format_rollup": [
+  {
+   "format": "image",
+   "videos": 10,
+   "shorts": 34,
+   "views": 2407,
+   "minutes_watched": 3186,
+   "avg_view_pct": 12.4,
+   "avg_view_duration_s": 711.1
+  },
+  {
+   "format": "veo",
+   "videos": 1,
+   "shorts": 5,
+   "views": 188,
+   "minutes_watched": 665,
+   "avg_view_pct": 7.4,
+   "avg_view_duration_s": 530.8
+  }
+ ],
+ "generated_at": "2026-10-12T20:18:22.804016",
+ "fetched_at": 1791825502.8612962
+}

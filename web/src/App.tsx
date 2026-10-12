@@ -1,4 +1,6 @@
 import { NavLink, Navigate, Route, Routes } from 'react-router-dom'
+import { useQuery } from '@tanstack/react-query'
+import { fetchHealth } from './api'
 import Dashboard from './pages/Dashboard'
 import Assets from './pages/Assets'
 import Build from './pages/Build'
@@ -18,6 +20,7 @@ const NAV = [
 ]
 
 export default function App() {
+  const health = useQuery({ queryKey: ['health'], queryFn: fetchHealth, staleTime: Infinity })
   return (
     <div className="flex min-h-screen">
       <aside className="w-52 shrink-0 border-r border-dusk-800 bg-dusk-900 flex flex-col">
@@ -26,6 +29,15 @@ export default function App() {
             Ambiverse<span className="text-accent-400"> Studio</span>
           </div>
           <div className="text-[11px] text-dusk-400 mt-0.5">pipeline mission control</div>
+          {health.data?.demo && (
+            <div
+              className="mt-3 rounded-lg border border-accent-500/40 bg-accent-500/10 px-2.5 py-1.5 text-[11px] leading-snug text-accent-300"
+              title="No private pipeline configured: a stand-in pipeline with generated sample assets runs every job through the real job engine. Channel data is a frozen snapshot of the real channel."
+            >
+              <span className="font-semibold">Demo mode</span>
+              <span className="block text-dusk-400">sample assets · stand-in pipeline</span>
+            </div>
+          )}
         </div>
         <nav className="p-2 flex flex-col gap-0.5">
           {NAV.map((n) => (

@@ -1,0 +1,42 @@
+{
+ "2026-07-14": {
+  "date": "2026-07-14",
+  "long_watch_minutes": 1742,
+  "retention": 10.3,
+  "subscribers": 8,
+  "total_views": 1126,
+  "watch_minutes": 1871
+ },
+ "2026-07-15": {
+  "date": "2026-07-15",
+  "long_watch_minutes": 1744,
+  "retention": 10.4,
+  "subscribers": 8,
+  "total_views": 1221,
+  "watch_minutes": 1915
+ },
+ "2026-07-18": {
+  "date": "2026-07-18",
+  "long_watch_minutes": 1836,
+  "retention": 10.6,
+  "subscribers": 8,
+  "total_views": 1278,
+  "watch_minutes": 2024
+ },
+ "2026-07-19": {
+  "date": "2026-07-19",
+  "long_watch_minutes": 1836,
+  "retention": 10.6,
+  "subscribers": 9,
+  "total_views": 1278,
+  "watch_minutes": 2024
+ },
+ "2026-10-12": {
+  "date": "2026-10-12",
+  "long_watch_minutes": 3495,
+  "retention": 10.1,
+  "subscribers": 11,
+  "total_views": 2595,
+  "watch_minutes": 3903
+ }
+}

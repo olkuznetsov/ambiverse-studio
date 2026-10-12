@@ -1,0 +1,51 @@
+{
+ "THEMES": {
+  "space-stations": {
+   "description": "orbital space stations, habitats, docking rings, massive mechanical infrastructure",
+   "style_notes": "huge scale, intricate mechanical structures, warm interior lights through windows"
+  },
+  "alien-planets": {
+   "description": "exotic planetary surfaces with retro-futuristic colonies or ruins",
+   "style_notes": "strange alien geology, unusual sky colors, distant moons and planets in the sky"
+  },
+  "cyberpunk-cities": {
+   "description": "dense futuristic megacities at night on alien or future Earth",
+   "style_notes": "neon lights, towering skyscrapers, flying traffic, rain, deep shadow"
+  },
+  "deep-space": {
+   "description": "deep cosmic vistas with nebulae, stars, and planetary bodies",
+   "style_notes": "vast emptiness, colorful nebulae, distant star clusters, sense of awe"
+  },
+  "japanese-streets": {
+   "description": "quiet Japanese city streets at night or twilight, shops, lanterns, rain-wet asphalt",
+   "style_notes": "warm glowing shop windows, soft rain, reflections on wet pavement, intimate scale"
+  },
+  "cozy-anime-rooms": {
+   "description": "cozy interior spaces — a bedroom, study room, or café with large windows and ambient lighting",
+   "style_notes": "warm lamp light, books, plants, rain on window, safe and peaceful feeling"
+  },
+  "ps1-jungle": {
+   "description": "lush low-poly 3D jungle, tropical islands, and dreamy Y2K video-game worlds — PS1/Dreamcast-era retro game environments",
+   "style_notes": "flat-shaded polygons, low-res textures, soft draw-distance fog, vibrant Y2K palette, glassy low-poly water, nostalgic dreamy mood, NO characters or UI",
+   "motif": "Low-Poly Jungle",
+   "base_style": "retro late-1990s low-poly 3D video game graphics, PlayStation 1 / Sega Dreamcast era aesthetic, flat-shaded polygons and low-resolution textures, lush jungle and tropical island environments, soft draw-distance fog, vibrant dreamy Y2K color palette, no characters, no people, no text, no UI or HUD, cinematic wide 16:9 aspect ratio, nostalgic atmospheric mood"
+  },
+  "fantasy-realms": {
+   "description": "original high-fantasy medieval worlds — candle-lit taverns, grand castle halls, enchanted forests, old libraries and apothecaries",
+   "style_notes": "warm candlelight, stone and timber, glowing hearths, misty enchanted woods, cozy yet epic, NO characters, NO copyrighted places or franchises",
+   "motif": "Enchanted Realm",
+   "base_style": "lush painterly high-fantasy illustration, classic fantasy book-cover and Studio Ghibli landscape art, warm candle-lit medieval taverns, grand castle halls, misty enchanted forests, old candle-lit libraries, rich oil-painting texture, golden firelight, cozy and atmospheric, original world with no copyrighted characters places or franchises, no people, no text, no UI, cinematic wide 16:9 aspect ratio, dreamy magical mood"
+  }
+ },
+ "BASE_STYLE_PROMPT": "retro 1980s Japanese anime background art, painted illustration, no characters, no people, no text, cinematic wide aspect ratio, style of Legend of the Galactic Heroes and classic Macross, rich color palette with deep blues, warm oranges, and golden highlights, detailed architecture, dreamy atmospheric mood",
+ "MIN_IMAGES_PER_THEME": 8,
+ "VIDEO_DURATION_SECONDS": 7200,
+ "NUM_IMAGES_PER_VIDEO": 0,
+ "MAX_IMAGES_PER_VIDEO": 30,
+ "MUSIC_MODE": "library",
+ "RENDER_PRESET": "fast",
+ "RENDER_CRF": 20,
+ "VEO_TARGET_H": 1440,
+ "VEO_SLOWDOWN": 4.0,
+ "DEPTHFLOW_LOOP_SECONDS": 20
+}

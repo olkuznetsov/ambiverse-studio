@@ -1,0 +1,519 @@
+{
+ "date": "2026-07-14",
+ "scenes": {
+  "space-stations": [
+   {
+    "scene": "Moonlit space station's cryogenic storage facility, deep blues and purples on metallic dewars, warm interior lights spilling from access panels onto frosty pipes, soft light casting long shadows",
+    "variations": [
+     "wider shot of entire facility",
+     "tighter on dewar valves",
+     "at blue hour just before dawn",
+     "looking down a side corridor",
+     "low angle close on pipe fittings"
+    ]
+   },
+   {
+    "scene": "Space station's hydroponic garden at high noon, warm oranges and yellows on growing lights, deep blues and purples on nutrient distribution pipes, soft light spilling from transparent domes onto lush greenery",
+    "variations": [
+     "from directly above the garden",
+     "during a light drizzle, hazier glow",
+     "tighter on individual planters",
+     "wider establishing shot of entire garden",
+     "low angle close on irrigation nozzles"
+    ]
+   },
+   {
+    "scene": "Abandoned space station's airlock module, icy blues and blacks on frozen control panels, faint emergency lights casting an ominous glow with warm oranges on warning signs, soft light casting long shadows",
+    "variations": [
+     "at dusk with warmer colors",
+     "wider shot of entire airlock",
+     "low angle close on warning signs",
+     "looking up at frozen control panels",
+     "tighter on emergency light fixtures"
+    ]
+   },
+   {
+    "scene": "Space station's observatory module at sunrise, warm oranges and pinks on telescopic instruments, deep blues and purples on metallic support structures, soft light spilling from transparent dome onto star charts",
+    "variations": [
+     "from directly behind telescopes",
+     "during a solar flare, intense light",
+     "wider shot of entire observatory",
+     "tighter on star chart displays",
+     "low angle close on telescopic lenses"
+    ]
+   }
+  ],
+  "alien-planets": [
+   {
+    "scene": "Deep indigo night on a planet of glowing, ethereal mushrooms, cool blue-violet light on luminescent fungal formations, misty atmosphere and a distant, glowing moon under a starry, dark sky with a few wispy clouds",
+    "variations": [
+     "wider establishing shot",
+     "close on the mushroom caps",
+     "looking up at the glowing moon",
+     "at dawn with a lighter sky",
+     "tighter on the misty forest floor"
+    ]
+   },
+   {
+    "scene": "Golden afternoon on a planet of ancient, ruined temples, warm yellow light on crumbling stone structures, hazy atmosphere and a distant, glowing planet under a pale, creamy sky with a few puffy clouds",
+    "variations": [
+     "low angle close on the temple entrance",
+     "from a distance, showcasing the vast desert",
+     "during a light sandstorm, hazier glow",
+     "tighter on the intricate carvings",
+     "from above, with a wider view of the ruins"
+    ]
+   },
+   {
+    "scene": "Coral morning on a planet of vast, coral-like cities, warm pink light on organic, curvaceous architecture, misty atmosphere and a distant, glowing moon under a pale, aqua sky with a few wispy clouds",
+    "variations": [
+     "high angle, looking down on the city",
+     "at sunset with a warmer sky",
+     "wider shot, showcasing the city's scale",
+     "close on the intricate, coral-like details",
+     "through a misty, dreamy filter"
+    ]
+   },
+   {
+    "scene": "Onyx dusk on a planet of dark, glassy lakes, cool dark light on reflective, still water formations, misty atmosphere and a distant, glowing planet under a deep, foreboding sky with a few distant, glowing stars",
+    "variations": [
+     "low angle, looking across the lake's surface",
+     "at midnight, with a darker sky",
+     "tighter on the lake's edge, with more mist",
+     "from a distance, with a wider view of the surrounding landscape",
+     "with a few, glowing bioluminescent plants"
+    ]
+   }
+  ],
+  "cyberpunk-cities": [
+   {
+    "scene": "Cyberpunk city on a distant, icy planet at 1am, with glowing, neon skyscrapers and a vast, elevated network of frozen, crystalline monorail tracks, set against a deep, rich blue background with warm, golden highlights",
+    "variations": [
+     "wider establishing shot",
+     "low angle close on the neon lights",
+     "looking down a frozen side street",
+     "tighter on the crystalline rooftops",
+     "at blue hour just before dawn"
+    ]
+   },
+   {
+    "scene": "Futuristic cyberpunk metropolis on a terraformed Jupiter moon at midnight, with towering, sleek skyscrapers and a series of interconnected, glowing orbs, set against a deep, dark grey background with bright, iridescent highlights",
+    "variations": [
+     "higher angle showing the entire city",
+     "close up on the glowing orbs",
+     "following a flying vehicle through the city",
+     "wider shot of the city's perimeter",
+     "during a heavy downpour, with rain-soaked streets"
+    ]
+   },
+   {
+    "scene": "Abandoned, futuristic cyberpunk city on a dark, rocky planet at 3am, with crumbling, industrial skyscrapers and a monorail system, set against a deep, dark blue background with faint, orange embers",
+    "variations": [
+     "narrower focus on a single, crumbling skyscraper",
+     "low angle looking up at the monorail tracks",
+     "wider shot of the city's desolate outskirts",
+     "tighter on the abandoned, rusty machinery",
+     "at dusk, with a warm, orange glow"
+    ]
+   },
+   {
+    "scene": "Cyberpunk city on a futuristic, high-tech space station at 11pm, with sleek, modern skyscrapers and a massive, circular docking bay, set against a deep, starry black background with bright, neon highlights",
+    "variations": [
+     "looking out from the docking bay into space",
+     "close up on the sleek, modern skyscrapers",
+     "following a flying vehicle through the docking bay",
+     "wider shot of the space station's exterior",
+     "during a solar flare, with a bright, glowing aura"
+    ]
+   }
+  ],
+  "deep-space": [
+   {
+    "scene": "Deep space, celestial noon view of a resplendent, aquamarine nebula, sweeping wide shot of shimmering, amber star clusters amidst a bright, powder blue atmosphere with flashes of warm, golden light",
+    "variations": [
+     "wider establishing shot",
+     "low angle on the nebula's edge",
+     "looking up at the star clusters",
+     "tighter on the nebula's core",
+     "at dusk with a softer, pink glow"
+    ]
+   },
+   {
+    "scene": "Cosmic pre-dawn on a distant, frozen moon, haunting, low-angle shot of a rugged, icy surface against a dark, indigo sky with scattered, rose-colored stardust and flashes of faint, blue light",
+    "variations": [
+     "higher angle on the moon's horizon",
+     "closer on the icy surface",
+     "wider shot of the moon's curvature",
+     "at sunrise with a warm, orange glow",
+     "with a thicker, misty atmosphere"
+    ]
+   },
+   {
+    "scene": "Deep space, enchanting evening view of a luminous, violet galaxy, intimate close-up of glittering, diamond stardust amidst a dark, slate atmosphere with flashes of cool, blue light",
+    "variations": [
+     "wider shot of the galaxy's spiral arms",
+     "low angle on the stardust",
+     "looking down on the galaxy's central bulge",
+     "at midnight with a deeper, navy blue atmosphere",
+     "with a brighter, more vibrant color palette"
+    ]
+   },
+   {
+    "scene": "Cosmic high noon on a small, smoldering asteroid, dramatic, high-angle shot of a barren, blackened surface against a vibrant, scarlet sky with scattered, bronze-colored stardust and flashes of intense, white light",
+    "variations": [
+     "lower angle on the asteroid's surface",
+     "wider shot of the asteroid's cratered terrain",
+     "closer on the stardust",
+     "at sunset with a warm, golden glow",
+     "with a more ominous, foreboding atmosphere"
+    ]
+   }
+  ],
+  "japanese-streets": [
+   {
+    "scene": "Twilight streets of Nagoya, warm orange light on castle walls, deep blues in moat shadows, soft glow on paper lanterns, peaceful atmosphere with rich colors",
+    "variations": [
+     "wider shot of castle walls",
+     "low angle on lanterns",
+     "looking down a side street",
+     "tighter on rooftop tiles",
+     "at blue hour just before dawn"
+    ]
+   },
+   {
+    "scene": "Nighttime street in Fukuoka, rich colors with deep blues, warm golden light on traditional temple roofs, soft rain on stone lanterns, intimate scale with glowing shop windows",
+    "variations": [
+     "closer on temple roofs",
+     "wide shot of street intersection",
+     "low angle on stone lanterns",
+     "from across the canal",
+     "during a light drizzle"
+    ]
+   },
+   {
+    "scene": "Rainy evening streets of Hiroshima, dark greys and greens, glowing streetlights, warm golden light on peace memorial park, mystical ambiance with rich colors",
+    "variations": [
+     "wider shot of peace park",
+     "low angle on streetlights",
+     "looking up at skyscrapers",
+     "tighter on memorial park details",
+     "at dusk with warmer tones"
+    ]
+   },
+   {
+    "scene": "Dawn streets of Kanazawa, soft pastel colors, misty atmosphere, warm golden light on traditional Japanese gardens, peaceful mood with rich colors and soft glow on stone paths",
+    "variations": [
+     "wider shot of garden gates",
+     "low angle on garden paths",
+     "looking down a winding path",
+     "tighter on garden ornaments",
+     "just before sunrise with cooler tones"
+    ]
+   }
+  ],
+  "cozy-anime-rooms": [
+   {
+    "scene": "Soft morning light in a cozy, attic-style study, warm beige tones, gentle sunbeams, lush bookshelves, soft shadows on wooden trunks, rich golden highlights",
+    "variations": [
+     "wider shot of the room",
+     "close on the vintage typewriter",
+     "at blue hour just before dawn",
+     "looking down at the cluttered desk",
+     "tighter on the wooden ladder"
+    ]
+   },
+   {
+    "scene": "Deep, moody evening atmosphere in a spacious, Victorian-style parlor, rich emerald tones, gentle candlelight, lush velvet curtains, soft shadows on ornate furniture, warm golden accents",
+    "variations": [
+     "low angle close on the candelabra",
+     "wider establishing shot of the room",
+     "during a light drizzle, hazier glow",
+     "looking up at the chandelier",
+     "tighter on the vintage clock"
+    ]
+   },
+   {
+    "scene": "Warm, sunny afternoon in a charming, greenhouse-style café, cool pale turquoise hues, gentle natural light, lush ferns, soft shadows on wooden tables, rich copper accents",
+    "variations": [
+     "high angle shot of the café",
+     "close on the steaming teacups",
+     "at golden hour, warmer tones",
+     "looking out the windows at the garden",
+     "tighter on the vintage planters"
+    ]
+   },
+   {
+    "scene": "Peaceful, nighttime moment in a serene, circular meditation room, deep purple tones, gentle starlight, lush greenery, soft shadows on stone walls, warm silver highlights",
+    "variations": [
+     "wider shot of the room",
+     "close on the meditation cushions",
+     "during a meteor shower, twinkling lights",
+     "looking down at the reflection pool",
+     "tighter on the intricate stone carvings"
+    ]
+   }
+  ],
+  "ps1-jungle": [
+   {
+    "scene": "Low-poly jungle sunset cliffside with vibrant orange and pink color palette, featuring a rugged coastline and lush, flat-shaded foliage, surrounded by soft draw-distance fog",
+    "variations": [
+     "wider shot of the coastline",
+     "tighter on the cliffside rocks",
+     "at blue hour just before dusk",
+     "low angle close on the foliage",
+     "looking out to the distant horizon"
+    ]
+   },
+   {
+    "scene": "Low-poly jungle moonlit gorge at midnight, with a soft, ethereal color palette, featuring a winding river and lush, flat-shaded foliage, surrounded by a vibrant, dreamy glow",
+    "variations": [
+     "higher angle looking down on the gorge",
+     "closer to the river's edge",
+     "during a light mist, softer glow",
+     "focusing on the gorge's steep walls",
+     "wider establishing shot of the surrounding landscape"
+    ]
+   },
+   {
+    "scene": "Low-poly jungle hidden cove at mid-afternoon, with a bright, turquoise color palette, featuring a secluded, glassy lake and lush, flat-shaded foliage, surrounded by vibrant, lush greenery",
+    "variations": [
+     "low angle close on the lake's surface",
+     "wider shot of the cove's entrance",
+     "looking up at the surrounding foliage",
+     "at golden hour, warmer glow",
+     "tighter on the cove's rocky shoreline"
+    ]
+   },
+   {
+    "scene": "Low-poly jungle stormy mountain peak at early evening, with a dramatic, dark color palette, featuring a rugged, rocky peak and lush, flat-shaded foliage, surrounded by a ominous, stormy atmosphere",
+    "variations": [
+     "wider shot of the mountain range",
+     "closer to the peak's rocky summit",
+     "during a heavy downpour, more intense storm",
+     "looking out to the distant, stormy horizon",
+     "low angle close on the peak's rugged texture"
+    ]
+   }
+  ],
+  "fantasy-realms": [
+   {
+    "scene": "Twilight in a mystical, abandoned, overgrown amphitheater, warm soft purple light, lush vibrant foliage, rich weathered stone accents, soft misty atmosphere, distant fog rolling in",
+    "variations": [
+     "wider shot of the entire structure",
+     "low angle close on the crumbling steps",
+     "looking down a side aisle",
+     "tighter on the central stage",
+     "at dawn with a warm golden glow"
+    ]
+   },
+   {
+    "scene": "Late morning in a grand, serene, mystical monastery library, warm soft light, lush vibrant illuminated manuscripts, rich warm wood accents, soft glowing lanterns, distant gentle chanting",
+    "variations": [
+     "high angle shot of the vaulted ceiling",
+     "close up on a single manuscript page",
+     "looking down a row of bookshelves",
+     "wider shot of the entire room",
+     "at night with a cool blue glow"
+    ]
+   },
+   {
+    "scene": "Early afternoon in a mystical, dreamy, shimmering Lotus pond, warm soft light, lush vibrant water lilies, rich golden accents, soft gentle ripples, distant birdsong",
+    "variations": [
+     "low angle close on the water's edge",
+     "wider shot of the surrounding landscape",
+     "looking down a winding path",
+     "tighter on a single lotus flower",
+     "during a light drizzle with a misty atmosphere"
+    ]
+   },
+   {
+    "scene": "Evening in a cozy, secluded, rustic medieval blacksmith's forge, warm soft light, lush vibrant glowing embers, rich warm metal accents, soft gentle clanging, distant howling wind",
+    "variations": [
+     "high angle shot of the forge",
+     "close up on a glowing piece of metal",
+     "looking down a side workbench",
+     "wider shot of the entire room",
+     "at blue hour with a cool purple glow"
+    ]
+   }
+  ]
+ },
+ "music_prompts": {
+  "space-stations": [
+   "cinematic ambient, soft Rhodes and analog Juno pads, 60 bpm, tape-warm and spacious, hopeful and serene",
+   "space ambient, grand piano and slow synth arpeggios, 80 bpm, distant and weightless, awe-inspired and bittersweet",
+   "neoclassical ambient, gentle bowed strings and wordless choir, 40 bpm, warm and intimate, serene and contemplative",
+   "berlin-school, analog Juno pads and gentle synth leads, 100 bpm, driving and hypnotic, hopeful and expansive",
+   "cinematic ambient, soft Rhodes and warm analog pads, 50 bpm, beatless and drifting, peaceful and calming",
+   "space ambient, slow synth arpeggios and distant wordless choir, 70 bpm, spacious and atmospheric, weightless and free",
+   "ambient, grand piano and soft synth textures, 90 bpm, gentle and soothing, hopeful and uplifting",
+   "neoclassical ambient, gentle bowed strings and analog Juno pads, 30 bpm, calm and soothing, serene and tranquil",
+   "berlin-school, analog synth leads and slow arpeggios, 110 bpm, hypnotic and driving, awe-inspired and grand",
+   "space ambient, grand piano and distant wordless choir, 80 bpm, spacious and atmospheric, bittersweet and contemplative",
+   "ambient, gentle synth leads and soft Rhodes, 50 bpm, beatless and drifting, peaceful and calming",
+   "cinematic ambient, soft Rhodes and warm analog pads, 70 bpm, tape-warm and spacious, awe-inspired and weightless",
+   "cinematic ambient, grand piano and gentle bowed strings, 65 bpm, warm and cinematic, serene and awe-inspired",
+   "space ambient, analog Juno pads and soft wordless choir, 85 bpm, spacious and atmospheric, hopeful and expansive",
+   "neoclassical ambient, slow synth arpeggios and soft Rhodes, 45 bpm, intimate and contemplative, bittersweet and soothing",
+   "berlin-school, gentle synth leads and grand piano, 105 bpm, hypnotic and driving, awe-inspired and grand",
+   "ambient, warm analog pads and distant wordless choir, 55 bpm, beatless and drifting, peaceful and calming",
+   "cinematic ambient, soft Rhodes and slow synth arpeggios, 75 bpm, tape-warm and spacious, hopeful and uplifting",
+   "space ambient, grand piano and analog Juno pads, 95 bpm, spacious and atmospheric, weightless and free",
+   "neoclassical ambient, gentle bowed strings and soft synth textures, 35 bpm, warm and intimate, serene and tranquil"
+  ],
+  "alien-planets": [
+   "organic ambient, breathy bamboo flute and soft hand percussion, 80 bpm, earthy and immersive, curious and wonder",
+   "world ambient, tuned mallets and kalimba, 60 bpm, warm and resonant, serene and peaceful",
+   "fourth-world ambient, alien synth textures and processed field recordings, 40 bpm, atmospheric and drifting, dreamlike and otherworldly",
+   "sci-fi ambient, warm bass and soft hand percussion, 90 bpm, spacey and expansive, strange and intriguing",
+   "organic ambient, breathy bamboo flute and kalimba, 50 bpm, natural and soothing, calm and relaxing",
+   "world ambient, tuned mallets and gamelan, 70 bpm, vibrant and earthy, curious and exploratory",
+   "ambient, alien synth textures and wordless vocal pads, 30 bpm, ethereal and haunting, serene and contemplative",
+   "fourth-world ambient, soft hand percussion and processed field recordings, 60 bpm, rhythmic and hypnotic, wonder and awe",
+   "sci-fi ambient, warm bass and breathy bamboo flute, 80 bpm, futuristic and mysterious, otherworldly and enchanting",
+   "organic ambient, kalimba and tuned mallets, 40 bpm, gentle and lilting, peaceful and soothing",
+   "world ambient, gamelan and soft hand percussion, 90 bpm, dynamic and engaging, curious and adventurous",
+   "ambient, alien synth textures and kalimba, 50 bpm, atmospheric and immersive, dreamlike and surreal",
+   "sci-fi ambient, warm bass and processed field recordings, 70 bpm, spacey and ambient, strange and fascinating",
+   "organic ambient, breathy bamboo flute and wordless vocal pads, 30 bpm, calming and soothing, serene and tranquil",
+   "fourth-world ambient, tuned mallets and soft hand percussion, 60 bpm, earthy and organic, wonder and curiosity",
+   "world ambient, kalimba and gamelan, 80 bpm, vibrant and expressive, peaceful and relaxing",
+   "ambient, alien synth textures and warm bass, 40 bpm, haunting and ethereal, otherworldly and mysterious",
+   "sci-fi ambient, soft hand percussion and breathy bamboo flute, 90 bpm, rhythmic and engaging, curious and exploratory",
+   "organic ambient, processed field recordings and kalimba, 50 bpm, natural and immersive, calm and soothing",
+   "fourth-world ambient, tuned mallets and wordless vocal pads, 30 bpm, atmospheric and contemplative, serene and peaceful"
+  ],
+  "cyberpunk-cities": [
+   "synthwave, analog synth pads and neon synth leads, 80 bpm, lush reverb, moody and nostalgic",
+   "cyberpunk ambient, arpeggiated synths and deep bass, 60 bpm, dark and cinematic, calm-tense",
+   "darksynth, gated-reverb drums and analog synth pads, 100 bpm, gritty and industrial, melancholic",
+   "chillsynth, soft vocal pads and neon synth leads, 70 bpm, ethereal and spacious, hopeful",
+   "synthwave, analog Juno pads and rain foley, 90 bpm, warm and nostalgic, nocturnal",
+   "cyberpunk ambient, arpeggiated synths and distant-traffic foley, 50 bpm, beatless and drifting, serene",
+   "synthwave, neon synth leads and deep bass, 110 bpm, bright and pulsing, energetic",
+   "darksynth, gated-reverb drums and analog synth pads, 80 bpm, moody and intense, focused",
+   "chillsynth, soft vocal pads and analog synth pads, 60 bpm, soothing and calming, relaxed",
+   "cyberpunk ambient, arpeggiated synths and rain foley, 70 bpm, atmospheric and cinematic, melancholic",
+   "darksynth, gated-reverb drums and deep bass, 90 bpm, dark and ominous, tense",
+   "synthwave, analog synth pads and neon synth leads, 90 bpm, lush and pulsing, energetic",
+   "cyberpunk ambient, analog synth pads and arpeggiated synths, 65 bpm, warm and cinematic, calm-tense",
+   "synthwave, neon synth leads and gated-reverb drums, 85 bpm, dark and moody, nostalgic",
+   "chillsynth, soft vocal pads and arpeggiated synths, 55 bpm, ethereal and spacious, hopeful",
+   "darksynth, gated-reverb drums and deep bass, 80 bpm, moody and intense, tense",
+   "synthwave, analog synth pads and gated-reverb drums, 90 bpm, lush and vibrant, nostalgic",
+   "darksynth, deep bass and gated-reverb drums, 78 bpm, gritty and industrial, moody",
+   "cyberpunk ambient, analog synth pads and rain foley, 58 bpm, warm and intimate, melancholic",
+   "synthwave, arpeggiated synths and soft vocal pads, 76 bpm, lush and cinematic, calm-tense"
+  ],
+  "deep-space": [
+   "dark ambient, glacial drones and deep sub-bass, 40 bpm, slow reverb washes, vast and lonely",
+   "deep ambient, sparse piano notes and shimmering high pads, 50 bpm, distant radio static, infinite and mysterious",
+   "space ambient, glacial drones and glassy bells, 30 bpm, weightless and cold, beatless drifting",
+   "drone, deep sub-bass and soft wordless vocal pads, 20 bpm, tape-warm and spacious, serene and hopeful",
+   "dark ambient, slow reverb washes and distant radio static, 60 bpm, gently beat-driven, lonely and sparse",
+   "deep ambient, shimmering high pads and glacial drones, 40 bpm, calm and peaceful, infinite and vast",
+   "space ambient, glassy bells and sparse piano notes, 50 bpm, soft and serene, weightless and free",
+   "drone, deep sub-bass and glacial drones, 30 bpm, slow and melancholic, cold and dark",
+   "dark ambient, distant radio static and shimmering high pads, 20 bpm, beatless and drifting, mysterious and lonely",
+   "drone, deep sub-bass and slow reverb washes, 30 bpm, calm and soothing, cold and dark",
+   "deep ambient, shimmering high pads and soft wordless vocal pads, 40 bpm, peaceful and hopeful, infinite and mysterious",
+   "space ambient, glassy bells and glacial drones, 50 bpm, gently beat-driven, weightless and free",
+   "drone, deep sub-bass and sparse piano notes, 20 bpm, beatless and drifting, cold and dark",
+   "dark ambient, slow reverb washes and shimmering high pads, 30 bpm, calm and soothing, lonely and vast",
+   "deep ambient, glacial drones and distant radio static, 40 bpm, gently beat-driven, infinite and mysterious",
+   "space ambient, sparse piano notes and soft wordless vocal pads, 50 bpm, peaceful and calming, weightless and serene",
+   "dark ambient, glacial drones and glassy bells, 25 bpm, slow reverb washes, vast and mysterious",
+   "deep ambient, sparse piano notes and distant radio static, 45 bpm, tape-warm and spacious, infinite and peaceful",
+   "space ambient, shimmering high pads and soft wordless vocal pads, 35 bpm, gently beat-driven, weightless and hopeful",
+   "dark ambient, glacial drones and sparse piano notes, 20 bpm, beatless and drifting, lonely and sparse"
+  ],
+  "japanese-streets": [
+   "lofi hip hop, koto and soft Rhodes, 80 bpm, warm and intimate, nostalgic",
+   "jazzhop, shakuhachi and upright bass, 60 bpm, vinyl crackle and lazy, melancholic",
+   "chillhop, shamisen and mellow jazz guitar, 100 bpm, tape-warm and cozy, wistful",
+   "lofi hip hop, koto and lazy boom-bap drums, 90 bpm, spacious and serene, hopeful",
+   "jazzhop, soft Rhodes and rain foley, 50 bpm, beatless and drifting, calm",
+   "lofi hip hop, shakuhachi and soft wordless vocal pads, 70 bpm, warm and soothing, mellow",
+   "chillhop, upright bass and mellow jazz guitar, 110 bpm, gentle and lilting, nostalgic",
+   "jazzhop, koto and vinyl crackle, 85 bpm, intimate and crackly, melancholic",
+   "lofi hip hop, shamisen and soft Rhodes, 95 bpm, smooth and jazzy, cozy",
+   "beatless ambient, shakuhachi and rain foley, 40 bpm, peaceful and calming, serene",
+   "lofi hip hop, lazy boom-bap drums and upright bass, 80 bpm, warm and groovy, wistful",
+   "jazzhop, mellow jazz guitar and soft wordless vocal pads, 65 bpm, soulful and heartfelt, hopeful",
+   "chillhop, koto and shamisen, 105 bpm, lively and playful, nostalgic",
+   "lofi hip hop, soft Rhodes and vinyl crackle, 75 bpm, warm and fuzzy, melancholic",
+   "jazzhop, upright bass and shakuhachi, 90 bpm, jazzy and improvisational, mellow",
+   "lofi hip hop, lazy boom-bap drums and soft Rhodes, 85 bpm, laid-back and relaxing, calm",
+   "beatless ambient, rain foley and soft wordless vocal pads, 30 bpm, peaceful and meditative, serene",
+   "jazzhop, mellow jazz guitar and koto, 100 bpm, smooth and sophisticated, wistful",
+   "lofi hip hop, shamisen and upright bass, 95 bpm, warm and infectious, hopeful",
+   "chillhop, shakuhachi and soft Rhodes, 80 bpm, gentle and soothing, nostalgic"
+  ],
+  "cozy-anime-rooms": [
+   "lofi hip hop, warm felt piano and soft saxophone, 50 bpm, vinyl crackle and gentle hiss, cozy and sleepy",
+   "chillhop, nylon guitar and music box, 60 bpm, soft and intimate, nostalgic and tender",
+   "ambient lofi, soft Rhodes and gentle bells, 40 bpm, tape hiss and spacious, serene and dreamy",
+   "jazzhop, upright bass and muted trumpet, 70 bpm, brushed drums and warm, content and wistful",
+   "downtempo, Wurlitzer and celesta, 55 bpm, mellotron and ethereal, bittersweet and nostalgic",
+   "lo-fi jazz, warm felt piano and soft vocal pads, 65 bpm, rain-on-window and cozy, sleepy and comforting",
+   "chillhop, nylon guitar and soft saxophone, 58 bpm, gentle and laid-back, hopeful and calm",
+   "lofi hip hop, upright bass and brushed drums, 68 bpm, vinyl crackle and warm, cozy and inviting",
+   "jazzhop, music box and soft vocal pads, 62 bpm, intimate and emotional, tender and nostalgic",
+   "downtempo, Wurlitzer and mellotron, 50 bpm, spacious and atmospheric, dreamy and ethereal",
+   "lo-fi jazz, warm felt piano and gentle bells, 60 bpm, rain-on-window and cozy, content and serene",
+   "chillhop, nylon guitar and soft saxophone, 55 bpm, soft and soothing, sleepy and calming",
+   "ambient lofi, soft Rhodes and upright bass, 40 bpm, tape hiss and gentle, peaceful and relaxing",
+   "lofi hip hop, music box and brushed drums, 65 bpm, vinyl crackle and warm, cozy and comforting",
+   "jazzhop, soft vocal pads and gentle bells, 58 bpm, intimate and emotional, wistful and nostalgic",
+   "downtempo, Wurlitzer and celesta, 45 bpm, mellotron and atmospheric, bittersweet and serene",
+   "chillhop, nylon guitar and soft vocal pads, 50 bpm, gentle and soothing, hopeful and calm",
+   "lofi hip hop, warm felt piano and muted trumpet, 52 bpm, vinyl crackle and cozy, drowsy and comforting",
+   "jazzhop, upright bass and soft saxophone, 63 bpm, brushed drums and warm, content and nostalgic",
+   "downtempo, Wurlitzer and gentle bells, 48 bpm, mellotron and ethereal, serene and tranquil"
+  ],
+  "ps1-jungle": [
+   "ambient downtempo, warm synth pads and glassy FM bells, 80 bpm, vinyl crackle and gentle reverb, nostalgic and dreamy",
+   "atmospheric jungle, soft pizzicato and detuned chorused pads, 100 bpm, hazy and aquatic, serene and bittersweet",
+   "chillsynth, mellow Rhodes and gentle arps, 60 bpm, tape hiss and spacious, hopeful and calm",
+   "liquid dnb, soft chopped amen breaks and dub-style sub bass, 120 bpm, shuffled and smooth, aquatic-calm and wonder",
+   "dreamy breakbeat, kalimba and soft vinyl crackle, 90 bpm, gentle and drifting, nostalgic and hazy",
+   "ambient, warm cinematic pads and analog Juno, 50 bpm, tape-warm and spacious, serene and peaceful",
+   "atmospheric, glassy FM bells and reese sub bass, 110 bpm, vinyl crackle and gentle, bittersweet and dreamy",
+   "downtempo, soft pizzicato and mellow Rhodes, 70 bpm, tape hiss and calm, hopeful and nostalgic",
+   "chillout, detuned chorused pads and gentle arps, 40 bpm, hazy and atmospheric, serene and aquatic",
+   "atmospheric jungle, gentle arps and soft pizzicato, 80 bpm, hazy and aquatic, nostalgic and serene",
+   "chillsynth, warm synth pads and soft wordless vocal pads, 65 bpm, tape-warm and spacious, hopeful and calm",
+   "downtempo, detuned chorused pads and dub-style sub bass, 70 bpm, vinyl crackle and gentle, bittersweet and dreamy",
+   "dreamy breakbeat, kalimba and glassy FM bells, 85 bpm, gentle and drifting, nostalgic and hazy",
+   "ambient, mellow Rhodes and soft vinyl crackle, 50 bpm, tape hiss and spacious, serene and peaceful",
+   "atmospheric, reese sub bass and detuned chorused pads, 100 bpm, hazy and aquatic, bittersweet and nostalgic",
+   "chillout, gentle arps and soft pizzicato, 40 bpm, tape hiss and calm, hopeful and serene",
+   "jungle, soft chopped amen breaks and warm synth pads, 125 bpm, shuffled and smooth, wonder and excitement",
+   "ambient downtempo, glassy FM bells and mellow Rhodes, 55 bpm, vinyl crackle and gentle reverb, calm and peaceful",
+   "liquid dnb, dub-style sub bass and detuned chorused pads, 115 bpm, shuffled and smooth, aquatic-calm and serene",
+   "chillsynth, gentle arps and soft vinyl crackle, 50 bpm, tape hiss and calm, hopeful and dreamy"
+  ],
+  "fantasy-realms": [
+   "medieval ambient, harp and lute, 80 bpm, warm and intimate, cozy",
+   "fantasy ambient, Celtic flute and soft strings, 60 bpm, ethereal and serene, mystical",
+   "celtic ambient, hammered dulcimer and gentle hand drum, 100 bpm, earthy and organic, nostalgic",
+   "neoclassical ambient, soft strings and ambient wordless choir, 40 bpm, spacious and cinematic, wistful",
+   "tavern folk ambient, lute and crackling fireplace, 80 bpm, warm and inviting, comfortable",
+   "medieval ambient, harp and wooden Celtic flute, 60 bpm, peaceful and soothing, enchanted",
+   "fantasy ambient, soft strings and gentle hand drum, 90 bpm, dreamy and hypnotic, mystical",
+   "celtic ambient, hammered dulcimer and soft strings, 70 bpm, airy and light, serene",
+   "neoclassical ambient, ambient wordless choir and harp, 50 bpm, heavenly and calming, peaceful",
+   "tavern folk ambient, lute and distant tavern murmur, 80 bpm, lively and social, cozy",
+   "medieval ambient, Celtic flute and soft strings, 60 bpm, melancholic and introspective, nostalgic",
+   "fantasy ambient, harp and gentle hand drum, 100 bpm, adventurous and exploratory, mystical",
+   "celtic ambient, wooden Celtic flute and hammered dulcimer, 90 bpm, lively and energetic, enchanted",
+   "neoclassical ambient, soft strings and crackling fireplace, 40 bpm, warm and comforting, serene",
+   "tavern folk ambient, lute and ambient wordless choir, 80 bpm, joyful and uplifting, cozy",
+   "medieval ambient, harp and soft strings, 60 bpm, soothing and calming, peaceful",
+   "neoclassical ambient, ambient wordless choir and harp, 50 bpm, ethereal and otherworldly, wistful",
+   "medieval ambient, harp and wooden Celtic flute, 50 bpm, warm and intimate, cozy",
+   "fantasy ambient, soft strings and ambient wordless choir, 70 bpm, ethereal and dreamy, mystical",
+   "fantasy ambient, Celtic flute and harp, 80 bpm, peaceful and soothing, wistful"
+  ]
+ }
+}

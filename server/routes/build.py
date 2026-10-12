@@ -10,7 +10,7 @@ import shutil
 from fastapi import APIRouter
 
 import pipeline
-from config import ANIMEMBIENT_DIR, DOWNLOADS_DIR, PIPELINE
+from config import ANIMEMBIENT_DIR, DEMO, DOWNLOADS_DIR, PIPELINE
 
 router = APIRouter(prefix="/api", tags=["build"])
 
@@ -42,8 +42,11 @@ def preflight(upload: bool = False, music_mode: str = "library", animate: str = 
     else:
         check(True, "Music", f"mode: {music_mode} (no library needed)")
 
-    check(bool(os.environ.get("GROQ_API_KEY")), "GROQ_API_KEY",
-          "set" if os.environ.get("GROQ_API_KEY") else "missing from animembient/.env — metadata generation will fail")
+    if DEMO:
+        check(True, "GROQ_API_KEY", "not needed — the demo pipeline writes canned metadata")
+    else:
+        check(bool(os.environ.get("GROQ_API_KEY")), "GROQ_API_KEY",
+              "set" if os.environ.get("GROQ_API_KEY") else "missing from animembient/.env — metadata generation will fail")
 
     check((ANIMEMBIENT_DIR / "client_secret.json").exists(), "OAuth client secret",
           "client_secret.json present" if (ANIMEMBIENT_DIR / "client_secret.json").exists() else "missing")
@@ -53,7 +56,7 @@ def preflight(upload: bool = False, music_mode: str = "library", animate: str = 
         check(tok, "YouTube upload token",
               "present" if tok else "missing — run auth_youtube.py first or disable upload")
 
-    free_gb = shutil.disk_usage(ANIMEMBIENT_DIR).free / 1024**3
+    free_gb = shutil.disk_usage(ANIMEMBIENT_DIR).free / 1e9
     check(free_gb > 5, "Disk space", f"{free_gb:.1f} GB free (need >5)")
 
     if animate == "depthflow":

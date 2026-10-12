@@ -21,3 +21,6 @@ web/dist/
 # os
 .DS_Store
 *.swp
+
+# test caches
+.pytest_cache/

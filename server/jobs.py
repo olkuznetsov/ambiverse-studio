@@ -4,7 +4,7 @@ Every job is a subprocess of an animembient script, spawned exactly the way
 the CLI does it (own venv interpreter, cwd=ANIMEMBIENT_DIR, env knobs), with:
 - start_new_session=True → own process group, so cancel kills ffmpeg/RIFE
   children too (SIGTERM → 10s grace → SIGKILL);
-- caffeinate -dimsu around heavy jobs so Mac sleep can't kill renders;
+- caffeinate -dimsu around heavy jobs (macOS) so sleep can't kill renders;
 - stdout+stderr → data/logs/job_<id>.log (tailed live over SSE);
 - a single worker drains the queue — heavy jobs never overlap (16 GB RAM).
 """
@@ -19,10 +19,9 @@ import threading
 import time
 from datetime import datetime, timezone
 
-from config import ANIMEMBIENT_DIR, DATA_DIR, JOB_LOGS_DIR, PIPELINE
+from config import ANIMEMBIENT_DIR, DATA_DIR, JOB_LOGS_DIR, PIPELINE, PIPELINE_PYTHON
 
 DB_PATH = DATA_DIR / "studio.sqlite"
-PIPELINE_PYTHON = str(ANIMEMBIENT_DIR / "venv" / "bin" / "python")
 
 TERMINAL = ("done", "failed", "cancelled")
 
@@ -141,7 +140,7 @@ def _disk_guard(need_gb: float) -> None:
     """Fail at queue time, not at hour 5: a full Veo build writes ~8 GB of
     intermediates + the final video. Raises ValueError (→ HTTP 400) when free
     space is under `need_gb`."""
-    free_gb = shutil.disk_usage(ANIMEMBIENT_DIR).free / 1024**3
+    free_gb = shutil.disk_usage(ANIMEMBIENT_DIR).free / 1e9
     if free_gb < need_gb:
         raise ValueError(
             f"only {free_gb:.1f} GB free — a full Veo build needs ~{need_gb:.0f} GB. "
@@ -264,11 +263,21 @@ JOB_TYPES = {
 }
 
 
+_NOTIFY_SCRIPT = (
+    "on run argv\n"
+    "display notification (item 1 of argv) with title (item 2 of argv)\n"
+    "end run"
+)
+
+
 def _notify(title: str, message: str):
-    """Fire-and-forget macOS banner (osascript). Never raises."""
+    """Fire-and-forget macOS banner. The text travels as argv, never spliced into
+    the AppleScript source, so quotes or emoji in a job title can't break it.
+    No-op where osascript doesn't exist (Linux CI)."""
+    if not shutil.which("osascript"):
+        return
     try:
-        script = f'display notification {message!r} with title {title!r}'
-        subprocess.Popen(["osascript", "-e", script],
+        subprocess.Popen(["osascript", "-e", _NOTIFY_SCRIPT, message, title],
                          stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     except OSError:
         pass
@@ -324,7 +333,7 @@ def create_job(job_type: str, params: dict | None = None, env: dict | None = Non
         raise ValueError(f"unknown job type: {job_type}")
     params = params or {}
     argv = spec["argv"](params)
-    if spec["heavy"]:
+    if spec["heavy"] and shutil.which("caffeinate"):
         argv = ["caffeinate", "-dimsu", *argv]
     safe_env = {k: str(v) for k, v in (env or {}).items() if k in spec["env_keys"]}
     title = spec["title"](params, safe_env) if callable(spec["title"]) else spec["title"]
@@ -502,6 +511,11 @@ def _claim_next() -> dict | None:
 
 def _run_job(job: dict):
     log_path = JOB_LOGS_DIR / f"job_{job['id']}.log"
+    # record the log path before spawning, so a spawn failure (missing venv,
+    # bad interpreter path) still lands in a log the UI can show
+    job["log_path"] = str(log_path)
+    with _db() as conn:
+        conn.execute("UPDATE jobs SET log_path=? WHERE id=?", (str(log_path), job["id"]))
     env = {**os.environ, **job["env"], "PYTHONUNBUFFERED": "1"}
     with open(log_path, "w") as log:
         log.write(f"[studio] job {job['id']} ({job['type']}) — {' '.join(job['cmd'])}\n")
@@ -514,8 +528,7 @@ def _run_job(job: dict):
             start_new_session=True,
         )
         with _db() as conn:
-            conn.execute("UPDATE jobs SET pid=?, log_path=? WHERE id=?",
-                         (proc.pid, str(log_path), job["id"]))
+            conn.execute("UPDATE jobs SET pid=? WHERE id=?", (proc.pid, job["id"]))
         rc = proc.wait()
     cancelled = get_job(job["id"])["cancel_requested"]
     status = "cancelled" if (cancelled and rc != 0) else ("done" if rc == 0 else "failed")

@@ -8,6 +8,7 @@ import json
 import re
 import shutil
 import subprocess
+import wave
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -63,7 +64,14 @@ def _probe_duration(path: Path) -> float | None:
         )
         return round(float(out.stdout.strip()), 1)
     except (OSError, ValueError, subprocess.TimeoutExpired):
-        return None
+        pass
+    if path.suffix.lower() == ".wav":  # no ffprobe on this machine — WAV headers suffice
+        try:
+            with wave.open(str(path)) as w:
+                return round(w.getnframes() / w.getframerate(), 1)
+        except (OSError, wave.Error, ZeroDivisionError):
+            pass
+    return None
 
 
 def durations_for(paths: list[Path]) -> dict[str, float | None]:
@@ -271,7 +279,7 @@ def housekeeping() -> dict:
     candidates.sort(key=lambda c: c["size"], reverse=True)
     return {"candidates": candidates,
             "total_bytes": sum(c["size"] for c in candidates),
-            "disk_free_gb": round(shutil.disk_usage(ANIMEMBIENT_DIR).free / 1024**3, 1)}
+            "disk_free_gb": round(shutil.disk_usage(ANIMEMBIENT_DIR).free / 1e9, 1)}
 
 
 def used_images(limit: int = 48) -> list[dict]:

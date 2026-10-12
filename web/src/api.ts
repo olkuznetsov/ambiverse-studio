@@ -216,7 +216,7 @@ export interface ChannelData {
   format_rollup?: FormatRollup[]
   generated_at: string
   fetched_at: number
-  cache: 'fresh' | 'live' | 'stale'
+  cache: 'fresh' | 'live' | 'stale' | 'snapshot'
   refresh_error?: string
   analytics_token: TokenStatus | null
   studio_impressions_url: string
@@ -280,6 +280,7 @@ async function get<T>(url: string): Promise<T> {
   return res.json()
 }
 
+export const fetchHealth = () => get<{ ok: boolean; demo: boolean; animembient_dir: string }>('/api/health')
 export const fetchOverview = () => get<Overview>('/api/state/overview')
 export const fetchThemeImages = (theme: string) =>
   get<ThemeImages>(`/api/themes/${theme}/images`)

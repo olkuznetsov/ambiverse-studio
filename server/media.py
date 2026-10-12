@@ -60,11 +60,14 @@ def video_thumbnail(path: str, size: int = Query(480, ge=64, le=2048)):
         raise HTTPException(400, "not a video")
     cached = _cache_key(src, size, "poster")
     if not cached.exists():
-        proc = subprocess.run(
-            ["ffmpeg", "-y", "-ss", "1", "-i", str(src), "-frames:v", "1",
-             "-vf", f"scale={size}:-2", str(cached)],
-            capture_output=True, timeout=30,
-        )
+        try:
+            proc = subprocess.run(
+                ["ffmpeg", "-y", "-ss", "1", "-i", str(src), "-frames:v", "1",
+                 "-vf", f"scale={size}:-2", str(cached)],
+                capture_output=True, timeout=30,
+            )
+        except (OSError, subprocess.TimeoutExpired):
+            raise HTTPException(500, "poster frame extraction failed — is ffmpeg installed?")
         if proc.returncode != 0 or not cached.exists():
             raise HTTPException(500, "poster frame extraction failed")
     return FileResponse(cached, media_type="image/jpeg",
