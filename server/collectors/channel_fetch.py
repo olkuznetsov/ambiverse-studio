@@ -50,7 +50,7 @@ THEME_KEYWORDS = {
     "ps1-jungle": ["ps1", "low-poly", "low poly", "jungle", "dreamcast", "y2k",
                    "polygon"],
     "fantasy-realms": ["fantasy", "tavern", "castle", "medieval", "enchanted", "realm",
-                       "apothecary", "library hall"],
+                       "apothecary", "alchemist", "elixir", "library"],
 }
 
 
@@ -289,8 +289,10 @@ def infer_format(row, veo_ids, veo_titles):
 # ---- rollups ----------------------------------------------------------
 
 def _aggregate(rows, analytics, key_field):
-    """Group rows by key_field: uploads/views/watch + watch-weighted retention
-    + exact AVD (total watch seconds / total views)."""
+    """Group rows by key_field: uploads, views and watch time over everything,
+    but retention and AVD over LONG-FORM only. Shorts loop, so their
+    averageViewPercentage routinely exceeds 100% — mixing them in made groups
+    with many Shorts look several times "stickier" than they are."""
     per_video = (analytics or {}).get("per_video", {})
     agg = {}
     for r in rows:
@@ -298,25 +300,25 @@ def _aggregate(rows, analytics, key_field):
         if not key:
             continue
         a = agg.setdefault(key, {
-            key_field: key, "videos": 0, "shorts": 0, "views": 0,
-            "minutes_watched": 0, "_avp_weight": 0.0, "_avp_num": 0.0,
+            key_field: key, "videos": 0, "shorts": 0, "views": 0, "minutes_watched": 0,
+            "_avp_weight": 0.0, "_avp_num": 0.0, "_long_minutes": 0, "_long_views": 0,
         })
-        if r["kind"] == "Short":
-            a["shorts"] += 1
-        else:
-            a["videos"] += 1
+        is_long = r["kind"] != "Short"
+        a["videos" if is_long else "shorts"] += 1
         a["views"] += r["views"]
         pv = per_video.get(r["video_id"])
         if pv:
             a["minutes_watched"] += pv["minutes_watched"]
-            # weight retention by watch time (long videos dominate the signal)
-            w = pv["minutes_watched"] or 1
-            a["_avp_weight"] += w
-            a["_avp_num"] += pv["avg_view_pct"] * w
+            if is_long:  # retention weighted by watch time, long-form only
+                w = pv["minutes_watched"] or 1
+                a["_avp_weight"] += w
+                a["_avp_num"] += pv["avg_view_pct"] * w
+                a["_long_minutes"] += pv["minutes_watched"]
+                a["_long_views"] += r["views"]
     out = []
     for a in agg.values():
         avp = round(a["_avp_num"] / a["_avp_weight"], 1) if a["_avp_weight"] else None
-        avd = round(a["minutes_watched"] * 60 / a["views"], 1) if a["views"] else None
+        avd = round(a["_long_minutes"] * 60 / a["_long_views"], 1) if a["_long_views"] else None
         out.append({
             key_field: a[key_field],
             "videos": a["videos"], "shorts": a["shorts"],

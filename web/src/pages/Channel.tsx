@@ -59,7 +59,8 @@ function Stat({ label, value, sub }: { label: string; value: string; sub?: strin
   )
 }
 
-function DimBars({ title, rows, total }: { title: string; rows: DimRow[]; total: number }) {
+function DimBars({ title, rows: allRows, total }: { title: string; rows: DimRow[]; total: number }) {
+  const rows = allRows.filter((r) => r.views > 0) // the API pads some dimensions with 0-view rows
   return (
     <div className="rounded-xl border border-dusk-800 bg-dusk-900 p-4">
       <h3 className="text-sm font-semibold text-dusk-300 uppercase tracking-wider mb-3">{title}</h3>
@@ -102,7 +103,7 @@ function ThemeRollupCard({ rows }: { rows: ThemeRollup[] }) {
     <div className="rounded-xl border border-accent-500/25 bg-accent-500/[0.04] p-4">
       <div className="flex items-baseline justify-between mb-1">
         <h3 className="text-sm font-semibold text-accent-300 uppercase tracking-wider">Theme rollup</h3>
-        <span className="text-[11px] text-dusk-500">retention weighted by watch time · what to make next</span>
+        <span className="text-[11px] text-dusk-500">long-form retention, weighted by watch time · what to make next</span>
       </div>
       <div className="overflow-x-auto">
         <table className="w-full text-xs">
@@ -112,7 +113,9 @@ function ThemeRollupCard({ rows }: { rows: ThemeRollup[] }) {
               <th className="py-1.5 font-medium text-right">Uploads</th>
               <th className="py-1.5 font-medium text-right">Views</th>
               <th className="py-1.5 font-medium text-right">Watch</th>
-              <th className="py-1.5 font-medium text-right">Retention</th>
+              <th className="py-1.5 font-medium text-right" title="Long-form only: Shorts loop, so their view % can pass 100">
+                Retention (long)
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -143,14 +146,16 @@ function ThemeRollupCard({ rows }: { rows: ThemeRollup[] }) {
   )
 }
 
-function FormatCard({ rows }: { rows: FormatRollup[] }) {
-  // fixed order: the experiment (veo) on top of the control (image)
-  const ordered = [...rows].sort((a) => (a.format === 'veo' ? -1 : 1))
+function FormatCard({ rows, videos }: { rows: FormatRollup[]; videos: ChannelVideo[] }) {
+  // fixed order: the experiment (veo) above the control (image)
+  const ordered = [...rows].sort((a, b) => Number(b.format === 'veo') - Number(a.format === 'veo'))
+  const veo = rows.find((r) => r.format === 'veo')
+  const noEvidence = videos.filter((v) => v.format_source === 'default').length
   return (
     <div className="rounded-xl border border-ok-400/25 bg-ok-400/[0.04] p-4">
       <div className="flex items-baseline justify-between mb-1">
         <h3 className="text-sm font-semibold text-ok-400 uppercase tracking-wider">Format A/B — Veo vs image</h3>
-        <span className="text-[11px] text-dusk-500">the live decision: does real motion out-retain stills?</span>
+        <span className="text-[11px] text-dusk-500">does real motion out-retain stills? · AVD & retention: long-form</span>
       </div>
       <div className="overflow-x-auto">
         <table className="w-full text-xs">
@@ -160,8 +165,8 @@ function FormatCard({ rows }: { rows: FormatRollup[] }) {
               <th className="py-1.5 font-medium text-right">Uploads</th>
               <th className="py-1.5 font-medium text-right">Views</th>
               <th className="py-1.5 font-medium text-right">Watch</th>
-              <th className="py-1.5 font-medium text-right">AVD</th>
-              <th className="py-1.5 font-medium text-right">Retention</th>
+              <th className="py-1.5 font-medium text-right">AVD (long)</th>
+              <th className="py-1.5 font-medium text-right">Retention (long)</th>
             </tr>
           </thead>
           <tbody>
@@ -169,10 +174,7 @@ function FormatCard({ rows }: { rows: FormatRollup[] }) {
               const pending = r.views === 0 && r.minutes_watched === 0
               return (
                 <tr key={r.format} className="border-t border-dusk-800/60">
-                  <td className="py-2 text-dusk-100 font-medium">
-                    {FORMAT_LABEL[r.format]}
-                    {r.format === 'veo' && <span className="ml-1.5 rounded bg-ok-400/15 px-1 text-[9px] text-ok-400">NEW</span>}
-                  </td>
+                  <td className="py-2 text-dusk-100 font-medium">{FORMAT_LABEL[r.format]}</td>
                   <td className="py-2 text-right text-dusk-300">
                     {r.videos}<span className="text-dusk-600"> long</span> · {r.shorts}<span className="text-dusk-600"> sh</span>
                   </td>
@@ -190,6 +192,13 @@ function FormatCard({ rows }: { rows: FormatRollup[] }) {
           </tbody>
         </table>
       </div>
+      <p className="mt-2 text-[11px] text-dusk-500">
+        Read with care: the Veo side rests on {veo?.videos ?? 0} long-form video
+        {veo?.videos === 1 ? '' : 's'}
+        {noEvidence > 0 &&
+          `, and ${noEvidence} uploads count as image only because no Veo evidence survives for them (build manifests are gone) — so Veo is a lower bound`}
+        .
+      </p>
     </div>
   )
 }
@@ -426,7 +435,7 @@ export default function Channel() {
   })
   const reauth = useMutation({ mutationFn: () => createJob('auth_analytics') })
 
-  if (isLoading) return <div className="text-dusk-400 text-sm">Loading channel data (querying YouTube)…</div>
+  if (isLoading) return <div className="text-dusk-400 text-sm">Loading channel data…</div>
   if (error || !data)
     return <div className="rounded-xl border border-bad-400/30 bg-bad-400/10 p-4 text-sm text-bad-400">{String(error)}</div>
 
@@ -434,6 +443,12 @@ export default function Channel() {
   const longWatch = a.content_type?.find((c) => c.label === 'Long videos')?.minutes_watched ?? null
   const watchHoursForYpp = longWatch ?? a.lifetime?.minutes_watched ?? 0
   const totalViews = a.traffic?.reduce((s, r) => s + r.views, 0) ?? 0
+  const isSnapshot = data.cache === 'snapshot'
+  const fetched = new Date(data.fetched_at * 1000)
+  const fetchedLabel =
+    !isSnapshot && fetched.toDateString() === new Date().toDateString()
+      ? fetched.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
+      : fetched.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
 
   return (
     <div className="max-w-6xl space-y-4">
@@ -441,16 +456,18 @@ export default function Channel() {
         <h1 className="text-xl font-semibold text-white">{data.channel.title}</h1>
         <div className="flex items-center gap-3 text-xs">
           <span className={data.cache === 'stale' ? 'text-warn-400' : 'text-dusk-500'}>
-            {data.cache === 'fresh' ? 'cached' : data.cache === 'stale' ? 'stale (refresh failed)' : 'live'} ·{' '}
-            {new Date(data.fetched_at * 1000).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}
+            {{ fresh: 'cached', stale: 'stale (refresh failed)', live: 'live', snapshot: 'frozen snapshot' }[data.cache]} ·{' '}
+            {fetchedLabel}
           </span>
-          <button
-            onClick={() => refresh.mutate()}
-            disabled={refresh.isPending || isFetching}
-            className="rounded-lg border border-dusk-700 px-3 py-1 text-dusk-300 hover:text-white hover:border-dusk-600 disabled:opacity-50"
-          >
-            {refresh.isPending ? 'refreshing…' : 'refresh'}
-          </button>
+          {!isSnapshot && (
+            <button
+              onClick={() => refresh.mutate()}
+              disabled={refresh.isPending || isFetching}
+              className="rounded-lg border border-dusk-700 px-3 py-1 text-dusk-300 hover:text-white hover:border-dusk-600 disabled:opacity-50"
+            >
+              {refresh.isPending ? 'refreshing…' : 'refresh'}
+            </button>
+          )}
           <a
             href={data.studio_impressions_url}
             target="_blank"
@@ -475,6 +492,13 @@ export default function Channel() {
           {reauth.isSuccess && (
             <Link to="/jobs" className="ml-2 text-xs text-accent-400 hover:text-accent-300">→ Jobs</Link>
           )}
+        </div>
+      )}
+
+      {isSnapshot && (
+        <div className="rounded-xl border border-accent-500/30 bg-accent-500/[0.06] px-4 py-2.5 text-xs text-dusk-300">
+          Demo mode: a frozen snapshot of the real channel from {fetchedLabel}, served without OAuth or
+          network. With a pipeline configured this page queries the YouTube Data + Analytics APIs (1-hour cache).
         </div>
       )}
 
@@ -505,7 +529,7 @@ export default function Channel() {
 
       <GrowthCard videos={data.videos} />
 
-      {(data.format_rollup?.length ?? 0) > 1 && <FormatCard rows={data.format_rollup!} />}
+      {(data.format_rollup?.length ?? 0) > 1 && <FormatCard rows={data.format_rollup!} videos={data.videos} />}
 
       {data.theme_rollup.length > 0 && <ThemeRollupCard rows={data.theme_rollup} />}
 

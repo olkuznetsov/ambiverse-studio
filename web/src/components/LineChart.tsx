@@ -1,7 +1,7 @@
 // Tiny dependency-free SVG line chart (single series). Handles 1 point (dot),
 // auto-scales Y to the data, labels the first/last X and the latest value.
-// Optional `markers` (dated events, e.g. uploads) render as ticks along the
-// baseline, positioned by date between the first and last point.
+// Points and optional `markers` (dated events, e.g. uploads) share one time
+// axis, so a gap between snapshots shows as a gap and ticks line up with it.
 
 export interface Point {
   x: string // date label
@@ -41,23 +41,24 @@ export default function LineChart({
   const span = max - min || 1
   const n = points.length
 
-  const xAt = (i: number) => (n === 1 ? W / 2 : padX + (i / (n - 1)) * (W - 2 * padX))
+  const last = points[n - 1]
+  const t0 = Date.parse(points[0].x)
+  const t1 = Date.parse(last.x)
+  const timeAxis = n > 1 && t1 > t0 && points.every((p) => !Number.isNaN(Date.parse(p.x)))
+  const xOfTime = (t: number) => padX + ((t - t0) / (t1 - t0)) * (W - 2 * padX)
+  const xAt = (i: number) =>
+    n === 1 ? W / 2 : timeAxis ? xOfTime(Date.parse(points[i].x)) : padX + (i / (n - 1)) * (W - 2 * padX)
   const yAt = (v: number) => padY + (1 - (v - min) / span) * (H - 2 * padY)
 
   const line = points.map((p, i) => `${xAt(i).toFixed(1)},${yAt(p.y).toFixed(1)}`).join(' ')
-  const last = points[n - 1]
   const area = `${padX},${H - padY} ${line} ${xAt(n - 1)},${H - padY}`
 
-  // date-positioned event ticks (only meaningful with a real time span)
-  const t0 = Date.parse(points[0].x)
-  const t1 = Date.parse(last.x)
-  const shownMarkers =
-    n > 1 && t1 > t0
-      ? markers
-          .map((m) => ({ ...m, t: Date.parse(m.x) }))
-          .filter((m) => m.t >= t0 && m.t <= t1)
-          .map((m) => ({ ...m, mx: padX + ((m.t - t0) / (t1 - t0)) * (W - 2 * padX) }))
-      : []
+  const shownMarkers = timeAxis
+    ? markers
+        .map((m) => ({ ...m, t: Date.parse(m.x) }))
+        .filter((m) => m.t >= t0 && m.t <= t1)
+        .map((m) => ({ ...m, mx: xOfTime(m.t) }))
+    : []
 
   return (
     <div>
