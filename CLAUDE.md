@@ -1,6 +1,6 @@
 # Ambiverse Studio — Project Notes for Claude
 
-Local web app (FastAPI + React) that is **mission control for the Ambiverse YouTube pipeline** at `~/myFolder/Programming/animembient/`. Read **PLAN.md** (architecture, feature census, milestones) before building anything. Read `animembient/CLAUDE.md` to understand the pipeline being wrapped.
+Local web app (FastAPI + React) that is **mission control for the Ambiverse YouTube pipeline** at `~/myFolder/Programming/animembient/`. Read **docs/PLAN.md** (architecture, feature census, milestones) before building anything. Read `animembient/CLAUDE.md` to understand the pipeline being wrapped.
 
 ## Cross-session coordination — read HANDOFF.md first
 
