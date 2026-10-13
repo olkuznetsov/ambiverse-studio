@@ -18,6 +18,7 @@ import subprocess
 import threading
 import time
 from datetime import datetime, timezone
+from pathlib import Path
 
 from config import ANIMEMBIENT_DIR, DATA_DIR, JOB_LOGS_DIR, PIPELINE, PIPELINE_PYTHON
 
@@ -518,7 +519,8 @@ def _run_job(job: dict):
         conn.execute("UPDATE jobs SET log_path=? WHERE id=?", (str(log_path), job["id"]))
     env = {**os.environ, **job["env"], "PYTHONUNBUFFERED": "1"}
     with open(log_path, "w") as log:
-        log.write(f"[studio] job {job['id']} ({job['type']}) — {' '.join(job['cmd'])}\n")
+        cmd_line = " ".join(job["cmd"]).replace(str(Path.home()), "~")  # the log is shown in the UI
+        log.write(f"[studio] job {job['id']} ({job['type']}) — {cmd_line}\n")
         if job["env"]:
             log.write(f"[studio] env: {job['env']}\n")
         log.flush()

@@ -19,12 +19,25 @@ After completing any code change, **automatically `git commit` + `git push origi
 3. **Read-only first, actions second.** Destructive ops = confirm + move to trash, never `rm`.
 4. **Single-flight heavy jobs** (16 GB RAM): one render at a time; wrap in `caffeinate -dimsu`; spawn with `start_new_session=True`; cancel kills the **process group**.
 
+## Status (Oct 2026)
+
+The channel is on hiatus; the repo is public and is a **portfolio piece** (LinkedIn Featured). Keep it working for visitors first: `make demo` must run on a fresh clone with no `.env`. The pipeline gained features after Jul 26 2026 (publish_queue, Omni Flash) that the studio doesn't surface — fine while paused.
+
+## Modes, tests, tooling
+
+- **Real mode:** `ANIMEMBIENT_DIR` set in `.env`. A set-but-wrong path must fail loudly — never fall back to demo silently.
+- **Demo mode:** `STUDIO_DEMO=1` or `ANIMEMBIENT_DIR` unset. `server/demo_seed.py` copies the stand-in pipeline `demo/pipeline/` into `data/demo/pipeline/` and generates assets. The stand-ins must print the **same log markers** as the real scripts (progress.py parses them) — when a parser changes, change the stand-in too. Channel data in demo = `demo/fixtures/channel_snapshot.json` (frozen real snapshot). Reset: `make demo-reset`.
+- **Before committing:** `make test` (pytest in demo mode + web lint/typecheck/build). CI runs the same on every push.
+- **Fixtures go public:** read them fully before committing (no tokens, no emails); never print local absolute paths in demo output — logs and screenshots show `~/…`.
+- **Metrics:** compare retention/AVD over long-form only (Shorts loop, view % can pass 100); label inferred attribution as inferred.
+
 ## Environment
 
-- **Ports:** API **4700**, Vite dev **5175** (8501 = trading dashboard, 5174 = wishplace — don't collide).
-- `.env`: `ANIMEMBIENT_DIR` (default `~/myFolder/Programming/animembient`), `DOWNLOADS_DIR`, `PORT`.
+- **Ports:** API **4700**, Vite dev **5175**, demo-mode preview **4701** (8501 = trading dashboard, 5174 = wishplace — don't collide).
+- `.env`: `ANIMEMBIENT_DIR`, `DOWNLOADS_DIR`, `PIPELINE_PYTHON`, `STUDIO_DEMO`, `PORT` — see `.env.example`.
 - Server venv: `server/venv`, Python ≥3.12. Frontend: Vite + React + TS + Tailwind, dark theme.
-- `.claude/launch.json` name **"studio"** for the preview tool.
+- Preview tool configs live in the **parent** folder's `.claude/launch.json`: **"studio"** (real, :4700, reload), **"studio-web"** (Vite :5175), **"studio-demo"** (demo, :4701, serves `web/dist` — rebuild it after UI changes).
+- Planning docs: `docs/PLAN.md` (milestones), `docs/IDEAS.md` (roadmap).
 
 ## Hard constraints
 

@@ -59,7 +59,8 @@ def main() -> None:
                 "track_names": [t.stem for t in tracks], "duration": duration,
                 "target_h": height, "built_at": dt.datetime.now().isoformat(timespec="seconds")}
     manifest_path.write_text(json.dumps(manifest, indent=2))
-    say(f"[full] DONE -> {video}\n[full] manifest -> {manifest_path}")
+    say(f"[full] DONE -> {video.relative_to(OUTPUT.parent)}\n"
+        f"[full] manifest -> {manifest_path.relative_to(OUTPUT.parent)}")
 
     if publish:
         say("[veo_publish] metadata: deterministic title + description (no invented scenes)")

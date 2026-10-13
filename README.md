@@ -28,6 +28,18 @@ Things to try:
 - **Prompts** — copy-ready image and music prompts; *Generate fresh prompts* runs as a job.
 - **Channel** — a frozen snapshot of the real channel's analytics.
 
+**Jobs** — a demo build mid-run. The bar is parsed from the pipeline's own log markers, the log streams over SSE, and cancel stops the whole process group.
+
+![Jobs](docs/screenshots/jobs.png)
+
+**Channel** — the real channel's analytics: YPP progress, growth with upload markers, a Veo-vs-image comparison that states its own limits, and the per-world rollup.
+
+![Channel](docs/screenshots/channel.png)
+
+**Build** — every knob of the main build, the exact command it will run, and an inline preflight.
+
+![Build](docs/screenshots/build.png)
+
 ## What it does
 
 | Page | |

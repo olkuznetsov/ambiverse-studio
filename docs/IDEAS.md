@@ -1,5 +1,7 @@
 # IDEAS — what Studio + the pipeline could become
 
+> Historical roadmap (July 2026). The checked "Now" items shipped; the rest is parked since the channel went on hiatus in August. The [README](../README.md) describes the current state.
+
 *2026-07-18. A curated roadmap from a deep pass over the whole system: what's missing,
 what compounds, what's deliberately cut. Studio session: treat "Now" items as a backlog;
 everything else needs Sasha's go.*

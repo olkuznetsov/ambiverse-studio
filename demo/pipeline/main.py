@@ -80,7 +80,7 @@ def main() -> None:
         stamp(f"Uploaded: https://youtu.be/{fake_id()}  (demo — nothing left this machine)")
     else:
         stamp("YOUTUBE_UPLOAD=false — skipping upload.")
-    stamp(f"Done. Video: {video}")
+    stamp(f"Done. Video: {video.relative_to(OUTPUT.parent)}")
 
 
 if __name__ == "__main__":

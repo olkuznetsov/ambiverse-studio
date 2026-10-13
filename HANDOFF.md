@@ -13,6 +13,19 @@ They share the same machine but not the same conversation. **Ambiverse Studio wr
 
 ---
 
+## 2026-10-13 — Audit for the public repo; channel on hiatus (studio session)
+
+The channel stopped publishing in August 2026; the studio is now a public portfolio piece. Studio commits `06816c7` onward:
+- **Security:** the SPA catch-all could serve any file via `%2e%2e/` when `web/dist` existed — including the pipeline's `.env` and OAuth token. Fixed (`resolve_spa_file`), plus a Host-header allowlist against DNS rebinding.
+- **Job-done notifications never worked** (AppleScript built with `repr()` quotes) — fixed; `caffeinate`/`osascript` optional so Linux works.
+- **Analytics:** retention/AVD rollups compare long-form only (Shorts loop, view % can pass 100); the Format card states that Veo rests on one long-form video and that uploads without surviving manifests default to image.
+- **Demo mode:** `demo/pipeline/` holds stand-ins for every script the studio runs. **Pipeline sessions: if you change a progress marker the studio parses (`clip i/N done`, `[esrgan] i/N`, `[upload] N%`, `[full] (i/N)`, `[veo_assemble] building reel`, `[veo_publish] …`), change the stand-in too** — `server/tests` will catch parser drift.
+- Tests + CI on every push; job-log headers print paths as `~/…`.
+
+**Parked:** the 2026-07-26 backlog below (staggered uploads, collision guard, calendar, traffic trend, velocity warning) — the channel is on hiatus, and the pipeline's `publish_queue.py` already rate-limits Shorts. Pipeline features since Jul 26 (`publish_queue.py`, Omni Flash sources, montage Shorts, `VEO_SRC_GLOB`, `VEO_SHORTS_FILES`) are not surfaced in the studio. Revisit if publishing resumes.
+
+---
+
 ## 2026-07-18 (evening) — IDEAS "Now" backlog built (studio session)
 
 Studio `aa3a8ca`: IDEAS #2 format A/B tracker (collector tags veo|image from

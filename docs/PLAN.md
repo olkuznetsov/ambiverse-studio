@@ -1,5 +1,7 @@
 # Ambiverse Studio — Plan
 
+> Historical planning document (July 2026). All seven milestones shipped on 14 July 2026; the channel went on hiatus in August. The [README](../README.md) describes the current state.
+
 **One-liner:** a local web app (mission control) for the Ambiverse YouTube pipeline — see everything, run everything, from one UI instead of ~20 CLI scripts + env vars.
 
 - **Date:** 2026-07-13 · **Status:** M0–M6 all shipped 2026-07-14 — feature-complete against this plan
