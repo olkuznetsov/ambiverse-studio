@@ -21,7 +21,7 @@ After completing any code change, **automatically `git commit` + `git push origi
 
 ## Status (Oct 2026)
 
-The channel is on hiatus; the repo is public and is a **portfolio piece** (LinkedIn Featured). Keep it working for visitors first: `make demo` must run on a fresh clone with no `.env`. The pipeline gained features after Jul 26 2026 (publish_queue, Omni Flash) that the studio doesn't surface — fine while paused.
+The channel is on hiatus; the repo is public and is a **portfolio piece** (LinkedIn Featured). Keep it working for visitors first: `make demo` must run on a fresh clone with no `.env`. The pipeline gained features after Jul 26 2026 (publish_queue, Omni Flash) that the studio doesn't surface — fine while paused. The repo's social preview (the link card on LinkedIn and elsewhere) is `docs/social-preview.png`; GitHub only takes it through the web UI (Settings → Social preview), so re-upload it there if the UI changes visibly.
 
 ## Modes, tests, tooling
 
